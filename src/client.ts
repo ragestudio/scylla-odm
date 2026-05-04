@@ -20,7 +20,7 @@ const DEFAULT_RETRY_DELAY = 1000
 const { SCYLLA_CONTACT_POINTS, SCYLLA_LOCAL_DATA_CENTER, SCYLLA_KEYSPACE } =
 	process.env
 
-export class ScyllaClient {
+export class Client {
 	constructor(config: ClientConfig = {}) {
 		this.config = {
 			modelsPath: path.resolve(process.cwd(), "db"),
@@ -185,4 +185,4 @@ export class ScyllaClient {
 	}
 }
 
-export default ScyllaClient
+export default Client
