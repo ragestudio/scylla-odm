@@ -1,0 +1,12 @@
+{
+  "name": "scylla-odm",
+  "version": "0.1.0",
+  "description": "An ODM for ScyllaDB",
+  "license": "MIT",
+  "author": "RageStudio",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "cassandra-driver": "^4.8.0"
+  }
+}
