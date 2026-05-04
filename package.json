@@ -1,6 +1,6 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "An ODM for ScyllaDB",
   "license": "MIT",
   "author": "RageStudio",
@@ -8,12 +8,6 @@
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
-    }
-  },
   "files": [
     "dist"
   ],
