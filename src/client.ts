@@ -28,8 +28,6 @@ export class Client {
 			)
 		}
 
-		globalThis.__scylla_client = this
-
 		this.config = {
 			modelsPath: path.resolve(process.cwd(), "db"),
 			contactPoints:
@@ -94,6 +92,8 @@ export class Client {
 			}
 		}
 
+		globalThis.__scylla_client = this
+
 		console.log("Connecting to ScyllaDB")
 		await this.connectWithRetry()
 		console.log("ScyllaDB Connected")
@@ -132,6 +132,8 @@ export class Client {
 		try {
 			await this.driver.shutdown()
 			console.log("ScyllaDB connection closed")
+
+			delete globalThis.__scylla_client
 		} catch (error) {
 			console.error("Error shutting down ScyllaDB connection:", error)
 			throw error

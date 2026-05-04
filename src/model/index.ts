@@ -25,7 +25,11 @@ export class Model<TDoc = any> {
 	}
 
 	get mapper(): mapping.ModelMapper {
-		return globalThis.__scylla_client?.mapper
+		if (!globalThis.__scylla_client?.mapper) {
+			throw new Error("No mapper available")
+		}
+
+		return globalThis.__scylla_client.mapper.forModel(this.name)
 	}
 
 	constructor(name: string, schema: Schema<any>) {
