@@ -66,6 +66,10 @@ export class Client {
 	mapper: T_CassandraMapping.Mapper
 	models: Map<string, Model<any>> = new Map()
 
+	model(name: string): Model<any> | undefined {
+		return this.models.get(name)
+	}
+
 	async initialize(options: { sync?: boolean } = {}) {
 		let models: Model<any>[]
 
