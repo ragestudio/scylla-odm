@@ -1,11 +1,12 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "An ODM for ScyllaDB",
   "license": "MIT",
   "author": "RageStudio",
   "type": "module",
   "types": "./index.d.ts",
+  "main": "./index.js",
   "module": "./index.js",
   "publishConfig": {
     "access": "public"
