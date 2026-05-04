@@ -1,10 +1,11 @@
-import { defineConfig } from "tsup"
+import { defineConfig } from "tsdown"
 
 export default defineConfig({
-	entry: ["src/index.ts"],
-	format: ["esm"],
+	entry: ["src/**/*.ts"],
+	format: "esm",
 	dts: true,
 	clean: true,
 	sourcemap: true,
-	//	outExtension: ({ format }) => (format === "cjs" ? ".cjs" : ".js"),
+	platform: "node",
+	unbundle: true,
 })
