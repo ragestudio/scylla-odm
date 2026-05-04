@@ -8,4 +8,10 @@ export default defineConfig({
 	sourcemap: true,
 	platform: "node",
 	unbundle: true,
+	outExtensions({ format, pkgType }) {
+		return {
+			js: ".js",
+			dts: ".d.ts",
+		}
+	},
 })
