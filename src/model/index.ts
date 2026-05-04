@@ -19,8 +19,14 @@ import syncOP from "../operations/sync"
 export class Model<TDoc = any> {
 	name: string
 	schema: Schema<any>
-	driver: ScyllaClient
-	mapper: mapping.ModelMapper
+
+	get driver(): ScyllaClient {
+		return globalThis.__scylla_client?.driver
+	}
+
+	get mapper(): mapping.ModelMapper {
+		return globalThis.__scylla_client?.mapper
+	}
 
 	constructor(name: string, schema: Schema<any>) {
 		this.name = name
@@ -82,11 +88,6 @@ export class Model<TDoc = any> {
 		row = fillDefaults(this.schema, row)
 
 		return new Result<TDoc>(row, this) as DocumentResult<TDoc>
-	}
-
-	_connect(driver: ScyllaClient) {
-		this.driver = driver
-		this.mapper = driver.mapper.forModel(this.name)
 	}
 }
 

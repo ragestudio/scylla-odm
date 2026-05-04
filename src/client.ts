@@ -22,6 +22,14 @@ const { SCYLLA_CONTACT_POINTS, SCYLLA_LOCAL_DATA_CENTER, SCYLLA_KEYSPACE } =
 
 export class Client {
 	constructor(config: ClientConfig = {}) {
+		if (globalThis.__scylla_client) {
+			throw new Error(
+				"An instance of Scylla Client is already initialized",
+			)
+		}
+
+		globalThis.__scylla_client = this
+
 		this.config = {
 			modelsPath: path.resolve(process.cwd(), "db"),
 			contactPoints:
@@ -76,8 +84,6 @@ export class Client {
 		})
 
 		for (let model of models) {
-			model._connect(this)
-
 			this.models.set(
 				model.name,
 				model as Model<InferDocument<typeof model.schema>>,

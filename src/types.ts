@@ -72,6 +72,9 @@ export type InferRawData<T> = {
 export type InferDocument<S> =
 	S extends Schema<infer T> ? InferRawData<T> : never
 
+// export type DocOf<M extends Model<any>> =
+// 	M extends Model<infer S> ? InferDocument<S> : never
+
 export type DocumentResult<TDoc> = Result<TDoc> & TDoc
 
 export type QueryOptions = {
