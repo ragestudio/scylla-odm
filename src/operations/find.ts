@@ -38,5 +38,5 @@ export default async function findOP<TDoc>(
 		return rows.map((row) => this._wrap(row))
 	}
 
-	return this.driver.executeWithRetry(operation, `find on ${this.name}`)
+	return this.client.executeWithRetry(operation, `find on ${this.name}`)
 }

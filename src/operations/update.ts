@@ -20,5 +20,5 @@ export default async function (this: Model, query: any) {
 		return this._wrap(query)
 	}
 
-	return this.driver.executeWithRetry(operation, `update on ${this.name}`)
+	return this.client.executeWithRetry(operation, `update on ${this.name}`)
 }

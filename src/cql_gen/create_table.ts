@@ -3,7 +3,7 @@ import type Model from "../model"
 export default function (model: Model): string {
 	const desc = model.schema
 	const tableName = desc.table_name
-	const keyspace = model.driver.config.keyspace
+	const keyspace = model.client.config.keyspace
 	const fields = desc.fields
 	const key = desc.keys
 	const clusteringOrder = desc.clustering_order

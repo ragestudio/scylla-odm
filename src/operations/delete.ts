@@ -5,5 +5,5 @@ export default async function (this: Model, query: any) {
 		return await this.mapper.remove(query)
 	}
 
-	return this.driver.executeWithRetry(operation, `delete on ${this.name}`)
+	return this.client.executeWithRetry(operation, `delete on ${this.name}`)
 }

@@ -21,5 +21,5 @@ export default function (this: Model, query: any, options?: QueryOptions) {
 		return result
 	}
 
-	return this.driver.executeWithRetry(operation, `findOne on ${this.name}`)
+	return this.client.executeWithRetry(operation, `findOne on ${this.name}`)
 }

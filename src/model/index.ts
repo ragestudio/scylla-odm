@@ -1,4 +1,4 @@
-import ScyllaClient from ".."
+import Client from ".."
 import { Result } from "../result"
 
 import fillDefaults from "../utils/fillDefaults"
@@ -20,8 +20,8 @@ export class Model<TDoc = any> {
 	name: string
 	schema: Schema<any>
 
-	get driver(): ScyllaClient {
-		return globalThis.__scylla_client?.driver
+	get client(): Client {
+		return globalThis.__scylla_client
 	}
 
 	get mapper(): mapping.ModelMapper {

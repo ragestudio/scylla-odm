@@ -9,7 +9,7 @@ export default async function syncOP(this: Model) {
 	}
 
 	try {
-		await this.driver.client.execute(generateCreateTableCQL(this))
+		await this.client.driver.execute(generateCreateTableCQL(this))
 
 		console.log(`Table "${this.schema.table_name}" created successfully`)
 	} catch (error) {

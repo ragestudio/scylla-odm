@@ -9,9 +9,9 @@ export default async function (this: Model) {
 		`
 
 	try {
-		const result = await this.driver.client.execute(
+		const result = await this.client.driver.execute(
 			cql,
-			[this.driver.config.keyspace, this.schema.table_name],
+			[this.client.config.keyspace, this.schema.table_name],
 			{
 				prepare: true,
 			},

@@ -60,11 +60,11 @@ export class Client {
 			clientOptions.pooling = this.config.pooling
 		}
 
-		this.client = new Cassandra.Client(clientOptions)
+		this.driver = new Cassandra.Client(clientOptions)
 	}
 
 	config: ClientConfig
-	client: T_CassandraClient
+	driver: T_CassandraClient
 	mapper: T_CassandraMapping.Mapper
 	models: Map<string, Model<any>> = new Map()
 
@@ -79,7 +79,7 @@ export class Client {
 
 		models = models.filter((schema) => schema instanceof Model)
 
-		this.mapper = new Cassandra.mapping.Mapper(this.client, {
+		this.mapper = new Cassandra.mapping.Mapper(this.driver, {
 			models: buildMapper(models),
 		})
 
@@ -104,7 +104,7 @@ export class Client {
 
 		for (let attempt = 1; attempt <= this.config.maxRetries!; attempt++) {
 			try {
-				await this.client.connect()
+				await this.driver.connect()
 				return
 			} catch (error) {
 				lastError = error
@@ -130,7 +130,7 @@ export class Client {
 
 	async shutdown(): Promise<void> {
 		try {
-			await this.client.shutdown()
+			await this.driver.shutdown()
 			console.log("ScyllaDB connection closed")
 		} catch (error) {
 			console.error("Error shutting down ScyllaDB connection:", error)
