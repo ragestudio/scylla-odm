@@ -50,6 +50,7 @@ export class Model<TDoc = any> {
 	}
 
 	create = (data: Partial<TDoc>) => this._wrap(data)
+	obj = (data: Partial<TDoc>) => this._wrap(data)
 
 	find: {
 		(
