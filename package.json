@@ -1,5 +1,5 @@
 {
-  "name": "scylla-odm",
+  "name": "@ragestudio/scylla-odm",
   "version": "0.1.0",
   "description": "An ODM for ScyllaDB",
   "license": "MIT",
