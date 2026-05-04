@@ -13,7 +13,7 @@ export default async (fromPath: string): Promise<any[]> => {
 		return []
 	}
 
-	let schemas = []
+	let mods = []
 
 	let files = await fs.promises.readdir(fromPath)
 
@@ -28,12 +28,12 @@ export default async (fromPath: string): Promise<any[]> => {
 
 			mod = mod.default
 
-			schemas.push(mod)
+			mods.push(mod)
 		} catch (error) {
-			console.error(`Failed to load schema [${name}]:`, error)
+			console.error(`Failed to load model [${name}]:`, error)
 			continue
 		}
 	}
 
-	return schemas
+	return mods
 }

@@ -9,7 +9,7 @@ import type { ClientConfig } from "./types"
 import path from "node:path"
 //@ts-ignore
 import Cassandra from "cassandra-driver"
-import loadSchemas from "./utils/loadSchemas"
+import loadModels from "./utils/loadModels"
 import buildMapper from "./utils/buildMapper"
 
 import { Model } from "./model"
@@ -23,7 +23,7 @@ const { SCYLLA_CONTACT_POINTS, SCYLLA_LOCAL_DATA_CENTER, SCYLLA_KEYSPACE } =
 export default class ScyllaClient {
 	constructor(config: ClientConfig = {}) {
 		this.config = {
-			modelsPath: path.resolve(__dirname, "../../db"),
+			modelsPath: path.resolve(process.cwd(), "db"),
 			contactPoints:
 				(config.contactPoints ?? SCYLLA_CONTACT_POINTS)
 					? SCYLLA_CONTACT_POINTS.split(",")
@@ -64,7 +64,7 @@ export default class ScyllaClient {
 		let models: Model<any>[]
 
 		try {
-			models = await loadSchemas(this.config.modelsPath)
+			models = await loadModels(this.config.modelsPath)
 		} catch (error) {
 			throw new Error(`Failed to load models: ${error.message}`)
 		}
