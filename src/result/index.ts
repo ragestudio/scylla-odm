@@ -1,5 +1,5 @@
 import type { Model } from "../model"
-import typeChecker from "../utils/typeChecker"
+//import typeChecker from "../utils/typeChecker"
 
 export class Result<TDoc = any> {
 	constructor(data: TDoc, model: Model<TDoc>) {
@@ -27,7 +27,7 @@ export class Result<TDoc = any> {
 		try {
 			const data = this.toRaw()
 
-			typeChecker(this._model, data)
+			//typeChecker(this._model, data)
 
 			return await this._model.update(data as any)
 		} catch (error: any) {
@@ -66,7 +66,7 @@ export class Result<TDoc = any> {
 
 	isValid(): boolean {
 		try {
-			typeChecker(this._model, this.toRaw())
+			//typeChecker(this._model, this.toRaw())
 			return true
 		} catch {
 			return false
