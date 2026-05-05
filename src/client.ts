@@ -85,6 +85,8 @@ export class Client {
 			models: buildMapper(models),
 		})
 
+		globalThis.__scylla_client = this
+
 		for (let model of models) {
 			this.models.set(
 				model.name,
@@ -95,8 +97,6 @@ export class Client {
 				await model._sync()
 			}
 		}
-
-		globalThis.__scylla_client = this
 
 		console.log("Connecting to ScyllaDB")
 		await this.connectWithRetry()
