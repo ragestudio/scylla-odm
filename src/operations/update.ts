@@ -1,11 +1,11 @@
 import type Model from "../model"
 import fillDefaults from "../utils/fillDefaults"
-import typeChecker from "../utils/typeChecker"
+//import typeChecker from "../utils/typeChecker"
 
 export default async function (this: Model, query: any) {
 	query = fillDefaults(this.schema, query)
 
-	typeChecker(this, query)
+	//typeChecker(this, query)
 
 	if (typeof query.__v !== "undefined") {
 		if (Number.isNaN(query.__v)) {

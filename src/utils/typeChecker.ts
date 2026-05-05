@@ -9,13 +9,25 @@ const intTypes = new Set(["int", "smallint", "tinyint"])
 const floatTypes = new Set(["double", "float"])
 const longTypes = new Set(["bigint", "counter"])
 
+function stripFrozen(raw: string): string {
+	let t = raw
+
+	while (t.startsWith("frozen<")) {
+		t = t.slice(7, -1)
+	}
+
+	return t
+}
+
 function isValidValue(value: any, expectedType: string): boolean {
 	if (value === null || value === undefined) return true
 
-	if (stringTypes.has(expectedType)) return typeof value === "string"
-	if (intTypes.has(expectedType)) return Number.isInteger(value)
-	if (floatTypes.has(expectedType)) return typeof value === "number"
-	if (longTypes.has(expectedType)) {
+	const typeName = stripFrozen(expectedType.toLowerCase().trim())
+
+	if (stringTypes.has(typeName)) return typeof value === "string"
+	if (intTypes.has(typeName)) return Number.isInteger(value)
+	if (floatTypes.has(typeName)) return typeof value === "number"
+	if (longTypes.has(typeName)) {
 		return (
 			typeof value === "bigint" ||
 			typeof value === "number" ||
@@ -23,7 +35,7 @@ function isValidValue(value: any, expectedType: string): boolean {
 		)
 	}
 
-	switch (expectedType) {
+	switch (typeName) {
 		case "boolean":
 			return typeof value === "boolean"
 		case "decimal":
@@ -56,13 +68,16 @@ function isValidValue(value: any, expectedType: string): boolean {
 			return Buffer.isBuffer(value) || value instanceof Uint8Array
 	}
 
-	if (expectedType.startsWith("list<") || expectedType.startsWith("set<")) {
+	if (typeName.startsWith("list<") || typeName.startsWith("set<")) {
 		return Array.isArray(value) || value instanceof Set
 	}
-	if (expectedType.startsWith("map<")) {
+	if (typeName.startsWith("map<")) {
 		return (
 			typeof value === "object" && !Array.isArray(value) && value !== null
 		)
+	}
+	if (typeName.startsWith("tuple<")) {
+		return Array.isArray(value)
 	}
 
 	return false
@@ -87,8 +102,15 @@ export default function typeChecker(model: Model<any>, data: any): boolean {
 		const fieldConfig = fields[key]
 		const expectedType = (fieldConfig.type || "text").toLowerCase()
 
+		if (fieldConfig.required && (value === null || value === undefined)) {
+			throw new TypeError(
+				`[${model.name}] Validation error: Field '${key}' is required but received ${value}`,
+			)
+		}
+
 		if (!isValidValue(value, expectedType)) {
 			const receivedType = Array.isArray(value) ? "array" : typeof value
+
 			throw new TypeError(
 				`[${model.name}] Validation error: Invalid type for field '${key}'. ` +
 					`Expected[${expectedType}], but received [${receivedType}]`,
