@@ -8,10 +8,10 @@ export const schema = new Schema(
 	},
 	{
 		key: {
-			type: ColumnTypes.Varchar,
+			type: ColumnTypes.Text,
 		} as Column<string>,
 		value: {
-			type: ColumnTypes.Varchar,
+			type: ColumnTypes.Text,
 		} as Column<string>,
 	},
 )
