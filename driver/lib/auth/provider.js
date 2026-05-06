@@ -15,16 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict"
 /**
  * @classdesc Provides [Authenticator]{@link module:auth~Authenticator} instances to be used when connecting to a host.
  * @constructor
  * @abstract
  * @alias module:auth~AuthProvider
  */
-function AuthProvider() {
-
-}
+function AuthProvider() {}
 
 /**
  * Returns an [Authenticator]{@link module:auth~Authenticator} instance to be used when connecting to a host.
@@ -34,9 +32,11 @@ function AuthProvider() {
  * @returns {Authenticator}
  */
 AuthProvider.prototype.newAuthenticator = function (endpoint, name) {
-  throw new Error('This is an abstract class, you must implement newAuthenticator method or ' +
-    'use another auth provider that inherits from this class');
-};
+	throw new Error(
+		"This is an abstract class, you must implement newAuthenticator method or " +
+			"use another auth provider that inherits from this class",
+	)
+}
 
 /**
  * @class
@@ -46,17 +46,15 @@ AuthProvider.prototype.newAuthenticator = function (endpoint, name) {
  * @constructor
  * @alias module:auth~Authenticator
  */
-function Authenticator() {
-
-}
+function Authenticator() {}
 
 /**
  * Obtain an initial response token for initializing the SASL handshake.
  * @param {Function} callback
  */
 Authenticator.prototype.initialResponse = function (callback) {
-  callback(new Error('Not implemented'));
-};
+	callback(new Error("Not implemented"))
+}
 
 /**
  * Evaluates a challenge received from the Server. Generally, this method should callback with
@@ -65,17 +63,15 @@ Authenticator.prototype.initialResponse = function (callback) {
  * @param {Function} callback
  */
 Authenticator.prototype.evaluateChallenge = function (challenge, callback) {
-  callback(new Error('Not implemented'));
-};
+	callback(new Error("Not implemented"))
+}
 
 /**
  * Called when authentication is successful with the last information
  * optionally sent by the server.
  * @param {Buffer} [token]
  */
-Authenticator.prototype.onAuthenticationSuccess = function (token) {
+Authenticator.prototype.onAuthenticationSuccess = function (token) {}
 
-};
-
-exports.AuthProvider = AuthProvider;
-exports.Authenticator = Authenticator;
+exports.AuthProvider = AuthProvider
+exports.Authenticator = Authenticator

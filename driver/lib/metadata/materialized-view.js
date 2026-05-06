@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
-const DataCollection = require('./data-collection');
+"use strict"
+const util = require("util")
+const DataCollection = require("./data-collection")
 /**
  * Creates a new MaterializedView.
  * @param {String} name Name of the View.
@@ -27,24 +27,24 @@ const DataCollection = require('./data-collection');
  * @constructor
  */
 function MaterializedView(name) {
-  DataCollection.call(this, name);
-  /**
-   * Name of the table.
-   * @type {String}
-   */
-  this.tableName = null;
-  /**
-   * View where clause.
-   * @type {String}
-   */
-  this.whereClause = null;
-  /**
-   * Determines if all the table columns where are included in the view.
-   * @type {boolean}
-   */
-  this.includeAllColumns = false;
+	DataCollection.call(this, name)
+	/**
+	 * Name of the table.
+	 * @type {String}
+	 */
+	this.tableName = null
+	/**
+	 * View where clause.
+	 * @type {String}
+	 */
+	this.whereClause = null
+	/**
+	 * Determines if all the table columns where are included in the view.
+	 * @type {boolean}
+	 */
+	this.includeAllColumns = false
 }
 
-util.inherits(MaterializedView, DataCollection);
+util.inherits(MaterializedView, DataCollection)
 
-module.exports = MaterializedView;
+module.exports = MaterializedView

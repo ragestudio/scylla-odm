@@ -17,44 +17,44 @@
  */
 
 export namespace search {
-  enum dateRangePrecision {
-    year = 0,
-    month,
-    day,
-    hour,
-    minute,
-    second,
-    millisecond
-  }
+	enum dateRangePrecision {
+		year = 0,
+		month,
+		day,
+		hour,
+		minute,
+		second,
+		millisecond,
+	}
 
-  class DateRange {
-    lowerBound: DateRangeBound;
-    upperBound: DateRangeBound;
+	class DateRange {
+		lowerBound: DateRangeBound
+		upperBound: DateRangeBound
 
-    constructor(lowerBound: DateRangeBound, upperBound: DateRangeBound);
+		constructor(lowerBound: DateRangeBound, upperBound: DateRangeBound)
 
-    equals(other: DateRangeBound): boolean;
+		equals(other: DateRangeBound): boolean
 
-    toString(): string;
+		toString(): string
 
-    static fromString(value: string): DateRange;
+		static fromString(value: string): DateRange
 
-    static fromBuffer(value: Buffer): DateRange;
-  }
+		static fromBuffer(value: Buffer): DateRange
+	}
 
-  class DateRangeBound {
-    date: Date;
+	class DateRangeBound {
+		date: Date
 
-    precision: number;
+		precision: number
 
-    equals(other: DateRangeBound): boolean;
+		equals(other: DateRangeBound): boolean
 
-    toString(): string;
+		toString(): string
 
-    static fromString(value: string): DateRangeBound;
+		static fromString(value: string): DateRangeBound
 
-    static toLowerBound(bound: DateRangeBound): DateRangeBound;
+		static toLowerBound(bound: DateRangeBound): DateRangeBound
 
-    static toUpperBound(bound: DateRangeBound): DateRangeBound;
-  }
+		static toUpperBound(bound: DateRangeBound): DateRangeBound
+	}
 }

@@ -16,76 +16,76 @@
  * limitations under the License.
  */
 
-import { errors } from '../../';
+import { errors } from "../../"
 
 export namespace metrics {
-  interface ClientMetrics {
-    onAuthenticationError(e: Error | errors.AuthenticationError): void;
+	interface ClientMetrics {
+		onAuthenticationError(e: Error | errors.AuthenticationError): void
 
-    onClientTimeoutError(e: errors.OperationTimedOutError): void;
+		onClientTimeoutError(e: errors.OperationTimedOutError): void
 
-    onClientTimeoutRetry(e: Error): void;
+		onClientTimeoutRetry(e: Error): void
 
-    onConnectionError(e: Error): void;
+		onConnectionError(e: Error): void
 
-    onIgnoreError(e: Error): void;
+		onIgnoreError(e: Error): void
 
-    onOtherError(e: Error): void;
+		onOtherError(e: Error): void
 
-    onOtherErrorRetry(e: Error): void;
+		onOtherErrorRetry(e: Error): void
 
-    onReadTimeoutError(e: errors.ResponseError): void;
+		onReadTimeoutError(e: errors.ResponseError): void
 
-    onReadTimeoutRetry(e: Error): void;
+		onReadTimeoutRetry(e: Error): void
 
-    onResponse(latency: number[]): void;
+		onResponse(latency: number[]): void
 
-    onSpeculativeExecution(): void;
+		onSpeculativeExecution(): void
 
-    onSuccessfulResponse(latency: number[]): void;
+		onSuccessfulResponse(latency: number[]): void
 
-    onUnavailableError(e: errors.ResponseError): void;
+		onUnavailableError(e: errors.ResponseError): void
 
-    onUnavailableRetry(e: Error): void;
+		onUnavailableRetry(e: Error): void
 
-    onWriteTimeoutError(e: errors.ResponseError): void;
+		onWriteTimeoutError(e: errors.ResponseError): void
 
-    onWriteTimeoutRetry(e: Error): void;
-  }
+		onWriteTimeoutRetry(e: Error): void
+	}
 
-  class DefaultMetrics implements ClientMetrics {
-    constructor();
+	class DefaultMetrics implements ClientMetrics {
+		constructor()
 
-    onAuthenticationError(e: Error | errors.AuthenticationError): void;
+		onAuthenticationError(e: Error | errors.AuthenticationError): void
 
-    onClientTimeoutError(e: errors.OperationTimedOutError): void;
+		onClientTimeoutError(e: errors.OperationTimedOutError): void
 
-    onClientTimeoutRetry(e: Error): void;
+		onClientTimeoutRetry(e: Error): void
 
-    onConnectionError(e: Error): void;
+		onConnectionError(e: Error): void
 
-    onIgnoreError(e: Error): void;
+		onIgnoreError(e: Error): void
 
-    onOtherError(e: Error): void;
+		onOtherError(e: Error): void
 
-    onOtherErrorRetry(e: Error): void;
+		onOtherErrorRetry(e: Error): void
 
-    onReadTimeoutError(e: errors.ResponseError): void;
+		onReadTimeoutError(e: errors.ResponseError): void
 
-    onReadTimeoutRetry(e: Error): void;
+		onReadTimeoutRetry(e: Error): void
 
-    onResponse(latency: number[]): void;
+		onResponse(latency: number[]): void
 
-    onSpeculativeExecution(): void;
+		onSpeculativeExecution(): void
 
-    onSuccessfulResponse(latency: number[]): void;
+		onSuccessfulResponse(latency: number[]): void
 
-    onUnavailableError(e: errors.ResponseError): void;
+		onUnavailableError(e: errors.ResponseError): void
 
-    onUnavailableRetry(e: Error): void;
+		onUnavailableRetry(e: Error): void
 
-    onWriteTimeoutError(e: errors.ResponseError): void;
+		onWriteTimeoutError(e: errors.ResponseError): void
 
-    onWriteTimeoutRetry(e: Error): void;
-  }
+		onWriteTimeoutRetry(e: Error): void
+	}
 }

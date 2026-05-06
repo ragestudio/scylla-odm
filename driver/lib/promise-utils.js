@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-'use strict';
+"use strict"
 
 /**
  * Creates a non-clearable timer that resolves the promise once elapses.
@@ -24,7 +24,7 @@
  * @returns {Promise<void>}
  */
 function delay(ms) {
-  return new Promise(r => setTimeout(r, ms || 0));
+	return new Promise((r) => setTimeout(r, ms || 0))
 }
 
 /**
@@ -34,14 +34,15 @@ function delay(ms) {
  * @returns {Promise}
  */
 function fromEvent(emitter, eventName) {
-  return new Promise((resolve, reject) =>
-    emitter.once(eventName, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    }));
+	return new Promise((resolve, reject) =>
+		emitter.once(eventName, (err, result) => {
+			if (err) {
+				reject(err)
+			} else {
+				resolve(result)
+			}
+		}),
+	)
 }
 
 /**
@@ -50,14 +51,15 @@ function fromEvent(emitter, eventName) {
  * @returns {Promise}
  */
 function fromCallback(fn) {
-  return new Promise((resolve, reject) =>
-    fn((err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    }));
+	return new Promise((resolve, reject) =>
+		fn((err, result) => {
+			if (err) {
+				reject(err)
+			} else {
+				resolve(result)
+			}
+		}),
+	)
 }
 
 /**
@@ -67,20 +69,20 @@ function fromCallback(fn) {
  * @returns {Function}
  */
 function getCallback(resolve, reject) {
-  return function (err, result) {
-    if (err) {
-      reject(err);
-    } else {
-      resolve(result);
-    }
-  };
+	return function (err, result) {
+		if (err) {
+			reject(err)
+		} else {
+			resolve(result)
+		}
+	}
 }
 
 async function invokeSequentially(info, length, fn) {
-  let index;
-  while ((index = info.counter++) < length) {
-    await fn(index);
-  }
+	let index
+	while ((index = info.counter++) < length) {
+		await fn(index)
+	}
 }
 
 /**
@@ -91,15 +93,15 @@ async function invokeSequentially(info, length, fn) {
  * @returns {Promise<Iterator>}
  */
 function newQueryPlan(lbp, keyspace, executionOptions) {
-  return new Promise((resolve, reject) => {
-    lbp.newQueryPlan(keyspace, executionOptions, (err, iterator) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(iterator);
-      }
-    });
-  });
+	return new Promise((resolve, reject) => {
+		lbp.newQueryPlan(keyspace, executionOptions, (err, iterator) => {
+			if (err) {
+				reject(err)
+			} else {
+				resolve(iterator)
+			}
+		})
+	})
 }
 
 /**
@@ -111,11 +113,11 @@ function newQueryPlan(lbp, keyspace, executionOptions) {
  * @returns {Promise|undefined}
  */
 function optionalCallback(promise, callback) {
-  if (!callback) {
-    return promise;
-  }
+	if (!callback) {
+		return promise
+	}
 
-  toCallback(promise, callback);
+	toCallback(promise, callback)
 }
 
 /**
@@ -126,21 +128,21 @@ function optionalCallback(promise, callback) {
  * @returns {Promise}
  */
 function times(count, limit, fn) {
-  if (limit > count) {
-    limit = count;
-  }
+	if (limit > count) {
+		limit = count
+	}
 
-  const promises = new Array(limit);
+	const promises = new Array(limit)
 
-  const info = {
-    counter: 0
-  };
+	const info = {
+		counter: 0,
+	}
 
-  for (let i = 0; i < limit; i++) {
-    promises[i] = invokeSequentially(info, count, fn);
-  }
+	for (let i = 0; i < limit; i++) {
+		promises[i] = invokeSequentially(info, count, fn)
+	}
 
-  return Promise.all(promises);
+	return Promise.all(promises)
 }
 
 /**
@@ -149,7 +151,7 @@ function times(count, limit, fn) {
  * @returns {undefined}
  */
 function toBackground(promise) {
-  promise.catch(() => {});
+	promise.catch(() => {})
 }
 
 /**
@@ -159,21 +161,21 @@ function toBackground(promise) {
  * @returns {undefined}
  */
 function toCallback(promise, callback) {
-  promise
-    .then(
-      result => process.nextTick(() => callback(null, result)),
-      // Avoid marking the promise as rejected
-      err => process.nextTick(() => callback(err)));
+	promise.then(
+		(result) => process.nextTick(() => callback(null, result)),
+		// Avoid marking the promise as rejected
+		(err) => process.nextTick(() => callback(err)),
+	)
 }
 
 module.exports = {
-  delay,
-  fromCallback,
-  fromEvent,
-  getCallback,
-  newQueryPlan,
-  optionalCallback,
-  times,
-  toBackground,
-  toCallback
-};
+	delay,
+	fromCallback,
+	fromEvent,
+	getCallback,
+	newQueryPlan,
+	optionalCallback,
+	times,
+	toBackground,
+	toCallback,
+}

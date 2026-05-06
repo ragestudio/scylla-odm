@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const Integer = require('./integer');
-const utils = require('../utils');
+"use strict"
+const Integer = require("./integer")
+const utils = require("../utils")
 
 /** @module types */
 /**
@@ -39,19 +39,19 @@ const utils = require('../utils');
  * @constructor
  */
 function BigDecimal(unscaledValue, scale) {
-  if (typeof unscaledValue === 'number') {
-    unscaledValue = Integer.fromNumber(unscaledValue);
-  }
-  /**
-   * @type {Integer}
-   * @private
-   */
-  this._intVal = unscaledValue;
-  /**
-   * @type {Number}
-   * @private
-   */
-  this._scale = scale;
+	if (typeof unscaledValue === "number") {
+		unscaledValue = Integer.fromNumber(unscaledValue)
+	}
+	/**
+	 * @type {Integer}
+	 * @private
+	 */
+	this._intVal = unscaledValue
+	/**
+	 * @type {Number}
+	 * @private
+	 */
+	this._scale = scale
 }
 
 /**
@@ -60,10 +60,10 @@ function BigDecimal(unscaledValue, scale) {
  * @returns {BigDecimal}
  */
 BigDecimal.fromBuffer = function (buf) {
-  const scale = buf.readInt32BE(0);
-  const unscaledValue = Integer.fromBuffer(buf.slice(4));
-  return new BigDecimal(unscaledValue, scale);
-};
+	const scale = buf.readInt32BE(0)
+	const unscaledValue = Integer.fromBuffer(buf.slice(4))
+	return new BigDecimal(unscaledValue, scale)
+}
 
 /**
  * Returns a buffer representation composed of the scale as a BE int 32 and the unsigned value as a BE varint
@@ -71,11 +71,14 @@ BigDecimal.fromBuffer = function (buf) {
  * @returns {Buffer}
  */
 BigDecimal.toBuffer = function (value) {
-  const unscaledValueBuffer = Integer.toBuffer(value._intVal);
-  const scaleBuffer = utils.allocBufferUnsafe(4);
-  scaleBuffer.writeInt32BE(value._scale, 0);
-  return Buffer.concat([scaleBuffer, unscaledValueBuffer], scaleBuffer.length + unscaledValueBuffer.length);
-};
+	const unscaledValueBuffer = Integer.toBuffer(value._intVal)
+	const scaleBuffer = utils.allocBufferUnsafe(4)
+	scaleBuffer.writeInt32BE(value._scale, 0)
+	return Buffer.concat(
+		[scaleBuffer, unscaledValueBuffer],
+		scaleBuffer.length + unscaledValueBuffer.length,
+	)
+}
 
 /**
  * Returns a BigDecimal representation of the string
@@ -83,18 +86,18 @@ BigDecimal.toBuffer = function (value) {
  * @returns {BigDecimal}
  */
 BigDecimal.fromString = function (value) {
-  if (!value) {
-    throw new TypeError('Invalid null or undefined value');
-  }
-  value = value.trim();
-  const scaleIndex = value.indexOf('.');
-  let scale = 0;
-  if (scaleIndex >= 0) {
-    scale = value.length - 1 - scaleIndex;
-    value = value.substr(0, scaleIndex) + value.substr(scaleIndex + 1);
-  }
-  return new BigDecimal(Integer.fromString(value), scale);
-};
+	if (!value) {
+		throw new TypeError("Invalid null or undefined value")
+	}
+	value = value.trim()
+	const scaleIndex = value.indexOf(".")
+	let scale = 0
+	if (scaleIndex >= 0) {
+		scale = value.length - 1 - scaleIndex
+		value = value.substr(0, scaleIndex) + value.substr(scaleIndex + 1)
+	}
+	return new BigDecimal(Integer.fromString(value), scale)
+}
 
 /**
  * Returns a BigDecimal representation of the Number
@@ -102,16 +105,16 @@ BigDecimal.fromString = function (value) {
  * @returns {BigDecimal}
  */
 BigDecimal.fromNumber = function (value) {
-  if (isNaN(value)) {
-    return new BigDecimal(Integer.ZERO, 0);
-  }
-  let textValue = value.toString();
-  if (textValue.indexOf('e') >= 0) {
-    //get until scale 20
-    textValue = value.toFixed(20);
-  }
-  return BigDecimal.fromString(textValue);
-};
+	if (isNaN(value)) {
+		return new BigDecimal(Integer.ZERO, 0)
+	}
+	let textValue = value.toString()
+	if (textValue.indexOf("e") >= 0) {
+		//get until scale 20
+		textValue = value.toFixed(20)
+	}
+	return BigDecimal.fromString(textValue)
+}
 
 /**
  * Returns true if the value of the BigDecimal instance and other are the same
@@ -119,20 +122,20 @@ BigDecimal.fromNumber = function (value) {
  * @returns {Boolean}
  */
 BigDecimal.prototype.equals = function (other) {
-  return ((other instanceof BigDecimal) && this.compare(other) === 0);
-};
+	return other instanceof BigDecimal && this.compare(other) === 0
+}
 
 BigDecimal.prototype.inspect = function () {
-  return this.constructor.name + ': ' + this.toString();
-};
+	return this.constructor.name + ": " + this.toString()
+}
 
 /**
  * @param {BigDecimal} other
  * @returns {boolean}
  */
 BigDecimal.prototype.notEquals = function (other) {
-  return !this.equals(other);
-};
+	return !this.equals(other)
+}
 
 /**
  * Compares this BigDecimal with the given one.
@@ -141,15 +144,15 @@ BigDecimal.prototype.notEquals = function (other) {
  *     if the given one is greater.
  */
 BigDecimal.prototype.compare = function (other) {
-  const diff = this.subtract(other);
-  if (diff.isNegative()) {
-    return -1;
-  }
-  if (diff.isZero()) {
-    return 0;
-  }
-  return +1;
-};
+	const diff = this.subtract(other)
+	if (diff.isNegative()) {
+		return -1
+	}
+	if (diff.isZero()) {
+		return 0
+	}
+	return +1
+}
 
 /**
  * Returns the difference of this and the given BigDecimal.
@@ -157,29 +160,32 @@ BigDecimal.prototype.compare = function (other) {
  * @return {!BigDecimal} The BigDecimal result.
  */
 BigDecimal.prototype.subtract = function (other) {
-  const first = this;
-  if (first._scale === other._scale) {
-    return new BigDecimal(first._intVal.subtract(other._intVal), first._scale);
-  }
-  let diffScale;
-  let unscaledValue;
-  if (first._scale < other._scale) {
-    //The scale of this is lower
-    diffScale = other._scale - first._scale;
-    //multiple this unScaledValue to compare in the same scale
-    unscaledValue = first._intVal
-      .multiply(Integer.fromNumber(Math.pow(10, diffScale)))
-      .subtract(other._intVal);
-    return new BigDecimal(unscaledValue, other._scale);
-  }
-  //The scale of this is higher
-  diffScale = first._scale - other._scale;
-  //multiple this unScaledValue to compare in the same scale
-  unscaledValue = first._intVal
-    .subtract(
-      other._intVal.multiply(Integer.fromNumber(Math.pow(10, diffScale))));
-  return new BigDecimal(unscaledValue, first._scale);
-};
+	const first = this
+	if (first._scale === other._scale) {
+		return new BigDecimal(
+			first._intVal.subtract(other._intVal),
+			first._scale,
+		)
+	}
+	let diffScale
+	let unscaledValue
+	if (first._scale < other._scale) {
+		//The scale of this is lower
+		diffScale = other._scale - first._scale
+		//multiple this unScaledValue to compare in the same scale
+		unscaledValue = first._intVal
+			.multiply(Integer.fromNumber(Math.pow(10, diffScale)))
+			.subtract(other._intVal)
+		return new BigDecimal(unscaledValue, other._scale)
+	}
+	//The scale of this is higher
+	diffScale = first._scale - other._scale
+	//multiple this unScaledValue to compare in the same scale
+	unscaledValue = first._intVal.subtract(
+		other._intVal.multiply(Integer.fromNumber(Math.pow(10, diffScale))),
+	)
+	return new BigDecimal(unscaledValue, first._scale)
+}
 
 /**
  * Returns the sum of this and the given <code>BigDecimal</code>.
@@ -187,29 +193,29 @@ BigDecimal.prototype.subtract = function (other) {
  * @return {!BigDecimal} The BigDecimal result.
  */
 BigDecimal.prototype.add = function (other) {
-  const first = this;
-  if (first._scale === other._scale) {
-    return new BigDecimal(first._intVal.add(other._intVal), first._scale);
-  }
-  let diffScale;
-  let unscaledValue;
-  if (first._scale < other._scale) {
-    //The scale of this is lower
-    diffScale = other._scale - first._scale;
-    //multiple this unScaledValue to compare in the same scale
-    unscaledValue = first._intVal
-      .multiply(Integer.fromNumber(Math.pow(10, diffScale)))
-      .add(other._intVal);
-    return new BigDecimal(unscaledValue, other._scale);
-  }
-  //The scale of this is higher
-  diffScale = first._scale - other._scale;
-  //multiple this unScaledValue to compare in the same scale
-  unscaledValue = first._intVal
-    .add(
-      other._intVal.multiply(Integer.fromNumber(Math.pow(10, diffScale))));
-  return new BigDecimal(unscaledValue, first._scale);
-};
+	const first = this
+	if (first._scale === other._scale) {
+		return new BigDecimal(first._intVal.add(other._intVal), first._scale)
+	}
+	let diffScale
+	let unscaledValue
+	if (first._scale < other._scale) {
+		//The scale of this is lower
+		diffScale = other._scale - first._scale
+		//multiple this unScaledValue to compare in the same scale
+		unscaledValue = first._intVal
+			.multiply(Integer.fromNumber(Math.pow(10, diffScale)))
+			.add(other._intVal)
+		return new BigDecimal(unscaledValue, other._scale)
+	}
+	//The scale of this is higher
+	diffScale = first._scale - other._scale
+	//multiple this unScaledValue to compare in the same scale
+	unscaledValue = first._intVal.add(
+		other._intVal.multiply(Integer.fromNumber(Math.pow(10, diffScale))),
+	)
+	return new BigDecimal(unscaledValue, first._scale)
+}
 
 /**
  * Returns true if the current instance is greater than the other
@@ -217,57 +223,61 @@ BigDecimal.prototype.add = function (other) {
  * @returns {boolean}
  */
 BigDecimal.prototype.greaterThan = function (other) {
-  return this.compare(other) === 1;
-};
+	return this.compare(other) === 1
+}
 
 /** @return {boolean} Whether this value is negative. */
 BigDecimal.prototype.isNegative = function () {
-  return this._intVal.isNegative();
-};
+	return this._intVal.isNegative()
+}
 
 /** @return {boolean} Whether this value is zero. */
 BigDecimal.prototype.isZero = function () {
-  return this._intVal.isZero();
-};
+	return this._intVal.isZero()
+}
 
 /**
  * Returns the string representation of this <code>BigDecimal</code>
  * @returns {string}
  */
 BigDecimal.prototype.toString = function () {
-  let intString = this._intVal.toString();
-  if (this._scale === 0) {
-    return intString;
-  }
-  let signSymbol = '';
-  if (intString.charAt(0) === '-') {
-    signSymbol = '-';
-    intString = intString.substr(1);
-  }
-  let separatorIndex = intString.length - this._scale;
-  if (separatorIndex <= 0) {
-    //add zeros at the beginning, plus an additional zero
-    intString = utils.stringRepeat('0', (-separatorIndex) + 1) + intString;
-    separatorIndex = intString.length - this._scale;
-  }
-  return signSymbol + intString.substr(0, separatorIndex) + '.' + intString.substr(separatorIndex);
-};
+	let intString = this._intVal.toString()
+	if (this._scale === 0) {
+		return intString
+	}
+	let signSymbol = ""
+	if (intString.charAt(0) === "-") {
+		signSymbol = "-"
+		intString = intString.substr(1)
+	}
+	let separatorIndex = intString.length - this._scale
+	if (separatorIndex <= 0) {
+		//add zeros at the beginning, plus an additional zero
+		intString = utils.stringRepeat("0", -separatorIndex + 1) + intString
+		separatorIndex = intString.length - this._scale
+	}
+	return (
+		signSymbol +
+		intString.substr(0, separatorIndex) +
+		"." +
+		intString.substr(separatorIndex)
+	)
+}
 
 /**
  * Returns a Number representation of this <code>BigDecimal</code>.
  * @returns {Number}
  */
 BigDecimal.prototype.toNumber = function () {
-  return parseFloat(this.toString());
-};
+	return parseFloat(this.toString())
+}
 
 /**
  * Returns the string representation.
  * Method used by the native JSON.stringify() to serialize this instance.
  */
 BigDecimal.prototype.toJSON = function () {
-  return this.toString();
-};
+	return this.toString()
+}
 
-
-module.exports = BigDecimal;
+module.exports = BigDecimal

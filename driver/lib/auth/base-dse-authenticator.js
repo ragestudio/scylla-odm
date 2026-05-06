@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
-const { Authenticator } = require('./provider');
+"use strict"
+const util = require("util")
+const { Authenticator } = require("./provider")
 
-const dseAuthenticatorName = 'com.datastax.bdp.cassandra.auth.DseAuthenticator';
+const dseAuthenticatorName = "com.datastax.bdp.cassandra.auth.DseAuthenticator"
 
 /**
  * Base class for Authenticator implementations that want to make use of
@@ -30,10 +30,10 @@ const dseAuthenticatorName = 'com.datastax.bdp.cassandra.auth.DseAuthenticator';
  * @ignore
  */
 function BaseDseAuthenticator(authenticatorName) {
-  this.authenticatorName = authenticatorName;
+	this.authenticatorName = authenticatorName
 }
 
-util.inherits(BaseDseAuthenticator, Authenticator);
+util.inherits(BaseDseAuthenticator, Authenticator)
 
 /**
  * Return a Buffer containing the required SASL mechanism.
@@ -41,8 +41,8 @@ util.inherits(BaseDseAuthenticator, Authenticator);
  * @returns {Buffer}
  */
 BaseDseAuthenticator.prototype.getMechanism = function () {
-  throw new Error('Not implemented');
-};
+	throw new Error("Not implemented")
+}
 
 /**
  * Return a byte array containing the expected successful server challenge.
@@ -50,21 +50,24 @@ BaseDseAuthenticator.prototype.getMechanism = function () {
  * @returns {Buffer}
  */
 BaseDseAuthenticator.prototype.getInitialServerChallenge = function () {
-  throw new Error('Not implemented');
-};
+	throw new Error("Not implemented")
+}
 
 /**
  * @param {Function} callback
  * @override
  */
 BaseDseAuthenticator.prototype.initialResponse = function (callback) {
-  if (!this._isDseAuthenticator()) {
-    //fallback
-    return this.evaluateChallenge(this.getInitialServerChallenge(), callback);
-  }
-  //send the mechanism as a first auth message
-  callback(null, this.getMechanism());
-};
+	if (!this._isDseAuthenticator()) {
+		//fallback
+		return this.evaluateChallenge(
+			this.getInitialServerChallenge(),
+			callback,
+		)
+	}
+	//send the mechanism as a first auth message
+	callback(null, this.getMechanism())
+}
 
 /**
  * Determines if the name of the authenticator matches DSE 5+
@@ -72,7 +75,7 @@ BaseDseAuthenticator.prototype.initialResponse = function (callback) {
  * @ignore
  */
 BaseDseAuthenticator.prototype._isDseAuthenticator = function () {
-  return this.authenticatorName === dseAuthenticatorName;
-};
+	return this.authenticatorName === dseAuthenticatorName
+}
 
-module.exports = BaseDseAuthenticator;
+module.exports = BaseDseAuthenticator

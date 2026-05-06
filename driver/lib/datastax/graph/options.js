@@ -15,30 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
-const types = require('../../types');
-const utils = require('../../utils');
-const { DefaultExecutionOptions, proxyExecuteKey } = require('../../execution-options');
-const Long = types.Long;
+"use strict"
+const util = require("util")
+const types = require("../../types")
+const utils = require("../../utils")
+const {
+	DefaultExecutionOptions,
+	proxyExecuteKey,
+} = require("../../execution-options")
+const Long = types.Long
 
-let consistencyNames;
+let consistencyNames
 
 const graphProtocol = Object.freeze({
-  graphson1: 'graphson-1.0',
-  graphson2: 'graphson-2.0',
-  graphson3: 'graphson-3.0'
-});
+	graphson1: "graphson-1.0",
+	graphson2: "graphson-2.0",
+	graphson3: "graphson-3.0",
+})
 
 const payloadKeys = Object.freeze({
-  language :'graph-language',
-  source: 'graph-source',
-  name: 'graph-name',
-  results: 'graph-results',
-  writeConsistency: 'graph-write-consistency',
-  readConsistency: 'graph-read-consistency',
-  timeout: 'request-timeout'
-});
+	language: "graph-language",
+	source: "graph-source",
+	name: "graph-name",
+	results: "graph-results",
+	writeConsistency: "graph-write-consistency",
+	readConsistency: "graph-read-consistency",
+	timeout: "request-timeout",
+})
 
 /**
  * Graph options that extends {@link QueryOptions}.
@@ -83,63 +86,100 @@ const payloadKeys = Object.freeze({
  * @returns {DseClientOptions}
  * @private
  */
-function getDefaultGraphOptions(profileManager, baseOptions, defaultRetryPolicy, profile) {
-  return profileManager.getOrCreateGraphOptions(profile, function createDefaultOptions() {
-    const profileOptions = profile.graphOptions || utils.emptyObject;
-    const defaultProfile = profileManager.getDefault();
-    const options = {
-      customPayload: {
-        [payloadKeys.language]: utils.allocBufferFromString(profileOptions.language || baseOptions.language),
-        [payloadKeys.source]: utils.allocBufferFromString(profileOptions.source || baseOptions.source)
-      },
-      graphLanguage: profileOptions.language || baseOptions.language,
-      graphResults: profileOptions.results || baseOptions.results,
-      graphSource: profileOptions.source || baseOptions.source,
-      graphName: utils.ifUndefined(profileOptions.name, baseOptions.name)
-    };
+function getDefaultGraphOptions(
+	profileManager,
+	baseOptions,
+	defaultRetryPolicy,
+	profile,
+) {
+	return profileManager.getOrCreateGraphOptions(
+		profile,
+		function createDefaultOptions() {
+			const profileOptions = profile.graphOptions || utils.emptyObject
+			const defaultProfile = profileManager.getDefault()
+			const options = {
+				customPayload: {
+					[payloadKeys.language]: utils.allocBufferFromString(
+						profileOptions.language || baseOptions.language,
+					),
+					[payloadKeys.source]: utils.allocBufferFromString(
+						profileOptions.source || baseOptions.source,
+					),
+				},
+				graphLanguage: profileOptions.language || baseOptions.language,
+				graphResults: profileOptions.results || baseOptions.results,
+				graphSource: profileOptions.source || baseOptions.source,
+				graphName: utils.ifUndefined(
+					profileOptions.name,
+					baseOptions.name,
+				),
+			}
 
-    if (profile !== defaultProfile) {
-      options.retry = profile.retry || baseOptions.retry;
-    } else {
-      // Based on an implementation detail of the execution profiles, the retry policy for the default profile is
-      // always loaded (required), but that doesn't mean that it was specified by the user.
-      // If it wasn't specified by the user, use the default retry policy for graph statements.
-      options.retry = defaultRetryPolicy || baseOptions.retry;
-    }
+			if (profile !== defaultProfile) {
+				options.retry = profile.retry || baseOptions.retry
+			} else {
+				// Based on an implementation detail of the execution profiles, the retry policy for the default profile is
+				// always loaded (required), but that doesn't mean that it was specified by the user.
+				// If it wasn't specified by the user, use the default retry policy for graph statements.
+				options.retry = defaultRetryPolicy || baseOptions.retry
+			}
 
-    if (baseOptions.executeAs) {
-      options.customPayload[proxyExecuteKey] = utils.allocBufferFromString(baseOptions.executeAs);
-    }
+			if (baseOptions.executeAs) {
+				options.customPayload[proxyExecuteKey] =
+					utils.allocBufferFromString(baseOptions.executeAs)
+			}
 
-    if (options.graphName) {
-      options.customPayload[payloadKeys.name] = utils.allocBufferFromString(options.graphName);
-    }
+			if (options.graphName) {
+				options.customPayload[payloadKeys.name] =
+					utils.allocBufferFromString(options.graphName)
+			}
 
-    const graphResults = utils.ifUndefined(profileOptions.results, baseOptions.graphResults);
-    if (graphResults !== undefined) {
-      options.customPayload[payloadKeys.results] = utils.allocBufferFromString(graphResults);
-    }
+			const graphResults = utils.ifUndefined(
+				profileOptions.results,
+				baseOptions.graphResults,
+			)
+			if (graphResults !== undefined) {
+				options.customPayload[payloadKeys.results] =
+					utils.allocBufferFromString(graphResults)
+			}
 
-    const readConsistency = utils.ifUndefined(profileOptions.readConsistency, baseOptions.readConsistency);
-    if (readConsistency !== undefined) {
-      options.customPayload[payloadKeys.readConsistency] =
-        utils.allocBufferFromString(getConsistencyName(readConsistency));
-    }
+			const readConsistency = utils.ifUndefined(
+				profileOptions.readConsistency,
+				baseOptions.readConsistency,
+			)
+			if (readConsistency !== undefined) {
+				options.customPayload[payloadKeys.readConsistency] =
+					utils.allocBufferFromString(
+						getConsistencyName(readConsistency),
+					)
+			}
 
-    const writeConsistency = utils.ifUndefined(profileOptions.writeConsistency, baseOptions.writeConsistency);
-    if (writeConsistency !== undefined) {
-      options.customPayload[payloadKeys.writeConsistency] =
-        utils.allocBufferFromString(getConsistencyName(writeConsistency));
-    }
+			const writeConsistency = utils.ifUndefined(
+				profileOptions.writeConsistency,
+				baseOptions.writeConsistency,
+			)
+			if (writeConsistency !== undefined) {
+				options.customPayload[payloadKeys.writeConsistency] =
+					utils.allocBufferFromString(
+						getConsistencyName(writeConsistency),
+					)
+			}
 
-    options.readTimeout = utils.ifUndefined3(profile.readTimeout, defaultProfile.readTimeout, baseOptions.readTimeout);
-    if (options.readTimeout > 0) {
-      // Write the graph read timeout payload
-      options.customPayload[payloadKeys.timeout] = longBuffer(options.readTimeout);
-    }
+			options.readTimeout = utils.ifUndefined3(
+				profile.readTimeout,
+				defaultProfile.readTimeout,
+				baseOptions.readTimeout,
+			)
+			if (options.readTimeout > 0) {
+				// Write the graph read timeout payload
+				options.customPayload[payloadKeys.timeout] = longBuffer(
+					options.readTimeout,
+				)
+			}
 
-    return options;
-  });
+			return options
+		},
+	)
 }
 
 /**
@@ -152,25 +192,25 @@ function getDefaultGraphOptions(profileManager, baseOptions, defaultRetryPolicy,
  * @private
  */
 function setPayloadKey(payload, profileOptions, key, value, converter) {
-  converter = converter || utils.allocBufferFromString;
-  if (value === null) {
-    // Use null to avoid set payload for a key
-    return;
-  }
+	converter = converter || utils.allocBufferFromString
+	if (value === null) {
+		// Use null to avoid set payload for a key
+		return
+	}
 
-  if (value !== undefined) {
-    payload[key] = converter(value);
-    return;
-  }
+	if (value !== undefined) {
+		payload[key] = converter(value)
+		return
+	}
 
-  if (profileOptions.customPayload[key]) {
-    payload[key] = profileOptions.customPayload[key];
-  }
+	if (profileOptions.customPayload[key]) {
+		payload[key] = profileOptions.customPayload[key]
+	}
 }
 
 function longBuffer(value) {
-  value = Long.fromNumber(value);
-  return Long.toBuffer(value);
+	value = Long.fromNumber(value)
+	return Long.toBuffer(value)
 }
 
 /**
@@ -179,36 +219,39 @@ function longBuffer(value) {
  * @private
  */
 function getConsistencyName(consistency) {
-  // eslint-disable-next-line
-  if (consistency == undefined) {
-    //null or undefined => undefined
-    return undefined;
-  }
-  loadConsistencyNames();
-  const name = consistencyNames[consistency];
-  if (!name) {
-    throw new Error(util.format(
-      'Consistency %s not found, use values defined as properties in types.consistencies object', consistency
-    ));
-  }
-  return name;
+	// eslint-disable-next-line
+	if (consistency == undefined) {
+		//null or undefined => undefined
+		return undefined
+	}
+	loadConsistencyNames()
+	const name = consistencyNames[consistency]
+	if (!name) {
+		throw new Error(
+			util.format(
+				"Consistency %s not found, use values defined as properties in types.consistencies object",
+				consistency,
+			),
+		)
+	}
+	return name
 }
 
 function loadConsistencyNames() {
-  if (consistencyNames) {
-    return;
-  }
-  consistencyNames = {};
-  const propertyNames = Object.keys(types.consistencies);
-  for (let i = 0; i < propertyNames.length; i++) {
-    const name = propertyNames[i];
-    consistencyNames[types.consistencies[name]] = name.toUpperCase();
-  }
-  //Using java constants naming conventions
-  consistencyNames[types.consistencies.localQuorum] = 'LOCAL_QUORUM';
-  consistencyNames[types.consistencies.eachQuorum] = 'EACH_QUORUM';
-  consistencyNames[types.consistencies.localSerial] = 'LOCAL_SERIAL';
-  consistencyNames[types.consistencies.localOne] = 'LOCAL_ONE';
+	if (consistencyNames) {
+		return
+	}
+	consistencyNames = {}
+	const propertyNames = Object.keys(types.consistencies)
+	for (let i = 0; i < propertyNames.length; i++) {
+		const name = propertyNames[i]
+		consistencyNames[types.consistencies[name]] = name.toUpperCase()
+	}
+	//Using java constants naming conventions
+	consistencyNames[types.consistencies.localQuorum] = "LOCAL_QUORUM"
+	consistencyNames[types.consistencies.eachQuorum] = "EACH_QUORUM"
+	consistencyNames[types.consistencies.localSerial] = "LOCAL_SERIAL"
+	consistencyNames[types.consistencies.localOne] = "LOCAL_ONE"
 }
 
 /**
@@ -217,120 +260,172 @@ function loadConsistencyNames() {
  * @ignore
  */
 class GraphExecutionOptions extends DefaultExecutionOptions {
+	/**
+	 * Creates a new instance of GraphExecutionOptions.
+	 * @param {GraphQueryOptions} queryOptions The user provided query options.
+	 * @param {Client} client the client instance.
+	 * @param graphBaseOptions The default graph base options.
+	 * @param {RetryPolicy} defaultProfileRetryPolicy
+	 */
+	constructor(
+		queryOptions,
+		client,
+		graphBaseOptions,
+		defaultProfileRetryPolicy,
+	) {
+		queryOptions = queryOptions || utils.emptyObject
+		super(queryOptions, client, null)
 
-  /**
-   * Creates a new instance of GraphExecutionOptions.
-   * @param {GraphQueryOptions} queryOptions The user provided query options.
-   * @param {Client} client the client instance.
-   * @param graphBaseOptions The default graph base options.
-   * @param {RetryPolicy} defaultProfileRetryPolicy
-   */
-  constructor(queryOptions, client, graphBaseOptions, defaultProfileRetryPolicy) {
+		this._defaultGraphOptions = getDefaultGraphOptions(
+			client.profileManager,
+			graphBaseOptions,
+			defaultProfileRetryPolicy,
+			this.getProfile(),
+		)
 
-    queryOptions = queryOptions || utils.emptyObject;
-    super(queryOptions, client, null);
+		this._preferredHost = null
+		this._graphSubProtocol =
+			queryOptions.graphResults || this._defaultGraphOptions.graphResults
+		this._graphLanguage =
+			queryOptions.graphLanguage ||
+			this._defaultGraphOptions.graphLanguage
+	}
 
-    this._defaultGraphOptions = getDefaultGraphOptions(
-      client.profileManager, graphBaseOptions, defaultProfileRetryPolicy, this.getProfile());
+	setPreferredHost(host) {
+		this._preferredHost = host
+	}
 
-    this._preferredHost = null;
-    this._graphSubProtocol = queryOptions.graphResults || this._defaultGraphOptions.graphResults;
-    this._graphLanguage = queryOptions.graphLanguage || this._defaultGraphOptions.graphLanguage;
-  }
+	getPreferredHost() {
+		return this._preferredHost
+	}
 
-  setPreferredHost(host) {
-    this._preferredHost = host;
-  }
+	getGraphSource() {
+		return (
+			this.getRawQueryOptions().graphSource ||
+			this._defaultGraphOptions.graphSource
+		)
+	}
 
-  getPreferredHost() {
-    return this._preferredHost;
-  }
+	getGraphLanguage() {
+		return this._graphLanguage
+	}
 
-  getGraphSource() {
-    return this.getRawQueryOptions().graphSource || this._defaultGraphOptions.graphSource;
-  }
+	setGraphLanguage(value) {
+		this._graphLanguage = value
+	}
 
-  getGraphLanguage() {
-    return this._graphLanguage;
-  }
+	getGraphName() {
+		return utils.ifUndefined(
+			this.getRawQueryOptions().graphName,
+			this._defaultGraphOptions.graphName,
+		)
+	}
 
-  setGraphLanguage(value) {
-    this._graphLanguage = value;
-  }
+	getGraphSubProtocol() {
+		return this._graphSubProtocol
+	}
 
-  getGraphName() {
-    return utils.ifUndefined(this.getRawQueryOptions().graphName, this._defaultGraphOptions.graphName);
-  }
+	setGraphSubProtocol(protocol) {
+		this._graphSubProtocol = protocol
+	}
 
-  getGraphSubProtocol() {
-    return this._graphSubProtocol;
-  }
+	/** Graph executions have a specific default read timeout */
+	getReadTimeout() {
+		return (
+			this.getRawQueryOptions().readTimeout ||
+			this._defaultGraphOptions.readTimeout
+		)
+	}
 
-  setGraphSubProtocol(protocol) {
-    this._graphSubProtocol = protocol;
-  }
+	/** Graph executions have a specific default retry policy */
+	getRetryPolicy() {
+		return (
+			this.getRawQueryOptions().retry || this._defaultGraphOptions.retry
+		)
+	}
 
-  /** Graph executions have a specific default read timeout */
-  getReadTimeout() {
-    return this.getRawQueryOptions().readTimeout || this._defaultGraphOptions.readTimeout;
-  }
+	getRowParser() {
+		const factory = this.getRawQueryOptions().rowParserFactory
 
-  /** Graph executions have a specific default retry policy */
-  getRetryPolicy() {
-    return this.getRawQueryOptions().retry || this._defaultGraphOptions.retry;
-  }
+		if (!factory) {
+			return null
+		}
 
-  getRowParser() {
-    const factory = this.getRawQueryOptions().rowParserFactory;
+		return factory(this.getGraphSubProtocol())
+	}
 
-    if (!factory) {
-      return null;
-    }
+	getQueryWriter() {
+		const factory = this.getRawQueryOptions().queryWriterFactory
 
-    return factory(this.getGraphSubProtocol());
-  }
+		if (!factory) {
+			return null
+		}
 
-  getQueryWriter() {
-    const factory = this.getRawQueryOptions().queryWriterFactory;
+		return factory(this.getGraphSubProtocol())
+	}
 
-    if (!factory) {
-      return null;
-    }
+	setGraphPayload() {
+		const options = this.getRawQueryOptions()
+		const defaultOptions = this._defaultGraphOptions
 
-    return factory(this.getGraphSubProtocol());
-  }
+		// Clone the existing custom payload (if any)
+		const payload = Object.assign({}, this.getCustomPayload())
 
-  setGraphPayload() {
-    const options = this.getRawQueryOptions();
-    const defaultOptions = this._defaultGraphOptions;
+		// Override the payload for DSE Graph exclusive options
+		setPayloadKey(
+			payload,
+			defaultOptions,
+			payloadKeys.language,
+			this.getGraphLanguage() !== this._defaultGraphOptions.graphLanguage
+				? this.getGraphLanguage()
+				: undefined,
+		)
+		setPayloadKey(
+			payload,
+			defaultOptions,
+			payloadKeys.source,
+			options.graphSource,
+		)
+		setPayloadKey(
+			payload,
+			defaultOptions,
+			payloadKeys.name,
+			options.graphName,
+		)
+		setPayloadKey(
+			payload,
+			defaultOptions,
+			payloadKeys.readConsistency,
+			getConsistencyName(options.graphReadConsistency),
+		)
+		setPayloadKey(
+			payload,
+			defaultOptions,
+			payloadKeys.writeConsistency,
+			getConsistencyName(options.graphWriteConsistency),
+		)
 
-    // Clone the existing custom payload (if any)
-    const payload = Object.assign({}, this.getCustomPayload());
+		// Use the read timeout defined by the user or the one default to graph executions
+		setPayloadKey(
+			payload,
+			defaultOptions,
+			payloadKeys.timeout,
+			this.getReadTimeout() > 0 ? this.getReadTimeout() : null,
+			longBuffer,
+		)
 
-    // Override the payload for DSE Graph exclusive options
-    setPayloadKey(payload, defaultOptions, payloadKeys.language,
-      this.getGraphLanguage() !== this._defaultGraphOptions.graphLanguage ? this.getGraphLanguage() : undefined);
-    setPayloadKey(payload, defaultOptions, payloadKeys.source, options.graphSource);
-    setPayloadKey(payload, defaultOptions, payloadKeys.name, options.graphName);
-    setPayloadKey(payload, defaultOptions, payloadKeys.readConsistency,
-      getConsistencyName(options.graphReadConsistency));
-    setPayloadKey(payload, defaultOptions, payloadKeys.writeConsistency,
-      getConsistencyName(options.graphWriteConsistency));
+		// Graph result is always set
+		payload[payloadKeys.results] =
+			defaultOptions.graphResults === this.getGraphSubProtocol()
+				? defaultOptions.customPayload[payloadKeys.results]
+				: utils.allocBufferFromString(this.getGraphSubProtocol())
 
-    // Use the read timeout defined by the user or the one default to graph executions
-    setPayloadKey(payload, defaultOptions, payloadKeys.timeout,
-      this.getReadTimeout() > 0 ? this.getReadTimeout() : null, longBuffer);
-
-    // Graph result is always set
-    payload[payloadKeys.results] = defaultOptions.graphResults === this.getGraphSubProtocol()
-      ? defaultOptions.customPayload[payloadKeys.results] : utils.allocBufferFromString(this.getGraphSubProtocol());
-
-    this.setCustomPayload(payload);
-  }
+		this.setCustomPayload(payload)
+	}
 }
 
 module.exports = {
-  GraphExecutionOptions,
-  graphProtocol,
-  payloadKeys
-};
+	GraphExecutionOptions,
+	graphProtocol,
+	payloadKeys,
+}

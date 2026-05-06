@@ -15,21 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
+"use strict"
+const util = require("util")
 
-const utils = require('../utils');
+const utils = require("../utils")
 /** @module types */
 
 /**
  * @private
  * @const
  */
-const millisecondsPerDay = 86400000;
+const millisecondsPerDay = 86400000
 /**
  * @private
  */
-const dateCenter = Math.pow(2,31);
+const dateCenter = Math.pow(2, 31)
 /**
  *
  * Creates a new instance of LocalDate.
@@ -55,83 +55,97 @@ const dateCenter = Math.pow(2,31);
  * @constructor
  */
 function LocalDate(year, month, day) {
-  //implementation detail: internally uses a UTC based date
-  if (typeof year === 'number' && typeof month === 'number' && typeof day === 'number') {
-    // Use setUTCFullYear as if there is a 2 digit year, Date.UTC() assumes
-    // that is the 20th century.
-    this.date = new Date();
-    this.date.setUTCHours(0, 0, 0, 0);
-    this.date.setUTCFullYear(year, month-1, day);
-    if(isNaN(this.date.getTime())) {
-      throw new Error(util.format('%d-%d-%d does not form a valid ES5 date!',
-        year, month, day));
-    }
-  }
-  else if (typeof month === 'undefined' && typeof day === 'undefined') {
-    if (typeof year === 'number') {
-      //in days since epoch.
-      if(year < -2147483648 || year > 2147483647) {
-        throw new Error('You must provide a valid value for days since epoch (-2147483648 <= value <= 2147483647).');
-      }
-      this.date = new Date(year * millisecondsPerDay);
-    }
-  }
+	//implementation detail: internally uses a UTC based date
+	if (
+		typeof year === "number" &&
+		typeof month === "number" &&
+		typeof day === "number"
+	) {
+		// Use setUTCFullYear as if there is a 2 digit year, Date.UTC() assumes
+		// that is the 20th century.
+		this.date = new Date()
+		this.date.setUTCHours(0, 0, 0, 0)
+		this.date.setUTCFullYear(year, month - 1, day)
+		if (isNaN(this.date.getTime())) {
+			throw new Error(
+				util.format(
+					"%d-%d-%d does not form a valid ES5 date!",
+					year,
+					month,
+					day,
+				),
+			)
+		}
+	} else if (typeof month === "undefined" && typeof day === "undefined") {
+		if (typeof year === "number") {
+			//in days since epoch.
+			if (year < -2147483648 || year > 2147483647) {
+				throw new Error(
+					"You must provide a valid value for days since epoch (-2147483648 <= value <= 2147483647).",
+				)
+			}
+			this.date = new Date(year * millisecondsPerDay)
+		}
+	}
 
-  if (typeof this.date === 'undefined') {
-    throw new Error('You must provide a valid year, month and day');
-  }
+	if (typeof this.date === "undefined") {
+		throw new Error("You must provide a valid year, month and day")
+	}
 
-  /** 
-   * If date cannot be represented yet given a valid days since epoch, track
-   * it internally.
-   */
-  this._value = isNaN(this.date.getTime()) ? year : null;
+	/**
+	 * If date cannot be represented yet given a valid days since epoch, track
+	 * it internally.
+	 */
+	this._value = isNaN(this.date.getTime()) ? year : null
 
-  /**
-   * A number representing the year.  May return NaN if cannot be represented as
-   * a Date.
-   * @type Number
-   */
-  this.year = this.date.getUTCFullYear();
-  /**
-   * A number between 1 and 12 inclusive representing the month.  May return
-   * NaN if cannot be represented as a Date.
-   * @type Number
-   */
-  this.month = this.date.getUTCMonth() + 1;
-  /**
-   * A number between 1 and the number of days in the given month of the given year (28, 29, 30, 31).
-   * May return NaN if cannot be represented as a Date.
-   * @type Number
-   */
-  this.day = this.date.getUTCDate();
+	/**
+	 * A number representing the year.  May return NaN if cannot be represented as
+	 * a Date.
+	 * @type Number
+	 */
+	this.year = this.date.getUTCFullYear()
+	/**
+	 * A number between 1 and 12 inclusive representing the month.  May return
+	 * NaN if cannot be represented as a Date.
+	 * @type Number
+	 */
+	this.month = this.date.getUTCMonth() + 1
+	/**
+	 * A number between 1 and the number of days in the given month of the given year (28, 29, 30, 31).
+	 * May return NaN if cannot be represented as a Date.
+	 * @type Number
+	 */
+	this.day = this.date.getUTCDate()
 }
 
 /**
  * Creates a new instance of LocalDate using the current year, month and day from the system clock in the default time-zone.
  */
 LocalDate.now = function () {
-  return LocalDate.fromDate(new Date());
-};
+	return LocalDate.fromDate(new Date())
+}
 
 /**
  * Creates a new instance of LocalDate using the current date from the system clock at UTC.
  */
 LocalDate.utcNow = function () {
-  return new LocalDate(Date.now());
-};
-
+	return new LocalDate(Date.now())
+}
 
 /**
  * Creates a new instance of LocalDate using the year, month and day from the provided local date time.
  * @param {Date} date
  */
 LocalDate.fromDate = function (date) {
-  if (isNaN(date.getTime())) {
-    throw new TypeError('Invalid date: ' + date);
-  }
-  return new LocalDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-};
+	if (isNaN(date.getTime())) {
+		throw new TypeError("Invalid date: " + date)
+	}
+	return new LocalDate(
+		date.getFullYear(),
+		date.getMonth() + 1,
+		date.getDate(),
+	)
+}
 
 /**
  * Creates a new instance of LocalDate using the year, month and day provided in the form: yyyy-mm-dd or
@@ -139,31 +153,35 @@ LocalDate.fromDate = function (date) {
  * @param {String} value
  */
 LocalDate.fromString = function (value) {
-  const dashCount = (value.match(/-/g) || []).length;
-  if(dashCount >= 2) {
-    let multiplier = 1;
-    if (value[0] === '-') {
-      value = value.substring(1);
-      multiplier = -1;
-    }
-    const parts = value.split('-');
-    return new LocalDate(multiplier * parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10));
-  }
-  if(value.match(/^-?\d+$/)) {
-    // Parse as days since epoch.
-    return new LocalDate(parseInt(value, 10));
-  }
-  throw new Error("Invalid input '" + value + "'.");
-};
+	const dashCount = (value.match(/-/g) || []).length
+	if (dashCount >= 2) {
+		let multiplier = 1
+		if (value[0] === "-") {
+			value = value.substring(1)
+			multiplier = -1
+		}
+		const parts = value.split("-")
+		return new LocalDate(
+			multiplier * parseInt(parts[0], 10),
+			parseInt(parts[1], 10),
+			parseInt(parts[2], 10),
+		)
+	}
+	if (value.match(/^-?\d+$/)) {
+		// Parse as days since epoch.
+		return new LocalDate(parseInt(value, 10))
+	}
+	throw new Error("Invalid input '" + value + "'.")
+}
 
 /**
  * Creates a new instance of LocalDate using the bytes representation.
  * @param {Buffer} buffer
  */
 LocalDate.fromBuffer = function (buffer) {
-  //move to unix epoch: 0.
-  return new LocalDate((buffer.readUInt32BE(0) - dateCenter));
-};
+	//move to unix epoch: 0.
+	return new LocalDate(buffer.readUInt32BE(0) - dateCenter)
+}
 
 /**
  * Compares this LocalDate with the given one.
@@ -172,17 +190,21 @@ LocalDate.fromBuffer = function (buffer) {
  * if the given one is greater.
  */
 LocalDate.prototype.compare = function (other) {
-  const thisValue = isNaN(this.date.getTime()) ? this._value * millisecondsPerDay : this.date.getTime();
-  const otherValue = isNaN(other.date.getTime()) ? other._value * millisecondsPerDay : other.date.getTime();
-  const diff = thisValue - otherValue;
-  if (diff < 0) {
-    return -1;
-  }
-  if (diff > 0) {
-    return 1;
-  }
-  return 0;
-};
+	const thisValue = isNaN(this.date.getTime())
+		? this._value * millisecondsPerDay
+		: this.date.getTime()
+	const otherValue = isNaN(other.date.getTime())
+		? other._value * millisecondsPerDay
+		: other.date.getTime()
+	const diff = thisValue - otherValue
+	if (diff < 0) {
+		return -1
+	}
+	if (diff > 0) {
+		return 1
+	}
+	return 0
+}
 
 /**
  * Returns true if the value of the LocalDate instance and other are the same
@@ -190,25 +212,27 @@ LocalDate.prototype.compare = function (other) {
  * @returns {Boolean}
  */
 LocalDate.prototype.equals = function (other) {
-  return ((other instanceof LocalDate)) && this.compare(other) === 0;
-};
+	return other instanceof LocalDate && this.compare(other) === 0
+}
 
 LocalDate.prototype.inspect = function () {
-  return this.constructor.name + ': ' + this.toString();
-};
+	return this.constructor.name + ": " + this.toString()
+}
 
 /**
  * Gets the bytes representation of the instance.
  * @returns {Buffer}
  */
 LocalDate.prototype.toBuffer = function () {
-  //days since unix epoch
-  const daysSinceEpoch = isNaN(this.date.getTime()) ? this._value : Math.floor(this.date.getTime() / millisecondsPerDay);
-  const value = daysSinceEpoch + dateCenter;
-  const buf = utils.allocBufferUnsafe(4);
-  buf.writeUInt32BE(value, 0);
-  return buf;
-};
+	//days since unix epoch
+	const daysSinceEpoch = isNaN(this.date.getTime())
+		? this._value
+		: Math.floor(this.date.getTime() / millisecondsPerDay)
+	const value = daysSinceEpoch + dateCenter
+	const buf = utils.allocBufferUnsafe(4)
+	buf.writeUInt32BE(value, 0)
+	return buf
+}
 
 /**
  * Gets the string representation of the instance in the form: yyyy-mm-dd if
@@ -216,28 +240,31 @@ LocalDate.prototype.toBuffer = function () {
  * @returns {String}
  */
 LocalDate.prototype.toString = function () {
-  let result;
-  //if cannot be parsed as date, return days since epoch representation.
-  if (isNaN(this.date.getTime())) {
-    return this._value.toString();
-  }
-  if (this.year < 0) {
-    result = '-' + fillZeros((this.year * -1).toString(), 4);
-  }
-  else {
-    result = fillZeros(this.year.toString(), 4);
-  }
-  result += '-' + fillZeros(this.month.toString(), 2) + '-' + fillZeros(this.day.toString(), 2);
-  return result;
-};
+	let result
+	//if cannot be parsed as date, return days since epoch representation.
+	if (isNaN(this.date.getTime())) {
+		return this._value.toString()
+	}
+	if (this.year < 0) {
+		result = "-" + fillZeros((this.year * -1).toString(), 4)
+	} else {
+		result = fillZeros(this.year.toString(), 4)
+	}
+	result +=
+		"-" +
+		fillZeros(this.month.toString(), 2) +
+		"-" +
+		fillZeros(this.day.toString(), 2)
+	return result
+}
 
 /**
  * Gets the string representation of the instance in the form: yyyy-mm-dd, valid for JSON.
  * @returns {String}
  */
 LocalDate.prototype.toJSON = function () {
-  return this.toString();
-};
+	return this.toString()
+}
 
 /**
  * @param {String} value
@@ -245,10 +272,10 @@ LocalDate.prototype.toJSON = function () {
  * @private
  */
 function fillZeros(value, amount) {
-  if (value.length >= amount) {
-    return value;
-  }
-  return utils.stringRepeat('0', amount - value.length) + value;
+	if (value.length >= amount) {
+		return value
+	}
+	return utils.stringRepeat("0", amount - value.length) + value
 }
 
-module.exports = LocalDate;
+module.exports = LocalDate

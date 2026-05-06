@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-'use strict';
+"use strict"
 
 /**
  * DataStax module.
@@ -26,5 +26,5 @@
  * @module datastax
  */
 
-exports.graph = require('./graph');
-exports.search = require('./search');
+exports.graph = require("./graph")
+exports.search = require("./search")

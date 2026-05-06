@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict"
 
-const dateRangeModule = require('./date-range');
+const dateRangeModule = require("./date-range")
 
 /**
  * Search module.
@@ -27,6 +27,6 @@ const dateRangeModule = require('./date-range');
  * @module datastax/search
  */
 
-exports.DateRange = dateRangeModule.DateRange;
-exports.DateRangeBound = dateRangeModule.DateRangeBound;
-exports.dateRangePrecision = dateRangeModule.dateRangePrecision;
+exports.DateRange = dateRangeModule.DateRange
+exports.DateRangeBound = dateRangeModule.DateRangeBound
+exports.dateRangePrecision = dateRangeModule.dateRangePrecision

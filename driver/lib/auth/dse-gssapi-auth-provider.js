@@ -15,17 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
-const { AuthProvider } = require('./provider');
-const BaseDseAuthenticator = require('./base-dse-authenticator');
-const GssapiClient = require('./gssapi-client');
-const dns = require('dns');
-const utils = require('../utils');
+"use strict"
+const util = require("util")
+const { AuthProvider } = require("./provider")
+const BaseDseAuthenticator = require("./base-dse-authenticator")
+const GssapiClient = require("./gssapi-client")
+const dns = require("dns")
+const utils = require("../utils")
 
-const mechanism = utils.allocBufferFromString('GSSAPI');
-const initialServerChallenge = 'GSSAPI-START';
-const emptyBuffer = utils.allocBuffer(0);
+const mechanism = utils.allocBufferFromString("GSSAPI")
+const initialServerChallenge = "GSSAPI-START"
+const emptyBuffer = utils.allocBuffer(0)
 
 /**
  * Creates a new instance of <code>DseGssapiAuthProvider</code>.
@@ -54,27 +54,30 @@ const emptyBuffer = utils.allocBuffer(0);
  * @constructor
  */
 function DseGssapiAuthProvider(gssOptions) {
-  //load the kerberos at construction time
-  try {
-    // eslint-disable-next-line
-    this._kerberos = require('kerberos');
-  }
-  catch (err) {
-    if (err.code === 'MODULE_NOT_FOUND') {
-      const newErr = new Error('You must install module "kerberos" to use GSSAPI auth provider: ' +
-        'https://www.npmjs.com/package/kerberos');
-      newErr.code = err.code;
-      throw newErr;
-    }
-    throw err;
-  }
-  gssOptions = gssOptions || utils.emptyObject;
-  this.authorizationId = gssOptions.authorizationId || gssOptions.user;
-  this.service = gssOptions.service;
-  this.hostNameResolver = gssOptions.hostNameResolver || DseGssapiAuthProvider.lookupServiceResolver;
+	//load the kerberos at construction time
+	try {
+		// eslint-disable-next-line
+		this._kerberos = require("kerberos")
+	} catch (err) {
+		if (err.code === "MODULE_NOT_FOUND") {
+			const newErr = new Error(
+				'You must install module "kerberos" to use GSSAPI auth provider: ' +
+					"https://www.npmjs.com/package/kerberos",
+			)
+			newErr.code = err.code
+			throw newErr
+		}
+		throw err
+	}
+	gssOptions = gssOptions || utils.emptyObject
+	this.authorizationId = gssOptions.authorizationId || gssOptions.user
+	this.service = gssOptions.service
+	this.hostNameResolver =
+		gssOptions.hostNameResolver ||
+		DseGssapiAuthProvider.lookupServiceResolver
 }
 
-util.inherits(DseGssapiAuthProvider, AuthProvider);
+util.inherits(DseGssapiAuthProvider, AuthProvider)
 
 /**
  * Returns an Authenticator instance to be used by the driver when connecting to a host.
@@ -84,13 +87,19 @@ util.inherits(DseGssapiAuthProvider, AuthProvider);
  * @returns {Authenticator}
  */
 DseGssapiAuthProvider.prototype.newAuthenticator = function (endpoint, name) {
-  let address = endpoint;
-  if (endpoint.indexOf(':') > 0) {
-    address = endpoint.split(':')[0];
-  }
-  return new GssapiAuthenticator(
-    this._kerberos, address, name, this.authorizationId, this.service, this.hostNameResolver);
-};
+	let address = endpoint
+	if (endpoint.indexOf(":") > 0) {
+		address = endpoint.split(":")[0]
+	}
+	return new GssapiAuthenticator(
+		this._kerberos,
+		address,
+		name,
+		this.authorizationId,
+		this.service,
+		this.hostNameResolver,
+	)
+}
 
 /**
  * Performs a lookupService query that resolves an IPv4 or IPv6 address to a hostname.  This ultimately makes a
@@ -103,20 +112,20 @@ DseGssapiAuthProvider.prototype.newAuthenticator = function (endpoint, name) {
  * @param {Function} callback The callback function with <code>err</code> and <code>hostname</code> arguments.
  */
 DseGssapiAuthProvider.lookupServiceResolver = function (ip, callback) {
-  if (!dns.lookupService) {
-    return DseGssapiAuthProvider.reverseDnsResolver(ip, callback);
-  }
-  dns.lookupService(ip, 0, function (err, hostname) {
-    if (err) {
-      return callback(err);
-    }
-    if (!hostname) {
-      //fallback to ip
-      return callback(null, ip);
-    }
-    callback(null, hostname);
-  });
-};
+	if (!dns.lookupService) {
+		return DseGssapiAuthProvider.reverseDnsResolver(ip, callback)
+	}
+	dns.lookupService(ip, 0, function (err, hostname) {
+		if (err) {
+			return callback(err)
+		}
+		if (!hostname) {
+			//fallback to ip
+			return callback(null, ip)
+		}
+		callback(null, hostname)
+	})
+}
 
 /**
  * Performs a reverse DNS query that resolves an IPv4 or IPv6 address to a hostname.
@@ -124,17 +133,17 @@ DseGssapiAuthProvider.lookupServiceResolver = function (ip, callback) {
  * @param {Function} callback The callback function with <code>err</code> and <code>hostname</code> arguments.
  */
 DseGssapiAuthProvider.reverseDnsResolver = function (ip, callback) {
-  dns.reverse(ip, function (err, names) {
-    if (err) {
-      return callback(err);
-    }
-    if (!names || !names.length) {
-      //fallback to ip
-      return callback(null, ip);
-    }
-    callback(null, names[0]);
-  });
-};
+	dns.reverse(ip, function (err, names) {
+		if (err) {
+			return callback(err)
+		}
+		if (!names || !names.length) {
+			//fallback to ip
+			return callback(null, ip)
+		}
+		callback(null, names[0])
+	})
+}
 
 /**
  * Effectively a no op operation, returns the IP address provided.
@@ -142,8 +151,8 @@ DseGssapiAuthProvider.reverseDnsResolver = function (ip, callback) {
  * @param {Function} callback The callback function with <code>err</code> and <code>hostname</code> arguments.
  */
 DseGssapiAuthProvider.useIpResolver = function (ip, callback) {
-  callback(null, ip);
-};
+	callback(null, ip)
+}
 
 /**
  * @param {Object} kerberosModule
@@ -155,24 +164,35 @@ DseGssapiAuthProvider.useIpResolver = function (ip, callback) {
  * @extends Authenticator
  * @private
  */
-function GssapiAuthenticator(kerberosModule, address, authenticatorName, authorizationId, service, hostNameResolver) {
-  BaseDseAuthenticator.call(this, authenticatorName);
-  this.authorizationId = authorizationId;
-  this.address = address;
-  this.client = GssapiClient.createNew(kerberosModule, authorizationId, service);
-  this.hostNameResolver = hostNameResolver;
+function GssapiAuthenticator(
+	kerberosModule,
+	address,
+	authenticatorName,
+	authorizationId,
+	service,
+	hostNameResolver,
+) {
+	BaseDseAuthenticator.call(this, authenticatorName)
+	this.authorizationId = authorizationId
+	this.address = address
+	this.client = GssapiClient.createNew(
+		kerberosModule,
+		authorizationId,
+		service,
+	)
+	this.hostNameResolver = hostNameResolver
 }
 
 //noinspection JSCheckFunctionSignatures
-util.inherits(GssapiAuthenticator, BaseDseAuthenticator);
+util.inherits(GssapiAuthenticator, BaseDseAuthenticator)
 
 GssapiAuthenticator.prototype.getMechanism = function () {
-  return mechanism;
-};
+	return mechanism
+}
 
 GssapiAuthenticator.prototype.getInitialServerChallenge = function () {
-  return utils.allocBufferFromString(initialServerChallenge);
-};
+	return utils.allocBufferFromString(initialServerChallenge)
+}
 
 //noinspection JSUnusedGlobalSymbols
 /**
@@ -180,33 +200,39 @@ GssapiAuthenticator.prototype.getInitialServerChallenge = function () {
  * @param {Function} callback
  */
 GssapiAuthenticator.prototype.initialResponse = function (callback) {
-  const self = this;
-  //initialize the GSS client
-  let host = this.address;
-  utils.series([
-    function getHostName(next) {
-      self.hostNameResolver(self.address, function (err, name) {
-        if (!err && name) {
-          host = name;
-        }
-        next();
-      });
-    },
-    function initClient(next) {
-      self.client.init(host, function (err) {
-        if (err) {
-          return next(err);
-        }
-        if (!self._isDseAuthenticator()) {
-          //fallback
-          return self.evaluateChallenge(self.getInitialServerChallenge(), next);
-        }
-        //send the mechanism as a first auth message
-        next(null, self.getMechanism());
-      });
-    }
-  ], callback);
-};
+	const self = this
+	//initialize the GSS client
+	let host = this.address
+	utils.series(
+		[
+			function getHostName(next) {
+				self.hostNameResolver(self.address, function (err, name) {
+					if (!err && name) {
+						host = name
+					}
+					next()
+				})
+			},
+			function initClient(next) {
+				self.client.init(host, function (err) {
+					if (err) {
+						return next(err)
+					}
+					if (!self._isDseAuthenticator()) {
+						//fallback
+						return self.evaluateChallenge(
+							self.getInitialServerChallenge(),
+							next,
+						)
+					}
+					//send the mechanism as a first auth message
+					next(null, self.getMechanism())
+				})
+			},
+		],
+		callback,
+	)
+}
 
 /**
  * Evaluates a challenge received from the Server. Generally, this method should callback with
@@ -215,19 +241,21 @@ GssapiAuthenticator.prototype.initialResponse = function (callback) {
  * @param {Function} callback
  * @override
  */
-GssapiAuthenticator.prototype.evaluateChallenge = function (challenge, callback) {
-  if (!challenge || challenge.toString() === initialServerChallenge) {
-    challenge = emptyBuffer;
-  }
-  this.client.evaluateChallenge(challenge, callback);
-};
+GssapiAuthenticator.prototype.evaluateChallenge = function (
+	challenge,
+	callback,
+) {
+	if (!challenge || challenge.toString() === initialServerChallenge) {
+		challenge = emptyBuffer
+	}
+	this.client.evaluateChallenge(challenge, callback)
+}
 
 /**
  * @override
  */
 GssapiAuthenticator.prototype.onAuthenticationSuccess = function (token) {
-  this.client.shutdown(function noop() { });
-};
+	this.client.shutdown(function noop() {})
+}
 
-
-module.exports = DseGssapiAuthProvider;
+module.exports = DseGssapiAuthProvider

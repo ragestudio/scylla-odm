@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict"
 
 /**
  * DSE Authentication module.
@@ -25,17 +25,17 @@
  * @module auth
  */
 
-const { Authenticator, AuthProvider } = require('./provider');
-const { PlainTextAuthProvider } = require('./plain-text-auth-provider');
-const DseGssapiAuthProvider = require('./dse-gssapi-auth-provider');
-const DsePlainTextAuthProvider = require('./dse-plain-text-auth-provider');
-const NoAuthProvider = require('./no-auth-provider');
+const { Authenticator, AuthProvider } = require("./provider")
+const { PlainTextAuthProvider } = require("./plain-text-auth-provider")
+const DseGssapiAuthProvider = require("./dse-gssapi-auth-provider")
+const DsePlainTextAuthProvider = require("./dse-plain-text-auth-provider")
+const NoAuthProvider = require("./no-auth-provider")
 
 module.exports = {
-  Authenticator,
-  AuthProvider,
-  DseGssapiAuthProvider,
-  DsePlainTextAuthProvider,
-  NoAuthProvider,
-  PlainTextAuthProvider
-};
+	Authenticator,
+	AuthProvider,
+	DseGssapiAuthProvider,
+	DsePlainTextAuthProvider,
+	NoAuthProvider,
+	PlainTextAuthProvider,
+}

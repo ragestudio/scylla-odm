@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
-const utils = require('../utils');
-const Geometry = require('./geometry');
+"use strict"
+const util = require("util")
+const utils = require("../utils")
+const Geometry = require("./geometry")
 
 /**
  * Creates a new {@link Point} instance.
@@ -33,26 +33,26 @@ const Geometry = require('./geometry');
  * @constructor
  */
 function Point(x, y) {
-  if (typeof x !== 'number' || typeof y !== 'number') {
-    throw new TypeError('X and Y must be numbers');
-  }
-  if (isNaN(x) || isNaN(y)) {
-    throw new TypeError('X and Y must be numbers');
-  }
-  /**
-   * Returns the X coordinate of this 2D point.
-   * @type {Number}
-   */
-  this.x = x;
-  /**
-   * Returns the Y coordinate of this 2D point.
-   * @type {Number}
-   */
-  this.y = y;
+	if (typeof x !== "number" || typeof y !== "number") {
+		throw new TypeError("X and Y must be numbers")
+	}
+	if (isNaN(x) || isNaN(y)) {
+		throw new TypeError("X and Y must be numbers")
+	}
+	/**
+	 * Returns the X coordinate of this 2D point.
+	 * @type {Number}
+	 */
+	this.x = x
+	/**
+	 * Returns the Y coordinate of this 2D point.
+	 * @type {Number}
+	 */
+	this.y = y
 }
 
 //noinspection JSCheckFunctionSignatures
-util.inherits(Point, Geometry);
+util.inherits(Point, Geometry)
 
 /**
  * Creates a {@link Point} instance from
@@ -62,15 +62,18 @@ util.inherits(Point, Geometry);
  * @returns {Point}
  */
 Point.fromBuffer = function (buffer) {
-  if (!buffer || buffer.length !== 21) {
-    throw new TypeError('2D Point buffer should contain 21 bytes');
-  }
-  const endianness = Geometry.getEndianness(buffer.readInt8(0, true));
-  if (Geometry.readInt32(buffer, endianness, 1) !== Geometry.types.Point2D) {
-    throw new TypeError('Binary representation was not a point');
-  }
-  return new Point(Geometry.readDouble(buffer, endianness, 5), Geometry.readDouble(buffer, endianness, 13));
-};
+	if (!buffer || buffer.length !== 21) {
+		throw new TypeError("2D Point buffer should contain 21 bytes")
+	}
+	const endianness = Geometry.getEndianness(buffer.readInt8(0, true))
+	if (Geometry.readInt32(buffer, endianness, 1) !== Geometry.types.Point2D) {
+		throw new TypeError("Binary representation was not a point")
+	}
+	return new Point(
+		Geometry.readDouble(buffer, endianness, 5),
+		Geometry.readDouble(buffer, endianness, 13),
+	)
+}
 
 /**
  * Creates a {@link Point} instance from
@@ -80,13 +83,13 @@ Point.fromBuffer = function (buffer) {
  * @returns {Point}
  */
 Point.fromString = function (textValue) {
-  const wktRegex = /^POINT\s?\(([-0-9.]+) ([-0-9.]+)\)$/g;
-  const matches = wktRegex.exec(textValue);
-  if (!matches || matches.length !== 3) {
-    throw new TypeError('2D Point WTK should contain 2 coordinates');
-  }
-  return new Point(parseFloat(matches[1]), parseFloat(matches[2]));
-};
+	const wktRegex = /^POINT\s?\(([-0-9.]+) ([-0-9.]+)\)$/g
+	const matches = wktRegex.exec(textValue)
+	if (!matches || matches.length !== 3) {
+		throw new TypeError("2D Point WTK should contain 2 coordinates")
+	}
+	return new Point(parseFloat(matches[1]), parseFloat(matches[2]))
+}
 
 /**
  * Returns a <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary">Well-known Binary</a> (WKB)
@@ -94,13 +97,13 @@ Point.fromString = function (textValue) {
  * @returns {Buffer}
  */
 Point.prototype.toBuffer = function () {
-  const buffer = utils.allocBufferUnsafe(21);
-  this.writeEndianness(buffer, 0);
-  this.writeInt32(Geometry.types.Point2D, buffer, 1);
-  this.writeDouble(this.x, buffer, 5);
-  this.writeDouble(this.y, buffer, 13);
-  return buffer;
-};
+	const buffer = utils.allocBufferUnsafe(21)
+	this.writeEndianness(buffer, 0)
+	this.writeInt32(Geometry.types.Point2D, buffer, 1)
+	this.writeDouble(this.x, buffer, 5)
+	this.writeDouble(this.y, buffer, 13)
+	return buffer
+}
 
 /**
  * Returns true if the values of the point are the same, otherwise it returns false.
@@ -108,29 +111,29 @@ Point.prototype.toBuffer = function () {
  * @returns {Boolean}
  */
 Point.prototype.equals = function (other) {
-  if (!(other instanceof Point)) {
-    return false;
-  }
-  return (this.x === other.x && this.y === other.y);
-};
+	if (!(other instanceof Point)) {
+		return false
+	}
+	return this.x === other.x && this.y === other.y
+}
 
 /**
  * Returns Well-known text (WKT) representation of the geometry object.
  * @returns {String}
  */
 Point.prototype.toString = function () {
-  return util.format('POINT (%d %d)', this.x, this.y);
-};
+	return util.format("POINT (%d %d)", this.x, this.y)
+}
 
 Point.prototype.useBESerialization = function () {
-  return false;
-};
+	return false
+}
 
 /**
  * Returns a JSON representation of this geo-spatial type.
  */
 Point.prototype.toJSON = function () {
-  return { type: 'Point', coordinates: [ this.x, this.y ]};
-};
+	return { type: "Point", coordinates: [this.x, this.y] }
+}
 
-module.exports = Point;
+module.exports = Point

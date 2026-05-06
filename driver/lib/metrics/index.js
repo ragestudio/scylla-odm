@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-'use strict';
+"use strict"
 
-const ClientMetrics = require('./client-metrics');
-const DefaultMetrics = require('./default-metrics');
+const ClientMetrics = require("./client-metrics")
+const DefaultMetrics = require("./default-metrics")
 
 /**
  * The <code>metrics</code> module contains interfaces and implementations used by the driver to expose
@@ -27,4 +27,4 @@ const DefaultMetrics = require('./default-metrics');
  * @module metrics
  */
 
-module.exports = { ClientMetrics, DefaultMetrics };
+module.exports = { ClientMetrics, DefaultMetrics }

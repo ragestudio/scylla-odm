@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const dns = require('dns');
-const util = require('util');
-const utils = require('../utils');
+"use strict"
+const dns = require("dns")
+const util = require("util")
+const utils = require("../utils")
 /** @module policies/addressResolution */
 /**
  * @class
@@ -44,9 +44,7 @@ const utils = require('../utils');
  * by Cassandra nodes to the driver are.
  * @constructor
  */
-function AddressTranslator() {
-
-}
+function AddressTranslator() {}
 
 /**
  * Translates a Cassandra <code>rpc_address</code> to another address if necessary.
@@ -61,8 +59,8 @@ function AddressTranslator() {
  * The endpoint is an string composed of the IP address and the port number in the format <code>ipAddress:port</code>.
  */
 AddressTranslator.prototype.translate = function (address, port, callback) {
-  callback(address + ':' + port);
-};
+	callback(address + ":" + port)
+}
 
 /**
  * @class
@@ -80,52 +78,58 @@ AddressTranslator.prototype.translate = function (address, port, callback) {
  * </p>
  * @constructor
  */
-function EC2MultiRegionTranslator() {
+function EC2MultiRegionTranslator() {}
 
-}
-
-util.inherits(EC2MultiRegionTranslator, AddressTranslator);
+util.inherits(EC2MultiRegionTranslator, AddressTranslator)
 
 /**
  * Addresses in the same EC2 region are translated to private IPs and addresses in
  * different EC2 regions (than the client) are unchanged
  */
-EC2MultiRegionTranslator.prototype.translate = function (address, port, callback) {
-  let newAddress = address;
-  const self = this;
-  let name;
-  utils.series([
-    function resolve(next) {
-      dns.reverse(address, function (err, hostNames) {
-        if (err) {
-          return next(err);
-        }
-        if (!hostNames) {
-          return next();
-        }
-        name = hostNames[0];
-        next();
-      });
-    },
-    function lookup(next) {
-      if (!name) {
-        return next();
-      }
-      dns.lookup(name, function (err, lookupAddress) {
-        if (err) {
-          return next(err);
-        }
-        newAddress = lookupAddress;
-        next();
-      });
-    }], function (err) {
-    if (err) {
-      //there was an issue while doing dns resolution
-      self.logError(address, err);
-    }
-    callback(newAddress + ':' + port);
-  });
-};
+EC2MultiRegionTranslator.prototype.translate = function (
+	address,
+	port,
+	callback,
+) {
+	let newAddress = address
+	const self = this
+	let name
+	utils.series(
+		[
+			function resolve(next) {
+				dns.reverse(address, function (err, hostNames) {
+					if (err) {
+						return next(err)
+					}
+					if (!hostNames) {
+						return next()
+					}
+					name = hostNames[0]
+					next()
+				})
+			},
+			function lookup(next) {
+				if (!name) {
+					return next()
+				}
+				dns.lookup(name, function (err, lookupAddress) {
+					if (err) {
+						return next(err)
+					}
+					newAddress = lookupAddress
+					next()
+				})
+			},
+		],
+		function (err) {
+			if (err) {
+				//there was an issue while doing dns resolution
+				self.logError(address, err)
+			}
+			callback(newAddress + ":" + port)
+		},
+	)
+}
 
 /**
  * Log method called to log errors that occurred while performing dns resolution.
@@ -134,8 +138,8 @@ EC2MultiRegionTranslator.prototype.translate = function (address, port, callback
  * @param {Error} err
  */
 EC2MultiRegionTranslator.prototype.logError = function (address, err) {
-  //Do nothing by default
-};
+	//Do nothing by default
+}
 
-exports.AddressTranslator = AddressTranslator;
-exports.EC2MultiRegionTranslator = EC2MultiRegionTranslator;
+exports.AddressTranslator = AddressTranslator
+exports.EC2MultiRegionTranslator = EC2MultiRegionTranslator

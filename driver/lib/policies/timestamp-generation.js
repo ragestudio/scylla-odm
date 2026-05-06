@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict"
 
-const util = require('util');
-const { Long } = require('../types');
-const errors = require('../errors');
+const util = require("util")
+const { Long } = require("../types")
+const errors = require("../errors")
 
 /** @module policies/timestampGeneration */
 
@@ -28,14 +28,14 @@ const errors = require('../errors');
  * @const
  * @private
  */
-const _maxSafeNumberDate = 9007199254740;
+const _maxSafeNumberDate = 9007199254740
 
 /**
  * A long representing the value 1000
  * @const
  * @private
  */
-const _longOneThousand = Long.fromInt(1000);
+const _longOneThousand = Long.fromInt(1000)
 
 /**
  * Creates a new instance of {@link TimestampGenerator}.
@@ -47,9 +47,7 @@ const _longOneThousand = Long.fromInt(1000);
  * </p>
  * @constructor
  */
-function TimestampGenerator() {
-
-}
+function TimestampGenerator() {}
 
 /**
  * Returns the next timestamp.
@@ -68,8 +66,8 @@ function TimestampGenerator() {
  * @abstract
  */
 TimestampGenerator.prototype.next = function (client) {
-  throw new Error('next() must be implemented');
-};
+	throw new Error("next() must be implemented")
+}
 
 /**
  * A timestamp generator that guarantees monotonically increasing timestamps and logs warnings when timestamps
@@ -87,86 +85,93 @@ TimestampGenerator.prototype.next = function (client) {
  * @constructor
  */
 function MonotonicTimestampGenerator(warningThreshold, minLogInterval) {
-  if (warningThreshold < 0) {
-    throw new errors.ArgumentError('warningThreshold can not be lower than 0');
-  }
-  this._warningThreshold = warningThreshold || 1000;
-  this._minLogInterval = 1000;
-  if (typeof minLogInterval === 'number') {
-    // A value under 1 will disable logging
-    this._minLogInterval = minLogInterval;
-  }
-  this._micros = -1;
-  this._lastDate = 0;
-  this._lastLogDate = 0;
+	if (warningThreshold < 0) {
+		throw new errors.ArgumentError(
+			"warningThreshold can not be lower than 0",
+		)
+	}
+	this._warningThreshold = warningThreshold || 1000
+	this._minLogInterval = 1000
+	if (typeof minLogInterval === "number") {
+		// A value under 1 will disable logging
+		this._minLogInterval = minLogInterval
+	}
+	this._micros = -1
+	this._lastDate = 0
+	this._lastLogDate = 0
 }
 
-util.inherits(MonotonicTimestampGenerator, TimestampGenerator);
+util.inherits(MonotonicTimestampGenerator, TimestampGenerator)
 
 /**
  * Returns the current time in milliseconds since UNIX epoch
  * @returns {Number}
  */
 MonotonicTimestampGenerator.prototype.getDate = function () {
-  return Date.now();
-};
+	return Date.now()
+}
 
 MonotonicTimestampGenerator.prototype.next = function (client) {
-  let date = this.getDate();
-  let drifted = 0;
-  if (date > this._lastDate) {
-    this._micros = 0;
-    this._lastDate = date;
-    return this._generateMicroseconds();
-  }
+	let date = this.getDate()
+	let drifted = 0
+	if (date > this._lastDate) {
+		this._micros = 0
+		this._lastDate = date
+		return this._generateMicroseconds()
+	}
 
-  if (date < this._lastDate) {
-    drifted = this._lastDate - date;
-    date = this._lastDate;
-  }
-  if (++this._micros === 1000) {
-    this._micros = 0;
-    if (date === this._lastDate) {
-      // Move date 1 millisecond into the future
-      date++;
-      drifted++;
-    }
-  }
-  const lastDate = this._lastDate;
-  this._lastDate = date;
-  const result = this._generateMicroseconds();
-  if (drifted >= this._warningThreshold) {
-    // Avoid logging an unbounded amount of times within a clock-skew event or during an interval when more than 1
-    // query is being issued by microsecond
-    const currentLogDate = Date.now();
-    if (this._minLogInterval > 0 && this._lastLogDate + this._minLogInterval <= currentLogDate){
-      const message = util.format(
-        'Timestamp generated using current date was %d milliseconds behind the last generated timestamp (which ' +
-        'millisecond portion was %d), the returned value (%s) is being artificially incremented to guarantee ' +
-        'monotonicity.',
-        drifted, lastDate, result);
-      this._lastLogDate = currentLogDate;
-      client.log('warning', message);
-    }
-  }
-  return result;
-};
+	if (date < this._lastDate) {
+		drifted = this._lastDate - date
+		date = this._lastDate
+	}
+	if (++this._micros === 1000) {
+		this._micros = 0
+		if (date === this._lastDate) {
+			// Move date 1 millisecond into the future
+			date++
+			drifted++
+		}
+	}
+	const lastDate = this._lastDate
+	this._lastDate = date
+	const result = this._generateMicroseconds()
+	if (drifted >= this._warningThreshold) {
+		// Avoid logging an unbounded amount of times within a clock-skew event or during an interval when more than 1
+		// query is being issued by microsecond
+		const currentLogDate = Date.now()
+		if (
+			this._minLogInterval > 0 &&
+			this._lastLogDate + this._minLogInterval <= currentLogDate
+		) {
+			const message = util.format(
+				"Timestamp generated using current date was %d milliseconds behind the last generated timestamp (which " +
+					"millisecond portion was %d), the returned value (%s) is being artificially incremented to guarantee " +
+					"monotonicity.",
+				drifted,
+				lastDate,
+				result,
+			)
+			this._lastLogDate = currentLogDate
+			client.log("warning", message)
+		}
+	}
+	return result
+}
 
 /**
  * @private
  * @returns {Number|Long}
  */
 MonotonicTimestampGenerator.prototype._generateMicroseconds = function () {
-  if (this._lastDate < _maxSafeNumberDate) {
-    // We are safe until Jun 06 2255, its faster to perform this operations on Number than on Long
-    // We hope to have native int64 by then :)
-    return this._lastDate * 1000 + this._micros;
-  }
-  return Long
-    .fromNumber(this._lastDate)
-    .multiply(_longOneThousand)
-    .add(Long.fromInt(this._micros));
-};
+	if (this._lastDate < _maxSafeNumberDate) {
+		// We are safe until Jun 06 2255, its faster to perform this operations on Number than on Long
+		// We hope to have native int64 by then :)
+		return this._lastDate * 1000 + this._micros
+	}
+	return Long.fromNumber(this._lastDate)
+		.multiply(_longOneThousand)
+		.add(Long.fromInt(this._micros))
+}
 
-exports.TimestampGenerator = TimestampGenerator;
-exports.MonotonicTimestampGenerator = MonotonicTimestampGenerator;
+exports.TimestampGenerator = TimestampGenerator
+exports.MonotonicTimestampGenerator = MonotonicTimestampGenerator

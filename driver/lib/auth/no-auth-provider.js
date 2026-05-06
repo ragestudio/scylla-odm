@@ -16,28 +16,28 @@
  * limitations under the License.
  */
 
-'use strict';
+"use strict"
 
-const { AuthProvider, Authenticator } = require('./provider');
-const { PlainTextAuthenticator } = require('./plain-text-auth-provider');
-const errors = require('../errors');
+const { AuthProvider, Authenticator } = require("./provider")
+const { PlainTextAuthenticator } = require("./plain-text-auth-provider")
+const errors = require("../errors")
 
-const dseAuthenticator = 'com.datastax.bdp.cassandra.auth.DseAuthenticator';
+const dseAuthenticator = "com.datastax.bdp.cassandra.auth.DseAuthenticator"
 
 /**
  * Internal authentication provider that is used when no provider has been set by the user.
  * @ignore
  */
 class NoAuthProvider extends AuthProvider {
-  newAuthenticator(endpoint, name) {
-    if (name === dseAuthenticator) {
-      // Try to use transitional mode
-      return new TransitionalModePlainTextAuthenticator();
-    }
+	newAuthenticator(endpoint, name) {
+		if (name === dseAuthenticator) {
+			// Try to use transitional mode
+			return new TransitionalModePlainTextAuthenticator()
+		}
 
-    // Use an authenticator that doesn't allow auth flow
-    return new NoAuthAuthenticator(endpoint);
-  }
+		// Use an authenticator that doesn't allow auth flow
+		return new NoAuthAuthenticator(endpoint)
+	}
 }
 
 /**
@@ -45,15 +45,18 @@ class NoAuthProvider extends AuthProvider {
  * @ignore
  */
 class NoAuthAuthenticator extends Authenticator {
-  constructor(endpoint) {
-    super();
-    this.endpoint = endpoint;
-  }
+	constructor(endpoint) {
+		super()
+		this.endpoint = endpoint
+	}
 
-  initialResponse(callback) {
-    callback(new errors.AuthenticationError(
-      `Host ${this.endpoint} requires authentication, but no authenticator found in the options`));
-  }
+	initialResponse(callback) {
+		callback(
+			new errors.AuthenticationError(
+				`Host ${this.endpoint} requires authentication, but no authenticator found in the options`,
+			),
+		)
+	}
 }
 
 /**
@@ -64,9 +67,9 @@ class NoAuthAuthenticator extends Authenticator {
  * by sending back a dummy credential.
  */
 class TransitionalModePlainTextAuthenticator extends PlainTextAuthenticator {
-  constructor() {
-    super('', '');
-  }
+	constructor() {
+		super("", "")
+	}
 }
 
-module.exports = NoAuthProvider;
+module.exports = NoAuthProvider

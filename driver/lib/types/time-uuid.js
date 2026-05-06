@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
-const crypto = require('crypto');
-const Long = require('long');
+"use strict"
+const util = require("util")
+const crypto = require("crypto")
+const Long = require("long")
 
-const Uuid = require('./uuid');
-const utils = require('../utils');
+const Uuid = require("./uuid")
+const utils = require("../utils")
 
 /** @module types */
 /**
@@ -29,37 +29,37 @@ const utils = require('../utils');
  * @const
  * @private
  */
-const _unixToGregorian = 12219292800000;
+const _unixToGregorian = 12219292800000
 /**
  * 10,000 ticks in a millisecond
  * @const
  * @private
  */
-const _ticksInMs = 10000;
+const _ticksInMs = 10000
 
-const minNodeId = utils.allocBufferFromString('808080808080', 'hex');
-const minClockId = utils.allocBufferFromString('8080', 'hex');
-const maxNodeId = utils.allocBufferFromString('7f7f7f7f7f7f', 'hex');
-const maxClockId = utils.allocBufferFromString('7f7f', 'hex');
+const minNodeId = utils.allocBufferFromString("808080808080", "hex")
+const minClockId = utils.allocBufferFromString("8080", "hex")
+const maxNodeId = utils.allocBufferFromString("7f7f7f7f7f7f", "hex")
+const maxClockId = utils.allocBufferFromString("7f7f", "hex")
 
 /**
  * Counter used to generate up to 10000 different timeuuid values with the same Date
  * @private
  * @type {number}
  */
-let _ticks = 0;
+let _ticks = 0
 /**
  * Counter used to generate ticks for the current time
  * @private
  * @type {number}
  */
-let _ticksForCurrentTime = 0;
+let _ticksForCurrentTime = 0
 /**
  * Remember the last time when a ticks for the current time so that it can be reset
  * @private
  * @type {number}
  */
-let _lastTimestamp = 0;
+let _lastTimestamp = 0
 
 /**
  * Creates a new instance of Uuid based on the parameters provided according to rfc4122.
@@ -83,20 +83,19 @@ let _lastTimestamp = 0;
  * @constructor
  */
 function TimeUuid(value, ticks, nodeId, clockId) {
-  let buffer;
-  if (value instanceof Buffer) {
-    if (value.length !== 16) {
-      throw new Error('Buffer for v1 uuid not valid');
-    }
-    buffer = value;
-  }
-  else {
-    buffer = generateBuffer(value, ticks, nodeId, clockId);
-  }
-  Uuid.call(this, buffer);
+	let buffer
+	if (value instanceof Buffer) {
+		if (value.length !== 16) {
+			throw new Error("Buffer for v1 uuid not valid")
+		}
+		buffer = value
+	} else {
+		buffer = generateBuffer(value, ticks, nodeId, clockId)
+	}
+	Uuid.call(this, buffer)
 }
 
-util.inherits(TimeUuid, Uuid);
+util.inherits(TimeUuid, Uuid)
 
 /**
  * Generates a TimeUuid instance based on the Date provided using random node and clock values.
@@ -127,40 +126,48 @@ util.inherits(TimeUuid, Uuid);
  * });
  */
 TimeUuid.fromDate = function (date, ticks, nodeId, clockId, callback) {
-  if (typeof ticks === 'function') {
-    callback = ticks;
-    ticks = nodeId = clockId = null;
-  } else if (typeof nodeId === 'function') {
-    callback = nodeId;
-    nodeId = clockId = null;
-  } else if (typeof clockId === 'function') {
-    callback = clockId;
-    clockId = null;
-  }
+	if (typeof ticks === "function") {
+		callback = ticks
+		ticks = nodeId = clockId = null
+	} else if (typeof nodeId === "function") {
+		callback = nodeId
+		nodeId = clockId = null
+	} else if (typeof clockId === "function") {
+		callback = clockId
+		clockId = null
+	}
 
-  if (!callback) {
-    return new TimeUuid(date, ticks, nodeId, clockId);
-  }
+	if (!callback) {
+		return new TimeUuid(date, ticks, nodeId, clockId)
+	}
 
-  utils.parallel([
-    next => getOrGenerateRandom(nodeId, 6, (err, buffer) => next(err, nodeId = buffer)),
-    next => getOrGenerateRandom(clockId, 2, (err, buffer) => next(err, clockId = buffer)),
-  ], (err) => {
-    if (err) {
-      return callback(err);
-    }
+	utils.parallel(
+		[
+			(next) =>
+				getOrGenerateRandom(nodeId, 6, (err, buffer) =>
+					next(err, (nodeId = buffer)),
+				),
+			(next) =>
+				getOrGenerateRandom(clockId, 2, (err, buffer) =>
+					next(err, (clockId = buffer)),
+				),
+		],
+		(err) => {
+			if (err) {
+				return callback(err)
+			}
 
-    let timeUuid;
-    try {
-      timeUuid = new TimeUuid(date, ticks, nodeId, clockId);
-    }
-    catch (e) {
-      return callback(e);
-    }
+			let timeUuid
+			try {
+				timeUuid = new TimeUuid(date, ticks, nodeId, clockId)
+			} catch (e) {
+				return callback(e)
+			}
 
-    callback(null, timeUuid);
-  });
-};
+			callback(null, timeUuid)
+		},
+	)
+}
 
 /**
  * Parses a string representation of a TimeUuid
@@ -168,22 +175,22 @@ TimeUuid.fromDate = function (date, ticks, nodeId, clockId, callback) {
  * @returns {TimeUuid}
  */
 TimeUuid.fromString = function (value) {
-  return new TimeUuid(Uuid.fromString(value).getBuffer());
-};
+	return new TimeUuid(Uuid.fromString(value).getBuffer())
+}
 
 /**
  * Returns the smaller possible type 1 uuid with the provided Date.
  */
 TimeUuid.min = function (date, ticks) {
-  return new TimeUuid(date, ticks, minNodeId, minClockId);
-};
+	return new TimeUuid(date, ticks, minNodeId, minClockId)
+}
 
 /**
  * Returns the biggest possible type 1 uuid with the provided Date.
  */
 TimeUuid.max = function (date, ticks) {
-  return new TimeUuid(date, ticks, maxNodeId, maxClockId);
-};
+	return new TimeUuid(date, ticks, maxNodeId, maxClockId)
+}
 
 /**
  * Generates a TimeUuid instance based on the current date using random node and clock values.
@@ -209,74 +216,72 @@ TimeUuid.max = function (date, ticks) {
  * const timeuuid = TimeUuid.now();
  */
 TimeUuid.now = function (nodeId, clockId, callback) {
-  return TimeUuid.fromDate(null, null, nodeId, clockId, callback);
-};
-
+	return TimeUuid.fromDate(null, null, nodeId, clockId, callback)
+}
 
 /**
  * Gets the Date and 100-nanoseconds units representation of this instance.
  * @returns {{date: Date, ticks: Number}}
  */
 TimeUuid.prototype.getDatePrecision = function () {
-  const timeLow = this.buffer.readUInt32BE(0);
+	const timeLow = this.buffer.readUInt32BE(0)
 
-  let timeHigh = 0;
-  timeHigh |= ( this.buffer[4] & 0xff ) << 8;
-  timeHigh |= this.buffer[5] & 0xff;
-  timeHigh |= ( this.buffer[6] & 0x0f ) << 24;
-  timeHigh |= ( this.buffer[7] & 0xff ) << 16;
+	let timeHigh = 0
+	timeHigh |= (this.buffer[4] & 0xff) << 8
+	timeHigh |= this.buffer[5] & 0xff
+	timeHigh |= (this.buffer[6] & 0x0f) << 24
+	timeHigh |= (this.buffer[7] & 0xff) << 16
 
-  const val = Long.fromBits(timeLow, timeHigh);
-  const ticksInMsLong = Long.fromNumber(_ticksInMs);
-  const ticks = val.modulo(ticksInMsLong);
-  const time = val
-    .div(ticksInMsLong)
-    .subtract(Long.fromNumber(_unixToGregorian));
-  return { date: new Date(time.toNumber()), ticks: ticks.toNumber()};
-};
+	const val = Long.fromBits(timeLow, timeHigh)
+	const ticksInMsLong = Long.fromNumber(_ticksInMs)
+	const ticks = val.modulo(ticksInMsLong)
+	const time = val
+		.div(ticksInMsLong)
+		.subtract(Long.fromNumber(_unixToGregorian))
+	return { date: new Date(time.toNumber()), ticks: ticks.toNumber() }
+}
 
 /**
  * Gets the Date representation of this instance.
  * @returns {Date}
  */
 TimeUuid.prototype.getDate = function () {
-  return this.getDatePrecision().date;
-};
+	return this.getDatePrecision().date
+}
 
 /**
  * Returns the node id this instance
  * @returns {Buffer}
  */
 TimeUuid.prototype.getNodeId = function () {
-  return this.buffer.slice(10);
-};
+	return this.buffer.slice(10)
+}
 
 /**
  * Returns the clock id this instance, with the variant applied (first 2 msb being 1 and 0).
  * @returns {Buffer}
  */
 TimeUuid.prototype.getClockId = function () {
-  return this.buffer.slice(8, 10);
-};
+	return this.buffer.slice(8, 10)
+}
 
 /**
  * Returns the node id this instance as an ascii string
  * @returns {String}
  */
 TimeUuid.prototype.getNodeIdString = function () {
-  return this.buffer.slice(10).toString('ascii');
-};
+	return this.buffer.slice(10).toString("ascii")
+}
 
 function writeTime(buffer, time, ticks) {
-  //value time expressed in ticks precision
-  const val = Long
-    .fromNumber(time + _unixToGregorian)
-    .multiply(Long.fromNumber(10000))
-    .add(Long.fromNumber(ticks));
-  const timeHigh = val.getHighBitsUnsigned();
-  buffer.writeUInt32BE(val.getLowBitsUnsigned(), 0);
-  buffer.writeUInt16BE(timeHigh & 0xffff, 4);
-  buffer.writeUInt16BE(timeHigh >>> 16 & 0xffff, 6);
+	//value time expressed in ticks precision
+	const val = Long.fromNumber(time + _unixToGregorian)
+		.multiply(Long.fromNumber(10000))
+		.add(Long.fromNumber(ticks))
+	const timeHigh = val.getHighBitsUnsigned()
+	buffer.writeUInt32BE(val.getLowBitsUnsigned(), 0)
+	buffer.writeUInt16BE(timeHigh & 0xffff, 4)
+	buffer.writeUInt16BE((timeHigh >>> 16) & 0xffff, 6)
 }
 
 /**
@@ -286,18 +291,17 @@ function writeTime(buffer, time, ticks) {
  * @private
  */
 function getClockId(clockId) {
-  let buffer = clockId;
-  if (typeof clockId === 'string') {
-    buffer = utils.allocBufferFromString(clockId, 'ascii');
-  }
-  if (!(buffer instanceof Buffer)) {
-    //Generate
-    buffer = getRandomBytes(2);
-  }
-  else if (buffer.length !== 2) {
-    throw new Error('Clock identifier must have 2 bytes');
-  }
-  return buffer;
+	let buffer = clockId
+	if (typeof clockId === "string") {
+		buffer = utils.allocBufferFromString(clockId, "ascii")
+	}
+	if (!(buffer instanceof Buffer)) {
+		//Generate
+		buffer = getRandomBytes(2)
+	} else if (buffer.length !== 2) {
+		throw new Error("Clock identifier must have 2 bytes")
+	}
+	return buffer
 }
 
 /**
@@ -307,70 +311,69 @@ function getClockId(clockId) {
  * @private
  */
 function getNodeId(nodeId) {
-  let buffer = nodeId;
-  if (typeof nodeId === 'string') {
-    buffer = utils.allocBufferFromString(nodeId, 'ascii');
-  }
-  if (!(buffer instanceof Buffer)) {
-    //Generate
-    buffer = getRandomBytes(6);
-  }
-  else if (buffer.length !== 6) {
-    throw new Error('Node identifier must have 6 bytes');
-  }
-  return buffer;
+	let buffer = nodeId
+	if (typeof nodeId === "string") {
+		buffer = utils.allocBufferFromString(nodeId, "ascii")
+	}
+	if (!(buffer instanceof Buffer)) {
+		//Generate
+		buffer = getRandomBytes(6)
+	} else if (buffer.length !== 6) {
+		throw new Error("Node identifier must have 6 bytes")
+	}
+	return buffer
 }
 
 /**
  * Returns the ticks portion of a timestamp.  If the ticks are not provided an internal counter is used that gets reset at 10000.
  * @private
- * @param {Number} [ticks] 
- * @returns {Number} 
+ * @param {Number} [ticks]
+ * @returns {Number}
  */
 function getTicks(ticks) {
-  if (typeof ticks !== 'number'|| ticks >= _ticksInMs) {
-    _ticks++;
-    if (_ticks >= _ticksInMs) {
-      _ticks = 0;
-    }
-    ticks = _ticks;
-  }
-  return ticks;
+	if (typeof ticks !== "number" || ticks >= _ticksInMs) {
+		_ticks++
+		if (_ticks >= _ticksInMs) {
+			_ticks = 0
+		}
+		ticks = _ticks
+	}
+	return ticks
 }
 
 /**
- * Returns an object with the time representation of the date expressed in milliseconds since unix epoch 
+ * Returns an object with the time representation of the date expressed in milliseconds since unix epoch
  * and a ticks property for the 100-nanoseconds precision.
  * @private
- * @returns {{time: Number, ticks: Number}} 
+ * @returns {{time: Number, ticks: Number}}
  */
 function getTimeWithTicks(date, ticks) {
-  if (!(date instanceof Date) || isNaN(date.getTime())) {
-    // time with ticks for the current time
-    date = new Date();
-    const time = date.getTime();
-    _ticksForCurrentTime++;
-    if(_ticksForCurrentTime > _ticksInMs || time > _lastTimestamp) {
-      _ticksForCurrentTime = 0;
-      _lastTimestamp = time;
-    }
-    ticks = _ticksForCurrentTime;
-  }
-  return {
-    time: date.getTime(),
-    ticks: getTicks(ticks)
-  };
+	if (!(date instanceof Date) || isNaN(date.getTime())) {
+		// time with ticks for the current time
+		date = new Date()
+		const time = date.getTime()
+		_ticksForCurrentTime++
+		if (_ticksForCurrentTime > _ticksInMs || time > _lastTimestamp) {
+			_ticksForCurrentTime = 0
+			_lastTimestamp = time
+		}
+		ticks = _ticksForCurrentTime
+	}
+	return {
+		time: date.getTime(),
+		ticks: getTicks(ticks),
+	}
 }
 
 function getRandomBytes(length) {
-  return crypto.randomBytes(length);
+	return crypto.randomBytes(length)
 }
 
 function getOrGenerateRandom(id, length, callback) {
-  if (id) {
-    return callback(null, id);
-  }
-  crypto.randomBytes(length, callback);
+	if (id) {
+		return callback(null, id)
+	}
+	crypto.randomBytes(length, callback)
 }
 
 /**
@@ -383,30 +386,30 @@ function getOrGenerateRandom(id, length, callback) {
  * @returns {Buffer}
  */
 function generateBuffer(date, ticks, nodeId, clockId) {
-  const timeWithTicks = getTimeWithTicks(date, ticks);
-  nodeId = getNodeId(nodeId);
-  clockId = getClockId(clockId);
-  const buffer = utils.allocBufferUnsafe(16);
-  //Positions 0-7 Timestamp
-  writeTime(buffer, timeWithTicks.time, timeWithTicks.ticks);
-  //Position 8-9 Clock
-  clockId.copy(buffer, 8, 0);
-  //Positions 10-15 Node
-  nodeId.copy(buffer, 10, 0);
-  //Version Byte: Time based
-  //0001xxxx
-  //turn off first 4 bits
-  buffer[6] = buffer[6] & 0x0f;
-  //turn on fifth bit
-  buffer[6] = buffer[6] | 0x10;
+	const timeWithTicks = getTimeWithTicks(date, ticks)
+	nodeId = getNodeId(nodeId)
+	clockId = getClockId(clockId)
+	const buffer = utils.allocBufferUnsafe(16)
+	//Positions 0-7 Timestamp
+	writeTime(buffer, timeWithTicks.time, timeWithTicks.ticks)
+	//Position 8-9 Clock
+	clockId.copy(buffer, 8, 0)
+	//Positions 10-15 Node
+	nodeId.copy(buffer, 10, 0)
+	//Version Byte: Time based
+	//0001xxxx
+	//turn off first 4 bits
+	buffer[6] = buffer[6] & 0x0f
+	//turn on fifth bit
+	buffer[6] = buffer[6] | 0x10
 
-  //IETF Variant Byte: 1.0.x
-  //10xxxxxx
-  //turn off first 2 bits
-  buffer[8] = buffer[8] & 0x3f;
-  //turn on first bit
-  buffer[8] = buffer[8] | 0x80;
-  return buffer;
+	//IETF Variant Byte: 1.0.x
+	//10xxxxxx
+	//turn off first 2 bits
+	buffer[8] = buffer[8] & 0x3f
+	//turn on first bit
+	buffer[8] = buffer[8] | 0x80
+	return buffer
 }
 
-module.exports = TimeUuid;
+module.exports = TimeUuid

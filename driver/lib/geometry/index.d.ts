@@ -17,53 +17,51 @@
  */
 
 export namespace geometry {
-  class LineString {
-    constructor(...args: Point[]);
+	class LineString {
+		constructor(...args: Point[])
 
-    static fromBuffer(buffer: Buffer): LineString;
+		static fromBuffer(buffer: Buffer): LineString
 
-    static fromString(textValue: string): LineString;
+		static fromString(textValue: string): LineString
 
-    equals(other: LineString): boolean;
+		equals(other: LineString): boolean
 
-    toBuffer(): Buffer;
+		toBuffer(): Buffer
 
-    toJSON(): string;
+		toJSON(): string
 
-    toString(): string;
+		toString(): string
+	}
 
-  }
+	class Point {
+		constructor(x: number, y: number)
 
-  class Point {
-    constructor(x: number, y: number);
+		static fromBuffer(buffer: Buffer): Point
 
-    static fromBuffer(buffer: Buffer): Point;
+		static fromString(textValue: string): Point
 
-    static fromString(textValue: string): Point;
+		equals(other: Point): boolean
 
-    equals(other: Point): boolean;
+		toBuffer(): Buffer
 
-    toBuffer(): Buffer;
+		toJSON(): string
 
-    toJSON(): string;
+		toString(): string
+	}
 
-    toString(): string;
+	class Polygon {
+		constructor(...args: Point[])
 
-  }
+		static fromBuffer(buffer: Buffer): Polygon
 
-  class Polygon {
-    constructor(...args: Point[]);
+		static fromString(textValue: string): Polygon
 
-    static fromBuffer(buffer: Buffer): Polygon;
+		equals(other: Polygon): boolean
 
-    static fromString(textValue: string): Polygon;
+		toBuffer(): Buffer
 
-    equals(other: Polygon): boolean;
+		toJSON(): string
 
-    toBuffer(): Buffer;
-
-    toJSON(): string;
-
-    toString(): string;
-  }
+		toString(): string
+	}
 }

@@ -15,8 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
-const util = require('util');
+"use strict"
+const util = require("util")
 /**
  * Contains the error classes exposed by the driver.
  * @module errors
@@ -26,16 +26,16 @@ const util = require('util');
  * Base Error
  * @private
  */
-function DriverError (message) {
-  Error.call(this, message);
-  Error.captureStackTrace(this, this.constructor);
-  this.name = this.constructor.name;
-  this.info = 'Cassandra Driver Error';
-  // Explicitly set the message property as the Error.call() doesn't set the property on v8
-  this.message = message;
+function DriverError(message) {
+	Error.call(this, message)
+	Error.captureStackTrace(this, this.constructor)
+	this.name = this.constructor.name
+	this.info = "Cassandra Driver Error"
+	// Explicitly set the message property as the Error.call() doesn't set the property on v8
+	this.message = message
 }
 
-util.inherits(DriverError, Error);
+util.inherits(DriverError, Error)
 
 /**
  * Represents an error when a query cannot be performed because no host is available or could be reached by the driver.
@@ -44,22 +44,27 @@ util.inherits(DriverError, Error);
  * @constructor
  */
 function NoHostAvailableError(innerErrors, message) {
-  DriverError.call(this, message);
-  this.innerErrors = innerErrors;
-  this.info = 'Represents an error when a query cannot be performed because no host is available or could be reached by the driver.';
-  if (!message) {
-    this.message = 'All host(s) tried for query failed.';
-    if (innerErrors) {
-      const hostList = Object.keys(innerErrors);
-      if (hostList.length > 0) {
-        const host = hostList[0];
-        this.message += util.format(' First host tried, %s: %s. See innerErrors.', host, innerErrors[host]);
-      }
-    }
-  }
+	DriverError.call(this, message)
+	this.innerErrors = innerErrors
+	this.info =
+		"Represents an error when a query cannot be performed because no host is available or could be reached by the driver."
+	if (!message) {
+		this.message = "All host(s) tried for query failed."
+		if (innerErrors) {
+			const hostList = Object.keys(innerErrors)
+			if (hostList.length > 0) {
+				const host = hostList[0]
+				this.message += util.format(
+					" First host tried, %s: %s. See innerErrors.",
+					host,
+					innerErrors[host],
+				)
+			}
+		}
+	}
 }
 
-util.inherits(NoHostAvailableError, DriverError);
+util.inherits(NoHostAvailableError, DriverError)
 
 /**
  * Represents an error message from the server
@@ -68,16 +73,16 @@ util.inherits(NoHostAvailableError, DriverError);
  * @constructor
  */
 function ResponseError(code, message) {
-  DriverError.call(this, message);
-  /**
-   * The error code as defined in [responseErrorCodes]{@link module:types~responseErrorCodes}.
-   * @type {Number}
-   */
-  this.code = code;
-  this.info = 'Represents an error message from the server';
+	DriverError.call(this, message)
+	/**
+	 * The error code as defined in [responseErrorCodes]{@link module:types~responseErrorCodes}.
+	 * @type {Number}
+	 */
+	this.code = code
+	this.info = "Represents an error message from the server"
 }
 
-util.inherits(ResponseError, DriverError);
+util.inherits(ResponseError, DriverError)
 
 /**
  * Represents a bug inside the driver or in a Cassandra host.
@@ -85,11 +90,11 @@ util.inherits(ResponseError, DriverError);
  * @constructor
  */
 function DriverInternalError(message) {
-  DriverError.call(this, message);
-  this.info = 'Represents a bug inside the driver or in a Cassandra host.';
+	DriverError.call(this, message)
+	this.info = "Represents a bug inside the driver or in a Cassandra host."
 }
 
-util.inherits(DriverInternalError, DriverError);
+util.inherits(DriverInternalError, DriverError)
 
 /**
  * Represents an error when trying to authenticate with auth-enabled host
@@ -97,11 +102,12 @@ util.inherits(DriverInternalError, DriverError);
  * @constructor
  */
 function AuthenticationError(message) {
-  DriverError.call(this, message);
-  this.info = 'Represents an authentication error from the driver or from a Cassandra node.';
+	DriverError.call(this, message)
+	this.info =
+		"Represents an authentication error from the driver or from a Cassandra node."
 }
 
-util.inherits(AuthenticationError, DriverError);
+util.inherits(AuthenticationError, DriverError)
 
 /**
  * Represents an error that is raised when one of the arguments provided to a method is not valid
@@ -109,11 +115,12 @@ util.inherits(AuthenticationError, DriverError);
  * @constructor
  */
 function ArgumentError(message) {
-  DriverError.call(this, message);
-  this.info = 'Represents an error that is raised when one of the arguments provided to a method is not valid.';
+	DriverError.call(this, message)
+	this.info =
+		"Represents an error that is raised when one of the arguments provided to a method is not valid."
 }
 
-util.inherits(ArgumentError, DriverError);
+util.inherits(ArgumentError, DriverError)
 
 /**
  * Represents a client-side error that is raised when the client didn't hear back from the server within
@@ -123,18 +130,19 @@ util.inherits(ArgumentError, DriverError);
  * @constructor
  */
 function OperationTimedOutError(message, host) {
-  DriverError.call(this, message, this.constructor);
-  this.info = 'Represents a client-side error that is raised when the client did not hear back from the server ' +
-    'within socketOptions.readTimeout';
+	DriverError.call(this, message, this.constructor)
+	this.info =
+		"Represents a client-side error that is raised when the client did not hear back from the server " +
+		"within socketOptions.readTimeout"
 
-  /**
-   * When defined, it gets the address of the host that caused the operation to time out.
-   * @type {String|undefined}
-   */
-  this.host = host;
+	/**
+	 * When defined, it gets the address of the host that caused the operation to time out.
+	 * @type {String|undefined}
+	 */
+	this.host = host
 }
 
-util.inherits(OperationTimedOutError, DriverError);
+util.inherits(OperationTimedOutError, DriverError)
 
 /**
  * Represents an error that is raised when a feature is not supported in the driver or in the current Cassandra version.
@@ -142,11 +150,12 @@ util.inherits(OperationTimedOutError, DriverError);
  * @constructor
  */
 function NotSupportedError(message) {
-  DriverError.call(this, message, this.constructor);
-  this.info = 'Represents a feature that is not supported in the driver or in the Cassandra version.';
+	DriverError.call(this, message, this.constructor)
+	this.info =
+		"Represents a feature that is not supported in the driver or in the Cassandra version."
 }
 
-util.inherits(NotSupportedError, DriverError);
+util.inherits(NotSupportedError, DriverError)
 
 /**
  * Represents a client-side error indicating that all connections to a certain host have reached
@@ -156,35 +165,45 @@ util.inherits(NotSupportedError, DriverError);
  * @param {Number} connectionLength
  * @constructor
  */
-function BusyConnectionError(address, maxRequestsPerConnection, connectionLength) {
-  const message = util.format('All connections to host %s are busy, %d requests are in-flight on %s',
-    address, maxRequestsPerConnection, connectionLength === 1 ? 'a single connection': 'each connection');
-  DriverError.call(this, message, this.constructor);
-  this.info = 'Represents a client-side error indicating that all connections to a certain host have reached ' +
-    'the maximum amount of in-flight requests supported (pooling.maxRequestsPerConnection)';
+function BusyConnectionError(
+	address,
+	maxRequestsPerConnection,
+	connectionLength,
+) {
+	const message = util.format(
+		"All connections to host %s are busy, %d requests are in-flight on %s",
+		address,
+		maxRequestsPerConnection,
+		connectionLength === 1 ? "a single connection" : "each connection",
+	)
+	DriverError.call(this, message, this.constructor)
+	this.info =
+		"Represents a client-side error indicating that all connections to a certain host have reached " +
+		"the maximum amount of in-flight requests supported (pooling.maxRequestsPerConnection)"
 }
 
-util.inherits(BusyConnectionError, DriverError);
+util.inherits(BusyConnectionError, DriverError)
 
 /**
- * 
- * @param {Long} long 
+ *
+ * @param {Long} long
  */
-function VIntOutOfRangeException(long){
-  const message = `Value ${long.toString} is out of range for a JavaScript Number`;
-  DriverError.call(this, message, this.constructor);
-  this.info = 'Represents a run-time exception when attempting to decode a vint and the JavaScript Number doesn\'t have enough space to fit the value that was decoded';
+function VIntOutOfRangeException(long) {
+	const message = `Value ${long.toString} is out of range for a JavaScript Number`
+	DriverError.call(this, message, this.constructor)
+	this.info =
+		"Represents a run-time exception when attempting to decode a vint and the JavaScript Number doesn't have enough space to fit the value that was decoded"
 }
 
-util.inherits(VIntOutOfRangeException, DriverError);
+util.inherits(VIntOutOfRangeException, DriverError)
 
-exports.ArgumentError = ArgumentError;
-exports.AuthenticationError = AuthenticationError;
-exports.BusyConnectionError = BusyConnectionError;
-exports.DriverError = DriverError;
-exports.OperationTimedOutError = OperationTimedOutError;
-exports.DriverInternalError = DriverInternalError;
-exports.NoHostAvailableError = NoHostAvailableError;
-exports.NotSupportedError = NotSupportedError;
-exports.ResponseError = ResponseError;
-exports.VIntOutOfRangeException = VIntOutOfRangeException;
+exports.ArgumentError = ArgumentError
+exports.AuthenticationError = AuthenticationError
+exports.BusyConnectionError = BusyConnectionError
+exports.DriverError = DriverError
+exports.OperationTimedOutError = OperationTimedOutError
+exports.DriverInternalError = DriverInternalError
+exports.NoHostAvailableError = NoHostAvailableError
+exports.NotSupportedError = NotSupportedError
+exports.ResponseError = ResponseError
+exports.VIntOutOfRangeException = VIntOutOfRangeException

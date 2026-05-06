@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-'use strict';
+"use strict"
 
-const util = require('util');
+const util = require("util")
 
 /**
  * @classdesc
@@ -30,15 +30,15 @@ const util = require('util');
  * @constructor
  */
 function Element(id, label) {
-  /**
-   * Gets the element id.
-   */
-  this.id = id;
-  /**
-   * Gets the element label.
-   * @type {String}
-   */
-  this.label = label;
+	/**
+	 * Gets the element id.
+	 */
+	this.id = id
+	/**
+	 * Gets the element label.
+	 * @type {String}
+	 */
+	this.label = label
 }
 
 /**
@@ -52,15 +52,15 @@ function Element(id, label) {
  * @constructor
  */
 function Vertex(id, label, properties) {
-  Element.call(this, id, label);
-  /**
-   * Gets the vertex properties.
-   * @type {Object<string, Array>}
-   */
-  this.properties = properties;
+	Element.call(this, id, label)
+	/**
+	 * Gets the vertex properties.
+	 * @type {Object<string, Array>}
+	 */
+	this.properties = properties
 }
 
-util.inherits(Vertex, Element);
+util.inherits(Vertex, Element)
 
 /**
  * @classdesc
@@ -77,41 +77,41 @@ util.inherits(Vertex, Element);
  * @constructor
  */
 function Edge(id, outV, outVLabel, label, inV, inVLabel, properties) {
-  Element.call(this, id, label);
-  /**
-   * Gets the id of outgoing vertex of the edge.
-   */
-  this.outV = outV;
-  /**
-   * Gets the label of the outgoing vertex.
-   */
-  this.outVLabel = outVLabel;
-  /**
-   * Gets the id of the incoming vertex of the edge.
-   */
-  this.inV = inV;
+	Element.call(this, id, label)
+	/**
+	 * Gets the id of outgoing vertex of the edge.
+	 */
+	this.outV = outV
+	/**
+	 * Gets the label of the outgoing vertex.
+	 */
+	this.outVLabel = outVLabel
+	/**
+	 * Gets the id of the incoming vertex of the edge.
+	 */
+	this.inV = inV
 
-  /**
-   * Gets the label of the incoming vertex.
-   */
-  this.inVLabel = inVLabel;
-  /**
-   * Gets the properties of the edge as an associative array.
-   * @type {Object}
-   */
-  this.properties = {};
-  (function adaptProperties(self) {
-    if (properties) {
-      const keys = Object.keys(properties);
-      for (let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        self.properties[k] = properties[k].value;
-      }
-    }
-  })(this);
+	/**
+	 * Gets the label of the incoming vertex.
+	 */
+	this.inVLabel = inVLabel
+	/**
+	 * Gets the properties of the edge as an associative array.
+	 * @type {Object}
+	 */
+	this.properties = {}
+	;(function adaptProperties(self) {
+		if (properties) {
+			const keys = Object.keys(properties)
+			for (let i = 0; i < keys.length; i++) {
+				const k = keys[i]
+				self.properties[k] = properties[k].value
+			}
+		}
+	})(this)
 }
 
-util.inherits(Edge, Element);
+util.inherits(Edge, Element)
 
 /**
  * @classdesc
@@ -125,13 +125,13 @@ util.inherits(Edge, Element);
  * @constructor
  */
 function VertexProperty(id, label, value, properties) {
-  Element.call(this, id, label);
-  this.value = value;
-  this.key = this.label;
-  this.properties = properties;
+	Element.call(this, id, label)
+	this.value = value
+	this.key = this.label
+	this.properties = properties
 }
 
-util.inherits(VertexProperty, Element);
+util.inherits(VertexProperty, Element)
 
 /**
  * @classdesc
@@ -142,8 +142,8 @@ util.inherits(VertexProperty, Element);
  * @constructor
  */
 function Property(key, value) {
-  this.key = key;
-  this.value = value;
+	this.key = key
+	this.value = value
 }
 
 /**
@@ -155,15 +155,15 @@ function Property(key, value) {
  * @constructor
  */
 function Path(labels, objects) {
-  this.labels = labels;
-  this.objects = objects;
+	this.labels = labels
+	this.objects = objects
 }
 
 module.exports = {
-  Edge,
-  Element,
-  Path,
-  Property,
-  Vertex,
-  VertexProperty
-};
+	Edge,
+	Element,
+	Path,
+	Property,
+	Vertex,
+	VertexProperty,
+}
