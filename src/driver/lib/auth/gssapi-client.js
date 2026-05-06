@@ -16,10 +16,8 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const util = require("util")
-const utils = require("../utils")
+import util from "util"
+import utils from "../utils"
 
 /**
  * GSSAPI Client interface.
@@ -170,4 +168,4 @@ class StandardGssClient extends GssapiClient {
 	}
 }
 
-module.exports = GssapiClient
+export default GssapiClient

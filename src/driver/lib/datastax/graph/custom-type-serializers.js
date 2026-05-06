@@ -15,17 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const types = require("../../types")
-const utils = require("../../utils")
-const {
+import * as types from "../../types/index"
+import * as utils from "../../utils"
+import {
 	getTypeDefinitionByValue,
 	getUdtTypeDefinitionByValue,
-} = require("./complex-type-helper")
-const { Point, Polygon, LineString } = require("../../geometry")
-const { Edge } = require("./structure")
-const { GraphTypeWrapper, UdtGraphWrapper } = require("./wrappers")
+} from "./complex-type-helper"
+import { Point, Polygon, LineString } from "../../geometry/index"
+import { Edge } from "./structure"
+import { GraphTypeWrapper, UdtGraphWrapper } from "./wrappers"
 const { Tuple, dataTypes } = types
 
 const typeKey = "@type"
@@ -380,4 +378,4 @@ function getCustomSerializers() {
 	return customSerializers
 }
 
-module.exports = getCustomSerializers
+export default getCustomSerializers

@@ -16,10 +16,8 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const util = require("util")
-const utils = require("../utils")
+import util from "util"
+import utils from "../utils"
 const inspectMethod = util.inspect.custom || "inspect"
 
 /**
@@ -138,4 +136,4 @@ class Result {
 	}
 }
 
-module.exports = Result
+export default Result

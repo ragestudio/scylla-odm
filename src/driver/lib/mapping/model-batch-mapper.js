@@ -16,13 +16,12 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const Tree = require("./tree")
-const moduleBatchItemModule = require("./model-batch-item")
-const InsertModelBatchItem = moduleBatchItemModule.InsertModelBatchItem
-const UpdateModelBatchItem = moduleBatchItemModule.UpdateModelBatchItem
-const RemoveModelBatchItem = moduleBatchItemModule.RemoveModelBatchItem
+import Tree from "./tree"
+import {
+	InsertModelBatchItem,
+	UpdateModelBatchItem,
+	RemoveModelBatchItem,
+} from "./model-batch-item"
 
 /**
  * Provides utility methods to group multiple mutations on a single batch.
@@ -139,4 +138,4 @@ class ModelBatchMapper {
 	}
 }
 
-module.exports = ModelBatchMapper
+export default ModelBatchMapper

@@ -15,9 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const utils = require("../../utils")
+import * as utils from "../../utils"
 
 /**
  * Creates a new instance of <code>GraphResultSet</code>.
@@ -155,4 +153,4 @@ function parsePlainJsonRow(row) {
 	return { object: parsed.result, bulk: parsed.bulk || 1 }
 }
 
-module.exports = GraphResultSet
+export default GraphResultSet

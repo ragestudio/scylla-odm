@@ -16,24 +16,22 @@
  * limitations under the License.
  */
 
-"use strict"
+import events from "events"
+import util from "util"
+import tls from "tls"
+import net from "net"
 
-const events = require("events")
-const util = require("util")
-const tls = require("tls")
-const net = require("net")
-
-const Encoder = require("./encoder.js")
-const { WriteQueue } = require("./writers")
-const requests = require("./requests")
-const streams = require("./streams")
-const utils = require("./utils")
-const types = require("./types")
-const errors = require("./errors")
-const StreamIdStack = require("./stream-id-stack")
-const OperationState = require("./operation-state")
-const promiseUtils = require("./promise-utils")
-const { ExecutionOptions } = require("./execution-options")
+import Encoder from "./encoder"
+import { WriteQueue } from "./writers"
+import requests from "./requests"
+import streams from "./streams"
+import utils from "./utils"
+import types from "./types"
+import errors from "./errors"
+import StreamIdStack from "./stream-id-stack"
+import OperationState from "./operation-state"
+import promiseUtils from "./promise-utils"
+import { ExecutionOptions } from "./execution-options"
 
 /**
  * Represents a connection to a Cassandra node
@@ -734,7 +732,7 @@ class Connection extends events.EventEmitter {
 		}
 		const self = this
 		// Scheduling the new timeout before de-scheduling the previous performs significantly better
-		// than de-scheduling first, see nodejs implementation: https://github.com/nodejs/node/blob/master/lib/timers.js
+		// than de-scheduling first, see nodejs implementation: https://github.com/nodejs/node/blob/master/lib/timers
 		const previousTimeout = this._idleTimeout
 		self._idleTimeout = setTimeout(
 			() => self._idleTimeoutHandler(),
@@ -1033,4 +1031,4 @@ class Connection extends events.EventEmitter {
 	}
 }
 
-module.exports = Connection
+export default Connection

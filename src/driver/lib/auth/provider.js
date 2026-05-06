@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 /**
  * @classdesc Provides [Authenticator]{@link module:auth~Authenticator} instances to be used when connecting to a host.
  * @constructor
@@ -73,5 +72,6 @@ Authenticator.prototype.evaluateChallenge = function (challenge, callback) {
  */
 Authenticator.prototype.onAuthenticationSuccess = function (token) {}
 
-exports.AuthProvider = AuthProvider
-exports.Authenticator = Authenticator
+export { AuthProvider, Authenticator }
+
+export default { AuthProvider, Authenticator }

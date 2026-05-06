@@ -15,28 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const util = require("util")
-const policies = require("./policies")
-const types = require("./types")
-const utils = require("./utils")
-const tracker = require("./tracker")
-const metrics = require("./metrics")
-const auth = require("./auth")
+import util from "util"
+import policies from "./policies"
+import types from "./types"
+import utils from "./utils"
+import tracker from "./tracker"
+import metrics from "./metrics"
+import auth from "./auth"
 
 /** Core connections per host for protocol versions 1 and 2 */
 const coreConnectionsPerHostV2 = {
-	[types.distance.local]: 2,
-	[types.distance.remote]: 1,
-	[types.distance.ignored]: 0,
+	0: 2,
+	1: 1,
+	2: 0,
 }
 
 /** Core connections per host for protocol version 3 and above */
 const coreConnectionsPerHostV3 = {
-	[types.distance.local]: 1,
-	[types.distance.remote]: 1,
-	[types.distance.ignored]: 0,
+	0: 1,
+	1: 1,
+	2: 0,
 }
 
 /** Default maxRequestsPerConnection value for protocol v1 and v2 */
@@ -412,13 +410,28 @@ function setMetadataDependent(client) {
 	)
 }
 
-exports.extend = extend
-exports.defaultOptions = defaultOptions
-exports.coreConnectionsPerHostV2 = coreConnectionsPerHostV2
-exports.coreConnectionsPerHostV3 = coreConnectionsPerHostV3
-exports.maxRequestsPerConnectionV2 = maxRequestsPerConnectionV2
-exports.maxRequestsPerConnectionV3 = maxRequestsPerConnectionV3
-exports.setMetadataDependent = setMetadataDependent
-exports.continuousPageUnitBytes = continuousPageUnitBytes
-exports.continuousPageDefaultSize = continuousPageDefaultSize
-exports.continuousPageDefaultHighWaterMark = continuousPageDefaultHighWaterMark
+export {
+	extend,
+	defaultOptions,
+	coreConnectionsPerHostV2,
+	coreConnectionsPerHostV3,
+	maxRequestsPerConnectionV2,
+	maxRequestsPerConnectionV3,
+	setMetadataDependent,
+	continuousPageUnitBytes,
+	continuousPageDefaultSize,
+	continuousPageDefaultHighWaterMark,
+}
+
+export default {
+	extend,
+	defaultOptions,
+	coreConnectionsPerHostV2,
+	coreConnectionsPerHostV3,
+	maxRequestsPerConnectionV2,
+	maxRequestsPerConnectionV3,
+	setMetadataDependent,
+	continuousPageUnitBytes,
+	continuousPageDefaultSize,
+	continuousPageDefaultHighWaterMark,
+}

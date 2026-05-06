@@ -15,14 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
+import util from "util"
 
-const errors = require("./errors")
-const types = require("./types")
-const utils = require("./utils")
-const RequestExecution = require("./request-execution")
-const promiseUtils = require("./promise-utils")
+import errors from "./errors"
+import types from "./types"
+import utils from "./utils"
+import RequestExecution from "./request-execution"
+import promiseUtils from "./promise-utils"
 
 /**
  * Handles a BATCH, QUERY and EXECUTE request to the server, dealing with host fail-over and retries on error
@@ -330,4 +329,4 @@ class RequestHandler {
 	}
 }
 
-module.exports = RequestHandler
+export default RequestHandler

@@ -16,18 +16,17 @@
  * limitations under the License.
  */
 
-"use strict"
-const util = require("util")
-const events = require("events")
-const types = require("../types")
-const utils = require("../utils")
-const errors = require("../errors")
-const promiseUtils = require("../promise-utils")
-const TableMetadata = require("./table-metadata")
-const Aggregate = require("./aggregate")
-const SchemaFunction = require("./schema-function")
-const Index = require("./schema-index")
-const MaterializedView = require("./materialized-view")
+import util from "util"
+import events from "events"
+import types from "../types"
+import utils from "../utils"
+import errors from "../errors"
+import promiseUtils from "../promise-utils"
+import TableMetadata from "./table-metadata"
+import Aggregate from "./aggregate"
+import SchemaFunction from "./schema-function"
+import Index from "./schema-index"
+import MaterializedView from "./materialized-view"
 const { format } = util
 
 /**
@@ -1397,5 +1396,5 @@ function getByVersion(options, cc, udtResolver, version, currentInstance) {
 	return currentInstance
 }
 
-exports.getByVersion = getByVersion
-exports.isDoneForToken = isDoneForToken
+export { getByVersion, isDoneForToken }
+export default { getByVersion, isDoneForToken }

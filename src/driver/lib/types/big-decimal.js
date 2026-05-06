@@ -15,9 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const Integer = require("./integer")
-const utils = require("../utils")
+import Integer from "./integer"
+import utils from "../utils"
 
 /** @module types */
 /**
@@ -280,4 +279,4 @@ BigDecimal.prototype.toJSON = function () {
 	return this.toString()
 }
 
-module.exports = BigDecimal
+export default BigDecimal

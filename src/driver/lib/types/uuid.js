@@ -15,10 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
-const crypto = require("crypto")
-const utils = require("../utils")
+import crypto from "crypto"
+import utils from "../utils"
 
 /** @module types */
 
@@ -158,4 +157,4 @@ function getRandomBytes(cb) {
 	return crypto.randomBytes(16, cb)
 }
 
-module.exports = Uuid
+export default Uuid

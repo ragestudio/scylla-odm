@@ -15,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const errors = require("./errors")
-const utils = require("./utils")
-const types = require("./types")
-const promiseUtils = require("./promise-utils")
+import errors from "./errors"
+import utils from "./utils"
+import types from "./types"
+import promiseUtils from "./promise-utils"
 
 /**
  * Encapsulates the logic for dealing with the different prepare request and response flows, including failover when
@@ -346,4 +344,4 @@ class PrepareHandler {
 	}
 }
 
-module.exports = PrepareHandler
+export default PrepareHandler

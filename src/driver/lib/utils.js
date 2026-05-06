@@ -15,15 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
-const Long = require("long")
-const util = require("util")
-const net = require("net")
-const { EventEmitter } = require("events")
+import Long from "long"
+import util from "util"
+import net from "net"
+import { EventEmitter } from "events"
 
-const errors = require("./errors")
-const promiseUtils = require("./promise-utils")
+import errors from "./errors"
+import promiseUtils from "./promise-utils"
 
 /**
  * Max int that can be accurately represented with 64-bit Number (2^53)
@@ -1391,49 +1390,96 @@ const VIntCoding = (function () {
 	}
 })()
 
-exports.adaptNamedParamsPrepared = adaptNamedParamsPrepared
-exports.adaptNamedParamsWithHints = adaptNamedParamsWithHints
-exports.AddressResolver = AddressResolver
-exports.allocBuffer = allocBuffer
-exports.allocBufferUnsafe = allocBufferUnsafe
-exports.allocBufferFromArray = allocBufferFromArray
-exports.allocBufferFromString = allocBufferFromString
-exports.arrayIterator = arrayIterator
-exports.binarySearch = binarySearch
-exports.callbackOnce = callbackOnce
-exports.copyBuffer = copyBuffer
-exports.deepExtend = deepExtend
-exports.each = each
-exports.eachSeries = eachSeries
-/** @const */
-exports.emptyArray = Object.freeze([])
-/** @const */
-exports.emptyObject = emptyObject
-exports.extend = extend
-exports.fixStack = fixStack
-exports.forEachOf = forEachOf
-exports.funcCompare = funcCompare
-exports.ifUndefined = ifUndefined
-exports.ifUndefined3 = ifUndefined3
-exports.insertSorted = insertSorted
-exports.iteratorToArray = iteratorToArray
-exports.log = log
-exports.map = map
-exports.mapSeries = mapSeries
-exports.maxInt = maxInt
-exports.noop = noop
-exports.objectValues = objectValues
-exports.parallel = parallel
-exports.promiseWrapper = promiseWrapper
-exports.propCompare = propCompare
-exports.series = series
-exports.shuffleArray = shuffleArray
-exports.stringRepeat = stringRepeat
-exports.times = times
-exports.timesLimit = timesLimit
-exports.timesSeries = timesSeries
-exports.totalLength = totalLength
-exports.validateFn = validateFn
-exports.whilst = whilst
-exports.HashSet = HashSet
-exports.VIntCoding = VIntCoding
+export {
+	adaptNamedParamsPrepared,
+	adaptNamedParamsWithHints,
+	AddressResolver,
+	allocBuffer,
+	allocBufferUnsafe,
+	allocBufferFromArray,
+	allocBufferFromString,
+	arrayIterator,
+	binarySearch,
+	callbackOnce,
+	copyBuffer,
+	deepExtend,
+	each,
+	eachSeries,
+	emptyArray,
+	emptyObject,
+	extend,
+	fixStack,
+	forEachOf,
+	funcCompare,
+	HashSet,
+	ifUndefined,
+	ifUndefined3,
+	insertSorted,
+	iteratorToArray,
+	log,
+	map,
+	mapSeries,
+	maxInt,
+	noop,
+	objectValues,
+	parallel,
+	promiseWrapper,
+	propCompare,
+	series,
+	shuffleArray,
+	stringRepeat,
+	times,
+	timesLimit,
+	timesSeries,
+	totalLength,
+	validateFn,
+	VIntCoding,
+	whilst,
+}
+
+export default {
+	adaptNamedParamsPrepared,
+	adaptNamedParamsWithHints,
+	AddressResolver,
+	allocBuffer,
+	allocBufferUnsafe,
+	allocBufferFromArray,
+	allocBufferFromString,
+	arrayIterator,
+	binarySearch,
+	callbackOnce,
+	copyBuffer,
+	deepExtend,
+	each,
+	eachSeries,
+	emptyArray,
+	emptyObject,
+	extend,
+	fixStack,
+	forEachOf,
+	funcCompare,
+	HashSet,
+	ifUndefined,
+	ifUndefined3,
+	insertSorted,
+	iteratorToArray,
+	log,
+	map,
+	mapSeries,
+	maxInt,
+	noop,
+	objectValues,
+	parallel,
+	promiseWrapper,
+	propCompare,
+	series,
+	shuffleArray,
+	stringRepeat,
+	times,
+	timesLimit,
+	timesSeries,
+	totalLength,
+	validateFn,
+	VIntCoding,
+	whilst,
+}

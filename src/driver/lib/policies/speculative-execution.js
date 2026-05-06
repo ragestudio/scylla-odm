@@ -15,10 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const util = require("util")
-const errors = require("../errors")
+import util from "util"
+import errors from "../errors"
 
 /** @module policies/speculativeExecution */
 
@@ -139,6 +137,14 @@ ConstantSpeculativeExecutionPolicy.prototype.getOptions = function () {
 	])
 }
 
-exports.NoSpeculativeExecutionPolicy = NoSpeculativeExecutionPolicy
-exports.SpeculativeExecutionPolicy = SpeculativeExecutionPolicy
-exports.ConstantSpeculativeExecutionPolicy = ConstantSpeculativeExecutionPolicy
+export {
+	NoSpeculativeExecutionPolicy,
+	SpeculativeExecutionPolicy,
+	ConstantSpeculativeExecutionPolicy,
+}
+
+export default {
+	NoSpeculativeExecutionPolicy,
+	SpeculativeExecutionPolicy,
+	ConstantSpeculativeExecutionPolicy,
+}

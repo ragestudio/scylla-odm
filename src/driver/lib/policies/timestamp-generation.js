@@ -15,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const util = require("util")
-const { Long } = require("../types")
-const errors = require("../errors")
+import util from "util"
+import { Long } from "../types"
+import errors from "../errors"
 
 /** @module policies/timestampGeneration */
 
@@ -173,5 +171,6 @@ MonotonicTimestampGenerator.prototype._generateMicroseconds = function () {
 		.add(Long.fromInt(this._micros))
 }
 
-exports.TimestampGenerator = TimestampGenerator
-exports.MonotonicTimestampGenerator = MonotonicTimestampGenerator
+export { TimestampGenerator, MonotonicTimestampGenerator }
+
+export default { TimestampGenerator, MonotonicTimestampGenerator }

@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const ModelMapper = require("./model-mapper")
-const MappingHandler = require("./mapping-handler")
-const DocInfoAdapter = require("./doc-info-adapter")
-const errors = require("../errors")
-const Result = require("./result")
-const ResultMapper = require("./result-mapper")
-const ModelMappingInfo = require("./model-mapping-info")
-const { ModelBatchItem } = require("./model-batch-item")
+import ModelMapper from "./model-mapper"
+import MappingHandler from "./mapping-handler"
+import DocInfoAdapter from "./doc-info-adapter"
+import errors from "../errors"
+import Result from "./result"
+import ResultMapper from "./result-mapper"
+import ModelMappingInfo from "./model-mapping-info"
+import { ModelBatchItem } from "./model-batch-item"
 
 /**
  * Represents an object mapper for Apache Cassandra and DataStax Enterprise.
@@ -224,4 +222,4 @@ class Mapper {
  * @property {String} [keyspace] The name of the keyspace. Only mandatory when the Client is not using a keyspace.
  */
 
-module.exports = Mapper
+export default Mapper

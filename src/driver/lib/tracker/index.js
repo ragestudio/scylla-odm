@@ -16,12 +16,13 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /**
  * Tracker module.
  * @module tracker
  */
 
-exports.RequestLogger = require("./request-logger")
-exports.RequestTracker = require("./request-tracker")
+import RequestLogger from "./request-logger"
+import RequestTracker from "./request-tracker"
+
+export { RequestLogger, RequestTracker }
+export default { RequestLogger, RequestTracker }

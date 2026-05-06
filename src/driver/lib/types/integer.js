@@ -14,7 +14,7 @@
 
 /** @module types */
 
-var utils = require("../utils")
+import utils from "../utils"
 
 /**
  * Constructs a two's-complement integer an array containing bits of the
@@ -815,4 +815,4 @@ Integer.prototype.toJSON = function () {
 	return this.toString()
 }
 
-module.exports = Integer
+export default Integer

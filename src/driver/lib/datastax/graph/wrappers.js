@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const types = require("../../types")
+import * as types from "../../types/index"
 const { dataTypes } = types
 
 /**
@@ -95,7 +93,17 @@ function asUdt(value, udtInfo) {
 	return new UdtGraphWrapper(value, udtInfo)
 }
 
-module.exports = {
+export {
+	asInt,
+	asDouble,
+	asFloat,
+	asTimestamp,
+	asUdt,
+	UdtGraphWrapper,
+	GraphTypeWrapper,
+}
+
+export default {
 	asInt,
 	asDouble,
 	asFloat,

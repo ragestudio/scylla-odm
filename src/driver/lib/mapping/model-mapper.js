@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const ModelBatchMapper = require("./model-batch-mapper")
+import ModelBatchMapper from "./model-batch-mapper"
 
 /**
  * Represents an object mapper for a specific model.
@@ -314,4 +312,4 @@ class ModelMapper {
 	}
 }
 
-module.exports = ModelMapper
+export default ModelMapper

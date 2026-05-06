@@ -15,21 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const events = require("events")
-const util = require("util")
-const net = require("net")
-const dns = require("dns")
+import events from "events"
+import util from "util"
+import net from "net"
+import dns from "dns"
 
-const errors = require("./errors")
-const { Host, HostMap } = require("./host")
-const Metadata = require("./metadata")
-const EventDebouncer = require("./metadata/event-debouncer")
-const Connection = require("./connection")
-const requests = require("./requests")
-const utils = require("./utils")
-const types = require("./types")
-const promiseUtils = require("./promise-utils")
+import errors from "./errors"
+import { Host, HostMap } from "./host"
+import Metadata from "./metadata"
+import EventDebouncer from "./metadata/event-debouncer"
+import Connection from "./connection"
+import requests from "./requests"
+import utils from "./utils"
+import types from "./types"
+import promiseUtils from "./promise-utils"
+
 const f = util.format
 
 const selectPeers = "SELECT * FROM system.peers"
@@ -1279,4 +1279,4 @@ function setDseParameters(host, row) {
 	}
 }
 
-module.exports = ControlConnection
+export default ControlConnection

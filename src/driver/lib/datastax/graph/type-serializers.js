@@ -25,8 +25,6 @@
 /**
  * @author Jorge Bay Gondra
  */
-"use strict"
-
 // Replace dependencies to minimize code changes from Apache TinkerPop
 const t = {
 	P: UnsupportedType,
@@ -37,7 +35,7 @@ const t = {
 }
 const ts = { TraversalStrategy: UnsupportedType }
 const Bytecode = UnsupportedType
-const g = require("./index")
+import * as g from "./index"
 const utils = { Long: UnsupportedType }
 t.t = g.t
 t.direction = g.direction
@@ -510,7 +508,34 @@ class SetSerializer extends ArraySerializer {
 	}
 }
 
-module.exports = {
+export {
+	BulkSetSerializer,
+	BytecodeSerializer,
+	DateSerializer,
+	DirectionSerializer,
+	EdgeSerializer,
+	EnumSerializer,
+	LambdaSerializer,
+	ListSerializer,
+	LongSerializer,
+	MapSerializer,
+	NumberSerializer,
+	Path3Serializer,
+	PathSerializer,
+	PropertySerializer,
+	PSerializer,
+	TextPSerializer,
+	SetSerializer,
+	TSerializer,
+	TraverserSerializer,
+	TraversalStrategySerializer,
+	typeKey,
+	valueKey,
+	VertexPropertySerializer,
+	VertexSerializer,
+}
+
+export default {
 	BulkSetSerializer,
 	BytecodeSerializer,
 	DateSerializer,

@@ -15,13 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const { AuthProvider } = require("./provider")
-const BaseDseAuthenticator = require("./base-dse-authenticator")
-const GssapiClient = require("./gssapi-client")
-const dns = require("dns")
-const utils = require("../utils")
+import { createRequire } from "module"
+const _require = createRequire(import.meta.url)
+import util from "util"
+import { AuthProvider } from "./provider"
+import BaseDseAuthenticator from "./base-dse-authenticator"
+import GssapiClient from "./gssapi-client"
+import dns from "dns"
+import utils from "../utils"
 
 const mechanism = utils.allocBufferFromString("GSSAPI")
 const initialServerChallenge = "GSSAPI-START"
@@ -57,7 +58,7 @@ function DseGssapiAuthProvider(gssOptions) {
 	//load the kerberos at construction time
 	try {
 		// eslint-disable-next-line
-		this._kerberos = require("kerberos")
+		this._kerberos = _require("kerberos")
 	} catch (err) {
 		if (err.code === "MODULE_NOT_FOUND") {
 			const newErr = new Error(
@@ -258,4 +259,4 @@ GssapiAuthenticator.prototype.onAuthenticationSuccess = function (token) {
 	this.client.shutdown(function noop() {})
 }
 
-module.exports = DseGssapiAuthProvider
+export default DseGssapiAuthProvider

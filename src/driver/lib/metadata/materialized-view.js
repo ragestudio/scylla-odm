@@ -15,9 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const DataCollection = require("./data-collection")
+import util from "util"
+import DataCollection from "./data-collection"
 /**
  * Creates a new MaterializedView.
  * @param {String} name Name of the View.
@@ -47,4 +46,4 @@ function MaterializedView(name) {
 
 util.inherits(MaterializedView, DataCollection)
 
-module.exports = MaterializedView
+export default MaterializedView

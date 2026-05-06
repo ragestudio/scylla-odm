@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const Long = require("long")
-const util = require("util")
-const utils = require("../utils")
+import Long from "long"
+import util from "util"
+import utils from "../utils"
+
 const VIntCoding = utils.VIntCoding
 
 /** @module types */
@@ -573,4 +573,4 @@ Builder.prototype.build = function () {
 		: new Duration(this._months, this._days, this._nanoseconds)
 }
 
-module.exports = Duration
+export default Duration

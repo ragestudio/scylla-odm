@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const vm = require("vm")
-const utils = require("../utils")
-const types = require("../types")
+import vm from "vm"
+import utils from "../utils"
+import types from "../types"
 
 /**
  * @ignore
@@ -55,7 +53,7 @@ class ResultMapper {
 		scriptText += "  return item;\n})"
 
 		const script = new vm.Script(scriptText, {
-			filename: "gen-result-mapper.js",
+			filename: "gen-result-mapper",
 		})
 		return script.runInThisContext()
 	}
@@ -122,4 +120,4 @@ class ResultMapper {
 	}
 }
 
-module.exports = ResultMapper
+export default ResultMapper

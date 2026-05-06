@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 /** @module types */
 /**
  * Represents a result row
@@ -83,4 +82,4 @@ Row.prototype.forEach = function (callback) {
 	}
 }
 
-module.exports = Row
+export default Row

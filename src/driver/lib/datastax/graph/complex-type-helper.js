@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const { GraphTypeWrapper, UdtGraphWrapper } = require("./wrappers")
-const types = require("../../types")
-const Encoder = require("../../encoder")
+import { GraphTypeWrapper, UdtGraphWrapper } from "./wrappers"
+import * as types from "../../types/index"
+import Encoder from "../../encoder"
 const { dataTypes } = types
 
 function getTypeDefinitionByValue(value) {
@@ -101,4 +99,6 @@ function getUdtTypeDefinitionByValue(wrappedValue) {
 	return getUdtTypeDefinition(wrappedValue.udtInfo)
 }
 
-module.exports = { getTypeDefinitionByValue, getUdtTypeDefinitionByValue }
+export { getTypeDefinitionByValue, getUdtTypeDefinitionByValue }
+
+export default { getTypeDefinitionByValue, getUdtTypeDefinitionByValue }

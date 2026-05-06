@@ -16,10 +16,8 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const utils = require("../utils")
-const errors = require("../errors")
+import utils from "../utils"
+import errors from "../errors"
 
 const asyncIteratorSymbol = Symbol.asyncIterator || "@@asyncIterator"
 
@@ -251,7 +249,7 @@ ResultSet.prototype[asyncIteratorSymbol] = function getAsyncGenerator() {
 
 	const self = this
 
-	// Async generators are not present in Node.js 8, implement it manually
+	// Async generators are not present in Node 8, implement it manually
 	return {
 		async next() {
 			if (index >= rows.length && pageState) {
@@ -286,4 +284,4 @@ ResultSet.prototype.isPaged = function () {
 	return !!this.rawPageState
 }
 
-module.exports = ResultSet
+export default ResultSet

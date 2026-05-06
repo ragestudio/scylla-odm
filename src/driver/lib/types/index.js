@@ -15,21 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
+import util from "util"
 
-const errors = require("../errors")
-const TimeUuid = require("./time-uuid")
-const Uuid = require("./uuid")
-const protocolVersion = require("./protocol-version")
-const utils = require("../utils")
+import errors from "../errors"
+import TimeUuid from "./time-uuid"
+import Uuid from "./uuid"
+import protocolVersion from "./protocol-version"
+import utils from "../utils"
+import BigDecimal from "./big-decimal"
+import Duration from "./duration"
+import InetAddress from "./inet-address"
+import Integer from "./integer"
+import LocalDate from "./local-date"
+import LocalTime from "./local-time"
+import ResultSet from "./result-set"
+import ResultStream from "./result-stream"
+import Row from "./row"
+import Tuple from "./tuple"
+import Vector from "./vector"
 
 /** @module types */
 /**
- * Long constructor, wrapper of the internal library used: {@link https://github.com/dcodeIO/long.js Long.js}.
+ * Long constructor, wrapper of the internal library used: {@link https://github.com/dcodeIO/long Long}.
  * @constructor
  */
-const Long = require("long")
+import Long from "long"
 
 /**
  * Consistency levels
@@ -651,36 +661,73 @@ function TimeoutError(message) {
 }
 util.inherits(TimeoutError, errors.DriverError)
 
-exports.opcodes = opcodes
-exports.consistencies = consistencies
-exports.consistencyToString = consistencyToString
-exports.dataTypes = dataTypes
-exports.getDataTypeNameByCode = getDataTypeNameByCode
-exports.distance = distance
-exports.frameFlags = frameFlags
-exports.protocolEvents = protocolEvents
-exports.protocolVersion = protocolVersion
-exports.responseErrorCodes = responseErrorCodes
-exports.resultKind = resultKind
-exports.timeuuid = timeuuid
-exports.uuid = uuid
-exports.BigDecimal = require("./big-decimal")
-exports.Duration = require("./duration")
-exports.FrameHeader = FrameHeader
-exports.InetAddress = require("./inet-address")
-exports.Integer = require("./integer")
-exports.LocalDate = require("./local-date")
-exports.LocalTime = require("./local-time")
-exports.Long = Long
-exports.ResultSet = require("./result-set")
-exports.ResultStream = require("./result-stream")
-exports.Row = require("./row")
+export { opcodes }
+export { consistencies }
+export { consistencyToString }
+export { dataTypes }
+export { getDataTypeNameByCode }
+export { distance }
+export { frameFlags }
+export { protocolEvents }
+export { protocolVersion }
+export { responseErrorCodes }
+export { resultKind }
+export { timeuuid }
+export { uuid }
+export {
+	BigDecimal,
+	Duration,
+	InetAddress,
+	Integer,
+	LocalDate,
+	LocalTime,
+	ResultSet,
+	ResultStream,
+	Row,
+	Tuple,
+	Vector,
+}
+export { FrameHeader }
+export { Long }
 //export DriverError for backward-compatibility
-exports.DriverError = errors.DriverError
-exports.TimeoutError = TimeoutError
-exports.TimeUuid = TimeUuid
-exports.Tuple = require("./tuple")
-exports.Vector = require("./vector")
-exports.Uuid = Uuid
-exports.unset = unset
-exports.generateTimestamp = generateTimestamp
+export const DriverError = errors.DriverError
+export { TimeoutError }
+export { TimeUuid }
+export { Uuid }
+export { unset }
+export { generateTimestamp }
+
+export default {
+	opcodes,
+	consistencies,
+	consistencyToString,
+	dataTypes,
+	getDataTypeNameByCode,
+	distance,
+	frameFlags,
+	protocolEvents,
+	protocolVersion,
+	responseErrorCodes,
+	resultKind,
+	timeuuid,
+	uuid,
+	BigDecimal,
+	Duration,
+	FrameHeader,
+	InetAddress,
+	Integer,
+	LocalDate,
+	LocalTime,
+	Long,
+	ResultSet,
+	ResultStream,
+	Row,
+	DriverError,
+	TimeoutError,
+	TimeUuid,
+	Tuple,
+	Vector,
+	Uuid,
+	unset,
+	generateTimestamp,
+}

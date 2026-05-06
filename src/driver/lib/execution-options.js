@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const utils = require("./utils")
-const types = require("./types")
-const errors = require("./errors")
+import utils from "./utils"
+import types from "./types"
+import errors from "./errors"
 
 const proxyExecuteKey = "ProxyExecute"
 
@@ -609,4 +607,6 @@ function ifUndefined3(v1, v2, v3) {
 	return v2 !== undefined ? v2 : v3
 }
 
-module.exports = { ExecutionOptions, DefaultExecutionOptions, proxyExecuteKey }
+export { ExecutionOptions, DefaultExecutionOptions, proxyExecuteKey }
+
+export default { ExecutionOptions, DefaultExecutionOptions, proxyExecuteKey }

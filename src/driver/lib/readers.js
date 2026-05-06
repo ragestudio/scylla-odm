@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const util = require("util")
-const utils = require("./utils")
-const types = require("./types")
-const errors = require("./errors")
+import util from "util"
+import utils from "./utils"
+import types from "./types"
+import errors from "./errors"
 
 /**
  * Information on the formatting of the returned rows
@@ -621,4 +619,6 @@ class FrameReader {
 	}
 }
 
-module.exports = { FrameReader }
+export { FrameReader }
+
+export default { FrameReader }

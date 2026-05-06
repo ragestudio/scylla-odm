@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /**
  * Creates a non-clearable timer that resolves the promise once elapses.
  * @param {number} ms
@@ -168,7 +166,19 @@ function toCallback(promise, callback) {
 	)
 }
 
-module.exports = {
+export {
+	delay,
+	fromCallback,
+	fromEvent,
+	getCallback,
+	newQueryPlan,
+	optionalCallback,
+	times,
+	toBackground,
+	toCallback,
+}
+
+export default {
 	delay,
 	fromCallback,
 	fromEvent,

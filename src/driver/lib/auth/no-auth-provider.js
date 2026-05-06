@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const { AuthProvider, Authenticator } = require("./provider")
-const { PlainTextAuthenticator } = require("./plain-text-auth-provider")
-const errors = require("../errors")
+import { AuthProvider, Authenticator } from "./provider"
+import { PlainTextAuthenticator } from "./plain-text-auth-provider"
+import errors from "../errors"
 
 const dseAuthenticator = "com.datastax.bdp.cassandra.auth.DseAuthenticator"
 
@@ -72,4 +70,4 @@ class TransitionalModePlainTextAuthenticator extends PlainTextAuthenticator {
 	}
 }
 
-module.exports = NoAuthProvider
+export default NoAuthProvider

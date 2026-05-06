@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const utils = require("../utils")
-const Geometry = require("./geometry")
-const Point = require("./point")
+import util from "util"
+import utils from "../utils"
+import Geometry from "./geometry"
+import Point from "./point"
 
 /**
  * Creates a new {@link LineString} instance.
@@ -221,4 +220,4 @@ LineString.prototype.toJSON = function () {
 	}
 }
 
-module.exports = LineString
+export default LineString

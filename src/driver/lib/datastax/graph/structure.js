@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const util = require("util")
+import util from "util"
 
 /**
  * @classdesc
@@ -159,11 +157,6 @@ function Path(labels, objects) {
 	this.objects = objects
 }
 
-module.exports = {
-	Edge,
-	Element,
-	Path,
-	Property,
-	Vertex,
-	VertexProperty,
-}
+export { Edge, Element, Path, Property, Vertex, VertexProperty }
+
+export default { Edge, Element, Path, Property, Vertex, VertexProperty }

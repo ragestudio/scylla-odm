@@ -15,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const util = require("util")
-const utils = require("./utils")
-const errors = require("./errors")
-const requests = require("./requests")
-const ExecuteRequest = requests.ExecuteRequest
-const QueryRequest = requests.QueryRequest
+import util from "util"
+import utils from "./utils"
+import errors from "./errors"
+import { ExecuteRequest, QueryRequest } from "./requests"
 
 const state = {
 	init: 0,
@@ -205,4 +203,4 @@ class OperationState {
 	}
 }
 
-module.exports = OperationState
+export default OperationState

@@ -15,10 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const utils = require("../../utils")
-const Long = require("long")
+import utils from "../../utils"
+import Long from "long"
 
 /**
  * Regex to parse dates in the following format YYYY-MM-DDThh:mm:ss.mssZ
@@ -588,7 +586,6 @@ BoundaryBuilder.prototype.build = function () {
 	return new DateRangeBound(date, this._index)
 }
 
-exports.unbounded = unbounded
-exports.dateRangePrecision = dateRangePrecision
-exports.DateRange = DateRange
-exports.DateRangeBound = DateRangeBound
+export { unbounded, dateRangePrecision, DateRange, DateRangeBound }
+
+export default { unbounded, dateRangePrecision, DateRange, DateRangeBound }

@@ -15,10 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const util = require("util")
-const errors = require("../errors")
+import util from "util"
+import errors from "../errors"
 
 /**
  * Represents the state of a {@link Client}.
@@ -118,4 +116,4 @@ class ClientState {
 	}
 }
 
-module.exports = ClientState
+export default ClientState

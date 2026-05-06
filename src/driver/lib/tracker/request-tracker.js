@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /**
  * Tracks request execution for a {@link Client}.
  * <p>
@@ -82,4 +80,4 @@ class RequestTracker {
 	shutdown() {}
 }
 
-module.exports = RequestTracker
+export default RequestTracker

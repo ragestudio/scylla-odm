@@ -15,9 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const utils = require("../utils")
+import utils from "../utils"
 
 /** @module types */
 /**
@@ -243,7 +241,7 @@ InetAddress.prototype.toJSON = function () {
 }
 
 /**
- * Validates for a IPv4-Mapped IPv6 according to https://tools.ietf.org/html/rfc4291#section-2.5.5
+ * Validates for a IPv4-Mapped IPv6 according to https://tools.ietf.org/html/rfc4291#section-2.2.5.5
  * @private
  * @param {Buffer} buffer
  */
@@ -261,4 +259,4 @@ function isValidIPv4Mapped(buffer) {
 	return !(buffer[10] !== 255 || buffer[11] !== 255)
 }
 
-module.exports = InetAddress
+export default InetAddress

@@ -16,14 +16,12 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const ClientMetrics = require("./client-metrics")
-const EventEmitter = require("events")
+import ClientMetrics from "./client-metrics"
+import EventEmitter from "events"
 
 /**
  * A default implementation of [ClientMetrics]{@link module:metrics~ClientMetrics} that exposes the driver events as
- * Node.js events.
+ * Node events.
  * <p>
  *   An instance of [DefaultMetrics]{@link module:metrics~DefaultMetrics} is configured by default in the client,
  *   you can access this instance using [Client#metrics]{@link Client#metrics} property.
@@ -198,4 +196,4 @@ class DefaultMetrics extends ClientMetrics {
 	}
 }
 
-module.exports = DefaultMetrics
+export default DefaultMetrics

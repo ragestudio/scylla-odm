@@ -16,16 +16,12 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const vm = require("vm")
-const qModule = require("./q")
-const QueryOperator = qModule.QueryOperator
-const QueryAssignment = qModule.QueryAssignment
-const types = require("../types")
+import vm from "vm"
+import { QueryOperator, QueryAssignment } from "./q"
+import types from "../types"
 const dataTypes = types.dataTypes
 
-const vmFileName = "gen-param-getter.js"
+const vmFileName = "gen-param-getter"
 
 /**
  * Provides methods to generate a query and parameter handlers.
@@ -557,4 +553,4 @@ class QueryGenerator {
 	}
 }
 
-module.exports = QueryGenerator
+export default QueryGenerator

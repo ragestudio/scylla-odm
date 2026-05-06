@@ -16,11 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const qModule = require("./q")
-const QueryOperator = qModule.QueryOperator
-const QueryAssignment = qModule.QueryAssignment
+import { QueryOperator, QueryAssignment } from "./q"
 
 /**
  * Provides utility methods for obtaining a caching keys based on the specifics of the Mapper methods.
@@ -215,4 +211,4 @@ class Cache {
 	}
 }
 
-module.exports = Cache
+export default Cache

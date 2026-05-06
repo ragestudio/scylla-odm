@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
 const _versionPattern =
 	/(\d+)\.(\d+)(?:\.(\d+))?(?:\.(\d+)?)?(?:[-~]([\w+]*(?:-\w[.\w]*)*))?(?:\+([.\w]+))?/
@@ -151,4 +150,4 @@ class VersionNumber {
 	}
 }
 
-module.exports = VersionNumber
+export default VersionNumber

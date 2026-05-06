@@ -15,9 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const { Authenticator } = require("./provider")
+import util from "util"
+import { Authenticator } from "./provider"
 
 const dseAuthenticatorName = "com.datastax.bdp.cassandra.auth.DseAuthenticator"
 
@@ -78,4 +77,4 @@ BaseDseAuthenticator.prototype._isDseAuthenticator = function () {
 	return this.authenticatorName === dseAuthenticatorName
 }
 
-module.exports = BaseDseAuthenticator
+export default BaseDseAuthenticator

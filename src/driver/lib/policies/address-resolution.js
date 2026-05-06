@@ -15,10 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const dns = require("dns")
-const util = require("util")
-const utils = require("../utils")
+import dns from "dns"
+import util from "util"
+import utils from "../utils"
 /** @module policies/addressResolution */
 /**
  * @class
@@ -141,5 +140,6 @@ EC2MultiRegionTranslator.prototype.logError = function (address, err) {
 	//Do nothing by default
 }
 
-exports.AddressTranslator = AddressTranslator
-exports.EC2MultiRegionTranslator = EC2MultiRegionTranslator
+export { AddressTranslator, EC2MultiRegionTranslator }
+
+export default { AddressTranslator, EC2MultiRegionTranslator }

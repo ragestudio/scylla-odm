@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const { AuthProvider } = require("./provider")
-const BaseDseAuthenticator = require("./base-dse-authenticator")
-const utils = require("../utils")
+import util from "util"
+import { AuthProvider } from "./provider"
+import BaseDseAuthenticator from "./base-dse-authenticator"
+import utils from "../utils"
 
 const mechanism = utils.allocBufferFromString("PLAIN")
 const separatorBuffer = utils.allocBufferFromArray([0])
@@ -128,4 +127,4 @@ PlainTextAuthenticator.prototype.evaluateChallenge = function (
 	)
 }
 
-module.exports = DsePlainTextAuthProvider
+export default DsePlainTextAuthProvider

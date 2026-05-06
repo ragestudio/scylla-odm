@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const utils = require("../utils")
-const QueryGenerator = require("./query-generator")
-const ResultMapper = require("./result-mapper")
-const Result = require("./result")
-const Cache = require("./cache")
-const Tree = require("./tree")
-const ObjectSelector = require("./object-selector")
-const DocInfoAdapter = require("./doc-info-adapter")
+import utils from "../utils"
+import QueryGenerator from "./query-generator"
+import ResultMapper from "./result-mapper"
+import Result from "./result"
+import Cache from "./cache"
+import Tree from "./tree"
+import ObjectSelector from "./object-selector"
+import DocInfoAdapter from "./doc-info-adapter"
 
 const cacheHighWaterMark = 100
 
@@ -640,4 +638,4 @@ class MappingHandler {
 	}
 }
 
-module.exports = MappingHandler
+export default MappingHandler

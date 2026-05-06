@@ -15,13 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-
-const provider = require("./provider.js")
-const utils = require("../utils")
-const AuthProvider = provider.AuthProvider
-const Authenticator = provider.Authenticator
+import util from "util"
+import { AuthProvider, Authenticator } from "./provider"
+import utils from "../utils"
 /**
  * Creates a new instance of the Authenticator provider
  * @classdesc Provides plain text [Authenticator]{@link module:auth~Authenticator} instances to be used when
@@ -80,7 +76,6 @@ PlainTextAuthenticator.prototype.evaluateChallenge = function (
 	callback()
 }
 
-module.exports = {
-	PlainTextAuthenticator,
-	PlainTextAuthProvider,
-}
+export { PlainTextAuthenticator, PlainTextAuthProvider }
+
+export default { PlainTextAuthenticator, PlainTextAuthProvider }

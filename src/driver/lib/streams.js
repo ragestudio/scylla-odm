@@ -16,18 +16,17 @@
  * limitations under the License.
  */
 
-"use strict"
+import util from "util"
+import { Transform, Writable } from "stream"
 
-const util = require("util")
-const { Transform, Writable } = require("stream")
+import types from "./types"
+import utils from "./utils"
+import errors from "./errors"
+import { FrameReader } from "./readers"
 
-const types = require("./types")
-const utils = require("./utils")
-const errors = require("./errors")
 const { FrameHeader } = types
-const { FrameReader } = require("./readers")
 
-// type codes that support zero-length buffers (matching zeroLengthTypesSupported in encoder.js)
+// type codes that support zero-length buffers (matching zeroLengthTypesSupported in encoder)
 const zeroLenTypeCodes = new Set([0x0000, 0x0001, 0x0003, 0x000a, 0x000d])
 // custom=0x0000, ascii=0x0001, blob=0x0003, text=0x000a, varchar=0x000d
 
@@ -147,7 +146,7 @@ Protocol.prototype.clearHeaderChunks = function () {
 
 /**
  * A stream that gets reads header + body chunks and transforms them into header + (row | error)
- * @param {Object} streamOptions Node.js Stream options
+ * @param {Object} streamOptions Node Stream options
  * @param {Encoder} encoder Encoder instance for the parser to use
  * @extends Transform
  */
@@ -741,6 +740,6 @@ ResultEmitter.prototype.bufferAndEmit = function (item) {
 	}
 }
 
-exports.Protocol = Protocol
-exports.Parser = Parser
-exports.ResultEmitter = ResultEmitter
+export { Protocol, Parser, ResultEmitter }
+
+export default { Protocol, Parser, ResultEmitter }

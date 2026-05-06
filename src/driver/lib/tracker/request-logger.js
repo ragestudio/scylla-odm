@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const events = require("events")
-const RequestTracker = require("./request-tracker")
-const errors = require("../errors")
-const { format } = require("util")
+import events from "events"
+import RequestTracker from "./request-tracker"
+import * as errors from "../errors"
+import { format } from "util"
 
 const nanosToMillis = 1000000
 const defaultMessageMaxQueryLength = 500
@@ -439,4 +437,4 @@ function formatSize(length) {
 	return length > 1000 ? Math.round(length / 1024) + " KB" : length + " bytes"
 }
 
-module.exports = RequestLogger
+export default RequestLogger

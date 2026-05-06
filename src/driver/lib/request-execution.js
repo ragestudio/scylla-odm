@@ -15,14 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const errors = require("./errors")
-const requests = require("./requests")
-const retry = require("./policies/retry")
-const types = require("./types")
-const utils = require("./utils")
-const promiseUtils = require("./promise-utils")
+import errors from "./errors"
+import requests from "./requests"
+import retry from "./policies/retry"
+import types from "./types"
+import utils from "./utils"
+import promiseUtils from "./promise-utils"
 
 const retryOnCurrentHost = Object.freeze({
 	decision: retry.RetryPolicy.retryDecision.retry,
@@ -643,4 +641,4 @@ class RequestExecution {
 	}
 }
 
-module.exports = RequestExecution
+export default RequestExecution

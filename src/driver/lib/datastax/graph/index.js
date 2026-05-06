@@ -15,16 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
 /**
  * Graph module.
  * @module datastax/graph
  */
 
-const GraphResultSet = require("./result-set")
-const getCustomTypeSerializers = require("./custom-type-serializers")
-const {
+import GraphResultSet from "./result-set"
+import getCustomTypeSerializers from "./custom-type-serializers"
+import {
 	asInt,
 	asDouble,
 	asFloat,
@@ -32,15 +30,15 @@ const {
 	asUdt,
 	UdtGraphWrapper,
 	GraphTypeWrapper,
-} = require("./wrappers")
-const {
+} from "./wrappers"
+import {
 	Edge,
 	Element,
 	Path,
 	Property,
 	Vertex,
 	VertexProperty,
-} = require("./structure")
+} from "./structure"
 
 class EnumValue {
 	constructor(typeName, elementName) {
@@ -77,14 +75,33 @@ const direction = {
 // Expose an extra property to represent `Direction.IN`.
 direction.in_ = direction.in
 
-module.exports = {
+export {
 	Edge,
 	Element,
 	Path,
 	Property,
 	Vertex,
 	VertexProperty,
+	asInt,
+	asDouble,
+	asFloat,
+	asTimestamp,
+	asUdt,
+	direction,
+	getCustomTypeSerializers,
+	GraphResultSet,
+	GraphTypeWrapper,
+	t,
+	UdtGraphWrapper,
+}
 
+export default {
+	Edge,
+	Element,
+	Path,
+	Property,
+	Vertex,
+	VertexProperty,
 	asInt,
 	asDouble,
 	asFloat,

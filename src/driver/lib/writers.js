@@ -15,12 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const events = require("events")
 
-const types = require("./types")
-const utils = require("./utils.js")
-const FrameHeader = types.FrameHeader
+import events from "events"
+
+import types from "./types"
+import utils from "./utils"
+
+const { FrameHeader } = types
 
 /**
  * Contains the logic to write all the different types to the frame.
@@ -344,4 +345,6 @@ class WriteQueue extends events.EventEmitter {
 	}
 }
 
-module.exports = { FrameWriter, WriteQueue }
+export { FrameWriter, WriteQueue }
+
+export default { FrameWriter, WriteQueue }

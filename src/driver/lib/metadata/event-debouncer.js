@@ -15,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const util = require("util")
-const utils = require("../utils")
-const promiseUtils = require("../promise-utils")
+import util from "util"
+import utils from "../utils"
+import promiseUtils from "../promise-utils"
 
 const _queueOverflowThreshold = 1000
 
@@ -173,4 +171,4 @@ function processQueue(q) {
 	})
 }
 
-module.exports = EventDebouncer
+export default EventDebouncer

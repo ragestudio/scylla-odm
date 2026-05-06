@@ -16,15 +16,13 @@
  * limitations under the License.
  */
 
-"use strict"
+import events from "events"
 
-const events = require("events")
-
-const utils = require("./utils")
-const types = require("./types")
-const HostConnectionPool = require("./host-connection-pool")
-const PrepareHandler = require("./prepare-handler")
-const promiseUtils = require("./promise-utils")
+import utils from "./utils"
+import types from "./types"
+import HostConnectionPool from "./host-connection-pool"
+import PrepareHandler from "./prepare-handler"
+import promiseUtils from "./promise-utils"
 
 const healthResponseCountInterval = 200
 
@@ -682,7 +680,7 @@ class HostMap extends events.EventEmitter {
 	}
 
 	toJSON() {
-		// Node.js 10 and below don't support Object.fromEntries()
+		// Node 10 and below don't support Object.fromEntries()
 		if (Object.fromEntries) {
 			return Object.fromEntries(this._items)
 		}
@@ -696,7 +694,6 @@ class HostMap extends events.EventEmitter {
 	}
 }
 
-module.exports = {
-	Host,
-	HostMap,
-}
+export { Host, HostMap }
+
+export default { Host, HostMap }

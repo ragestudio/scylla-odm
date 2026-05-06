@@ -15,8 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
+import util from "util"
 
 /** @module policies/reconnection */
 /**
@@ -154,6 +153,14 @@ ExponentialReconnectionPolicy.prototype.getOptions = function () {
 	])
 }
 
-exports.ReconnectionPolicy = ReconnectionPolicy
-exports.ConstantReconnectionPolicy = ConstantReconnectionPolicy
-exports.ExponentialReconnectionPolicy = ExponentialReconnectionPolicy
+export {
+	ReconnectionPolicy,
+	ConstantReconnectionPolicy,
+	ExponentialReconnectionPolicy,
+}
+
+export default {
+	ReconnectionPolicy,
+	ConstantReconnectionPolicy,
+	ExponentialReconnectionPolicy,
+}

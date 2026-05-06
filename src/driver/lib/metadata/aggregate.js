@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
 /**
  * Creates a new Aggregate.
@@ -77,4 +76,4 @@ function Aggregate() {
 	this.deterministic = null
 }
 
-module.exports = Aggregate
+export default Aggregate

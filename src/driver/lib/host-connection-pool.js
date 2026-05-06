@@ -15,15 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const events = require("events")
+import util from "util"
+import events from "events"
 
-const Connection = require("./connection")
-const utils = require("./utils")
-const promiseUtils = require("./promise-utils")
-const errors = require("./errors")
-const clientOptions = require("./client-options")
+import Connection from "./connection"
+import utils from "./utils"
+import promiseUtils from "./promise-utils"
+import errors from "./errors"
+import clientOptions from "./client-options"
 
 // Used to get the index of the connection with less in-flight requests
 let connectionIndex = 0
@@ -585,4 +584,4 @@ function getDefaultOptions() {
 	return defaultOptions
 }
 
-module.exports = HostConnectionPool
+export default HostConnectionPool

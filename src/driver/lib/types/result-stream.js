@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const { Readable } = require("stream")
-const utils = require("../utils")
-const errors = require("../errors")
-const clientOptions = require("../client-options")
+import { Readable } from "stream"
+import utils from "../utils"
+import errors from "../errors"
+import clientOptions from "../client-options"
 
 /** @module types */
 /**
@@ -163,4 +161,4 @@ class ResultStream extends Readable {
 	}
 }
 
-module.exports = ResultStream
+export default ResultStream

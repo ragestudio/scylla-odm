@@ -15,12 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const types = require("./types")
-const token = require("./token")
-const utils = require("./utils")
-const MutableLong = require("./types/mutable-long")
+import types from "./types"
+import token from "./token"
+import utils from "./utils"
+import MutableLong from "./types/mutable-long"
+import crypto from "crypto"
 const { Integer } = types
 
 // Murmur3 constants
@@ -385,8 +384,7 @@ class Murmur3Tokenizer extends Tokenizer {
 class RandomTokenizer extends Tokenizer {
 	constructor() {
 		super()
-		// eslint-disable-next-line
-		this._crypto = require("crypto")
+		this._crypto = crypto
 	}
 
 	/**
@@ -629,6 +627,5 @@ function fromSignedByte(value) {
 	return new MutableLong((value - 256) & 0xffff, 0xffff, 0xffff, 0xffff)
 }
 
-exports.Murmur3Tokenizer = Murmur3Tokenizer
-exports.RandomTokenizer = RandomTokenizer
-exports.ByteOrderedTokenizer = ByteOrderedTokenizer
+export { Murmur3Tokenizer, RandomTokenizer, ByteOrderedTokenizer }
+export default { Murmur3Tokenizer, RandomTokenizer, ByteOrderedTokenizer }

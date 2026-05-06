@@ -15,8 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
+import util from "util"
 /**
  * Contains the error classes exposed by the driver.
  * @module errors
@@ -197,13 +196,28 @@ function VIntOutOfRangeException(long) {
 
 util.inherits(VIntOutOfRangeException, DriverError)
 
-exports.ArgumentError = ArgumentError
-exports.AuthenticationError = AuthenticationError
-exports.BusyConnectionError = BusyConnectionError
-exports.DriverError = DriverError
-exports.OperationTimedOutError = OperationTimedOutError
-exports.DriverInternalError = DriverInternalError
-exports.NoHostAvailableError = NoHostAvailableError
-exports.NotSupportedError = NotSupportedError
-exports.ResponseError = ResponseError
-exports.VIntOutOfRangeException = VIntOutOfRangeException
+export {
+	ArgumentError,
+	AuthenticationError,
+	BusyConnectionError,
+	DriverError,
+	OperationTimedOutError,
+	DriverInternalError,
+	NoHostAvailableError,
+	NotSupportedError,
+	ResponseError,
+	VIntOutOfRangeException,
+}
+
+export default {
+	ArgumentError,
+	AuthenticationError,
+	BusyConnectionError,
+	DriverError,
+	OperationTimedOutError,
+	DriverInternalError,
+	NoHostAvailableError,
+	NotSupportedError,
+	ResponseError,
+	VIntOutOfRangeException,
+}

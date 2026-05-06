@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /**
  * Contains a set of methods to represent a row into a document and a document into a row.
  * @alias module:mapping~TableMappings
@@ -126,6 +124,10 @@ class DefaultTableMappings extends TableMappings {
 	}
 }
 
-exports.TableMappings = TableMappings
-exports.UnderscoreCqlToCamelCaseMappings = UnderscoreCqlToCamelCaseMappings
-exports.DefaultTableMappings = DefaultTableMappings
+export { TableMappings, UnderscoreCqlToCamelCaseMappings, DefaultTableMappings }
+
+export default {
+	TableMappings,
+	UnderscoreCqlToCamelCaseMappings,
+	DefaultTableMappings,
+}

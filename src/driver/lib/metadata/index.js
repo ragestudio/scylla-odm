@@ -16,25 +16,23 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const events = require("events")
-const util = require("util")
+import events from "events"
+import util from "util"
 
 /**
  * Module containing classes and fields related to metadata.
  * @module metadata
  */
 
-const t = require("../tokenizer")
-const utils = require("../utils")
-const errors = require("../errors")
-const types = require("../types")
-const requests = require("../requests")
-const schemaParserFactory = require("./schema-parser")
-const promiseUtils = require("../promise-utils")
-const { TokenRange } = require("../token")
-const { ExecutionOptions } = require("../execution-options")
+import t from "../tokenizer"
+import utils from "../utils"
+import errors from "../errors"
+import types from "../types"
+import requests from "../requests"
+import schemaParserFactory from "./schema-parser"
+import promiseUtils from "../promise-utils"
+import { TokenRange } from "../token"
+import { ExecutionOptions } from "../execution-options"
 
 /**
  * @const
@@ -1155,4 +1153,4 @@ class PreparedQueries {
 	}
 }
 
-module.exports = Metadata
+export default Metadata

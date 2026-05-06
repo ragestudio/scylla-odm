@@ -1,5 +1,23 @@
-import Client from "../src/client"
-import Example from "./db/example"
+import Client from "../dist/client.js"
+import { Model, Schema, ColumnTypes } from "../dist/index.js"
+import type { Column } from "../dist/types"
+
+const schema = new Schema(
+	{
+		table_name: "test",
+		keys: ["key"],
+	},
+	{
+		key: {
+			type: ColumnTypes.Text,
+		} as Column<string>,
+		value: {
+			type: ColumnTypes.Text,
+		} as Column<string>,
+	},
+)
+
+const model = new Model("test", schema)
 
 async function main() {
 	const client = new Client({
@@ -19,7 +37,7 @@ async function main() {
 	console.timeEnd("client.initialize")
 
 	console.time("Example.obj")
-	const newObj = Example.obj({
+	const newObj = model.obj({
 		key: "test",
 		value: new Date().toISOString(),
 	})
@@ -37,7 +55,7 @@ async function main() {
 	console.log(newObj.key, newObj.value)
 
 	console.time("Example.findOne")
-	const finded = await Example.findOne({ key: "test" })
+	const finded = await model.findOne({ key: "test" })
 	console.timeEnd("Example.findOne")
 
 	if (!finded) {

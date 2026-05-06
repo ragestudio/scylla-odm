@@ -15,10 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const utils = require("../utils")
-const types = require("../types")
+import util from "util"
+import utils from "../utils"
+import types from "../types"
 
 /** @private */
 const kind = {
@@ -164,4 +163,4 @@ function getKindByName(name) {
 	return kind[name.toLowerCase()]
 }
 
-module.exports = Index
+export default Index

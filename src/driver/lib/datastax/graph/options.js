@@ -15,14 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const types = require("../../types")
-const utils = require("../../utils")
-const {
+import util from "util"
+import * as types from "../../types/index"
+import * as utils from "../../utils"
+import {
 	DefaultExecutionOptions,
 	proxyExecuteKey,
-} = require("../../execution-options")
+} from "../../execution-options"
 const Long = types.Long
 
 let consistencyNames
@@ -424,8 +423,6 @@ class GraphExecutionOptions extends DefaultExecutionOptions {
 	}
 }
 
-module.exports = {
-	GraphExecutionOptions,
-	graphProtocol,
-	payloadKeys,
-}
+export { GraphExecutionOptions, graphProtocol, payloadKeys }
+
+export default { GraphExecutionOptions, graphProtocol, payloadKeys }

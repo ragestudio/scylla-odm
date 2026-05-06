@@ -16,13 +16,11 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const { Stream } = require("stream")
-const utils = require("../utils")
+import { Stream } from "stream"
+import utils from "../utils"
 
 /**
- * Utilities for concurrent query execution with the DataStax Node.js Driver.
+ * Utilities for concurrent query execution with the DataStax Node Driver.
  * @module concurrent
  */
 
@@ -364,5 +362,5 @@ class ResultSetGroup {
 	}
 }
 
-exports.executeConcurrent = executeConcurrent
-exports.ResultSetGroup = ResultSetGroup
+export { executeConcurrent, ResultSetGroup }
+export default { executeConcurrent, ResultSetGroup }

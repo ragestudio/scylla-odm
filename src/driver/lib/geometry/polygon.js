@@ -15,12 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const utils = require("../utils")
-const Geometry = require("./geometry")
-const Point = require("./point")
-const LineString = require("./line-string")
+import util from "util"
+import utils from "../utils"
+import Geometry from "./geometry"
+import Point from "./point"
+import LineString from "./line-string"
 
 /**
  * Creates a new {@link Polygon} instance.
@@ -250,4 +249,4 @@ Polygon.prototype.toJSON = function () {
 	}
 }
 
-module.exports = Polygon
+export default Polygon

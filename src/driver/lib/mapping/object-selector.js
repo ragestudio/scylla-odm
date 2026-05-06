@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-"use strict"
-
 const keyMatches = {
 	all: 1,
 	none: 0,
@@ -416,4 +414,4 @@ function staticColumnCount(table) {
 	)
 }
 
-module.exports = ObjectSelector
+export default ObjectSelector

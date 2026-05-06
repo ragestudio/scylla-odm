@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
 /**
  * Creates a new SchemaFunction.
@@ -96,4 +95,4 @@ function SchemaFunction() {
 	this.monotonicOn = null
 }
 
-module.exports = SchemaFunction
+export default SchemaFunction

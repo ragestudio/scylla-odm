@@ -15,8 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
 const endianness = {
 	0: "BE",
 	1: "LE",
@@ -130,4 +128,4 @@ Geometry.prototype.useBESerialization = function () {
 	throw new Error("Not Implemented")
 }
 
-module.exports = Geometry
+export default Geometry

@@ -15,10 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const types = require("./types")
-const util = require("util")
+import types from "./types"
+import util from "util"
 
 const _Murmur3TokenType = types.dataTypes.getByName("bigint")
 const _RandomTokenType = types.dataTypes.getByName("varint")
@@ -316,8 +314,12 @@ class TokenRange {
 	}
 }
 
-exports.Token = Token
-exports.TokenRange = TokenRange
-exports.ByteOrderedToken = ByteOrderedToken
-exports.Murmur3Token = Murmur3Token
-exports.RandomToken = RandomToken
+export { Token, TokenRange, ByteOrderedToken, Murmur3Token, RandomToken }
+
+export default {
+	Token,
+	TokenRange,
+	ByteOrderedToken,
+	Murmur3Token,
+	RandomToken,
+}

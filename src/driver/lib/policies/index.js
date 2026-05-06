@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
 /**
  * Contains driver tuning policies to determine [load balancing]{@link module:policies/loadBalancing},
@@ -25,21 +24,40 @@
  *  [speculative execution]{@link module:policies/speculativeExecution}.
  * @module policies
  */
-const addressResolution =
-	(exports.addressResolution = require("./address-resolution"))
-const loadBalancing = (exports.loadBalancing = require("./load-balancing"))
-const reconnection = (exports.reconnection = require("./reconnection"))
-const retry = (exports.retry = require("./retry"))
-const speculativeExecution =
-	(exports.speculativeExecution = require("./speculative-execution"))
-const timestampGeneration =
-	(exports.timestampGeneration = require("./timestamp-generation"))
+import addressResolution from "./address-resolution"
+import loadBalancing from "./load-balancing"
+import reconnection from "./reconnection"
+import retry from "./retry"
+import speculativeExecution from "./speculative-execution"
+import timestampGeneration from "./timestamp-generation"
+
+export { addressResolution }
+export { loadBalancing }
+export { reconnection }
+export { retry }
+export { speculativeExecution }
+export { timestampGeneration }
+
+export default {
+	addressResolution,
+	loadBalancing,
+	reconnection,
+	retry,
+	speculativeExecution,
+	timestampGeneration,
+	defaultAddressTranslator,
+	defaultLoadBalancingPolicy,
+	defaultRetryPolicy,
+	defaultReconnectionPolicy,
+	defaultSpeculativeExecutionPolicy,
+	defaultTimestampGenerator,
+}
 
 /**
  * Returns a new instance of the default address translator policy used by the driver.
  * @returns {AddressTranslator}
  */
-exports.defaultAddressTranslator = function () {
+export function defaultAddressTranslator() {
 	return new addressResolution.AddressTranslator()
 }
 
@@ -51,7 +69,7 @@ exports.defaultAddressTranslator = function () {
  * provided in the {@link ClientOptions}.</p>
  * @returns {LoadBalancingPolicy}
  */
-exports.defaultLoadBalancingPolicy = function (localDc) {
+export function defaultLoadBalancingPolicy(localDc) {
 	return new loadBalancing.DefaultLoadBalancingPolicy(localDc)
 }
 
@@ -59,7 +77,7 @@ exports.defaultLoadBalancingPolicy = function (localDc) {
  * Returns a new instance of the default retry policy used by the driver.
  * @returns {RetryPolicy}
  */
-exports.defaultRetryPolicy = function () {
+export function defaultRetryPolicy() {
 	return new retry.RetryPolicy()
 }
 
@@ -67,7 +85,7 @@ exports.defaultRetryPolicy = function () {
  * Returns a new instance of the default reconnection policy used by the driver.
  * @returns {ReconnectionPolicy}
  */
-exports.defaultReconnectionPolicy = function () {
+export function defaultReconnectionPolicy() {
 	return new reconnection.ExponentialReconnectionPolicy(
 		1000,
 		10 * 60 * 1000,
@@ -79,7 +97,7 @@ exports.defaultReconnectionPolicy = function () {
  * Returns a new instance of the default speculative execution policy used by the driver.
  * @returns {SpeculativeExecutionPolicy}
  */
-exports.defaultSpeculativeExecutionPolicy = function () {
+export function defaultSpeculativeExecutionPolicy() {
 	return new speculativeExecution.NoSpeculativeExecutionPolicy()
 }
 
@@ -87,6 +105,6 @@ exports.defaultSpeculativeExecutionPolicy = function () {
  * Returns a new instance of the default timestamp generator used by the driver.
  * @returns {TimestampGenerator}
  */
-exports.defaultTimestampGenerator = function () {
+export function defaultTimestampGenerator() {
 	return new timestampGeneration.MonotonicTimestampGenerator()
 }

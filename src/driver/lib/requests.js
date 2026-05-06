@@ -15,14 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
 
-const { FrameWriter } = require("./writers")
-const types = require("./types")
-const utils = require("./utils")
-const { ExecutionOptions } = require("./execution-options")
-const packageInfo = require("../../../package.json")
+import util from "util"
+
+import { FrameWriter } from "./writers"
+import types from "./types"
+import utils from "./utils"
+import { ExecutionOptions } from "./execution-options"
+import pkg from "../../../package.json" with { type: "json" }
 
 /**
  * Options for the execution of the query / prepared statement
@@ -361,8 +361,8 @@ class StartupRequest extends Request {
 
 		const startupOptions = {
 			CQL_VERSION: this.options.cqlVersion || "3.0.0",
-			DRIVER_NAME: packageInfo.description,
-			DRIVER_VERSION: packageInfo.version,
+			DRIVER_NAME: pkg.description,
+			DRIVER_VERSION: pkg.version,
 		}
 
 		if (this.options.noCompact) {
@@ -589,14 +589,30 @@ class OptionsRequest extends Request {
 
 const options = new OptionsRequest()
 
-exports.AuthResponseRequest = AuthResponseRequest
-exports.BatchRequest = BatchRequest
-exports.CancelRequest = CancelRequest
-exports.CredentialsRequest = CredentialsRequest
-exports.ExecuteRequest = ExecuteRequest
-exports.PrepareRequest = PrepareRequest
-exports.QueryRequest = QueryRequest
-exports.Request = Request
-exports.RegisterRequest = RegisterRequest
-exports.StartupRequest = StartupRequest
-exports.options = options
+export {
+	AuthResponseRequest,
+	BatchRequest,
+	CancelRequest,
+	CredentialsRequest,
+	ExecuteRequest,
+	options,
+	PrepareRequest,
+	QueryRequest,
+	RegisterRequest,
+	Request,
+	StartupRequest,
+}
+
+export default {
+	AuthResponseRequest,
+	BatchRequest,
+	CancelRequest,
+	CredentialsRequest,
+	ExecuteRequest,
+	options,
+	PrepareRequest,
+	QueryRequest,
+	RegisterRequest,
+	Request,
+	StartupRequest,
+}

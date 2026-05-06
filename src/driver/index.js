@@ -15,35 +15,76 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const clientOptions = require("./lib/client-options")
-exports.Client = require("./lib/client")
-exports.ExecutionProfile = require("./lib/execution-profile").ExecutionProfile
-exports.ExecutionOptions = require("./lib/execution-options").ExecutionOptions
-exports.types = require("./lib/types")
-exports.errors = require("./lib/errors")
-exports.policies = require("./lib/policies")
-exports.auth = require("./lib/auth")
-exports.mapping = require("./lib/mapping")
-exports.tracker = require("./lib/tracker")
-exports.metrics = require("./lib/metrics")
-exports.concurrent = require("./lib/concurrent")
+import clientOptions from "./lib/client-options"
+import Client from "./lib/client"
+import { ExecutionProfile } from "./lib/execution-profile"
+import { ExecutionOptions } from "./lib/execution-options"
+import types from "./lib/types"
+import errors from "./lib/errors"
+import policies from "./lib/policies"
+import auth from "./lib/auth"
+import mapping from "./lib/mapping"
+import tracker from "./lib/tracker"
+import metrics from "./lib/metrics"
+import concurrent from "./lib/concurrent"
+import { Token, TokenRange } from "./lib/token"
+import Metadata from "./lib/metadata"
+import Encoder from "./lib/encoder"
+import geometry from "./lib/geometry"
+import { version as pkgVersion } from "../../package.json" with { type: "json" }
 
-const token = require("./lib/token")
-exports.token = {
-	Token: token.Token,
-	TokenRange: token.TokenRange,
+export {
+	Client,
+	ExecutionProfile,
+	ExecutionOptions,
+	types,
+	errors,
+	policies,
+	auth,
+	mapping,
+	tracker,
+	metrics,
+	concurrent,
+	Encoder,
+	geometry,
 }
-const Metadata = require("./lib/metadata")
-exports.metadata = {
+
+export const token = {
+	Token: Token,
+	TokenRange: TokenRange,
+}
+
+export const metadata = {
 	Metadata: Metadata,
 }
-exports.Encoder = require("./lib/encoder")
-exports.geometry = require("./lib/geometry")
+
 /**
  * Returns a new instance of the default [options]{@link ClientOptions} used by the driver.
  */
-exports.defaultOptions = function () {
+export function defaultOptions() {
 	return clientOptions.defaultOptions()
 }
-exports.version = require("../../package.json").version
+
+export const version = pkgVersion
+
+const _default = {
+	Client,
+	ExecutionProfile,
+	ExecutionOptions,
+	types,
+	errors,
+	policies,
+	auth,
+	mapping,
+	tracker,
+	metrics,
+	concurrent,
+	token,
+	metadata,
+	Encoder,
+	geometry,
+	defaultOptions,
+	version,
+}
+
+export default _default

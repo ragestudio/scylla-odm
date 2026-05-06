@@ -25,9 +25,7 @@
 /**
  * @author Jorge Bay Gondra
  */
-"use strict"
-
-const typeSerializers = require("./type-serializers")
+import * as typeSerializers from "./type-serializers"
 
 /**
  * GraphSON2 writer.
@@ -253,11 +251,11 @@ const graphSON3Serializers = graphSON2Serializers.concat([
 	typeSerializers.MapSerializer,
 ])
 
-module.exports = {
+export { GraphSON3Writer, GraphSON3Reader, GraphSON2Writer, GraphSON2Reader }
+
+export default {
 	GraphSON3Writer,
 	GraphSON3Reader,
 	GraphSON2Writer,
 	GraphSON2Reader,
-	GraphSONWriter: GraphSON3Writer,
-	GraphSONReader: GraphSON3Reader,
 }

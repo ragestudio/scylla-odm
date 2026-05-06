@@ -15,9 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const types = require("./types")
+import types from "./types"
 
 /**
  * Group size
@@ -208,4 +206,4 @@ function generateGroup(initialValue) {
 	return arr
 }
 
-module.exports = StreamIdStack
+export default StreamIdStack

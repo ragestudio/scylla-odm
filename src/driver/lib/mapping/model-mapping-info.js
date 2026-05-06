@@ -16,11 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const tableMappingsModule = require("./table-mappings")
-const TableMappings = tableMappingsModule.TableMappings
-const DefaultTableMappings = tableMappingsModule.DefaultTableMappings
+import { TableMappings, DefaultTableMappings } from "./table-mappings"
 
 /**
  * Represents the parsed user information of the table mappings of a model.
@@ -226,4 +222,4 @@ class ModelColumnInfo {
 	}
 }
 
-module.exports = ModelMappingInfo
+export default ModelMappingInfo

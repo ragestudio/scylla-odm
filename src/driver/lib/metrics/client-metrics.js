@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /**
  * Represents a base class that is used to measure events from the server and the client as seen by the driver.
  * @alias module:metrics~ClientMetrics
@@ -126,4 +124,4 @@ class ClientMetrics {
 	onResponse(latency) {}
 }
 
-module.exports = ClientMetrics
+export default ClientMetrics

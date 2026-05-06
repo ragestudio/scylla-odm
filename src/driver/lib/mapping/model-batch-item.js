@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const Cache = require("./cache")
+import Cache from "./cache"
 
 /**
  * Represents a query or a set of queries used to perform a mutation in a batch.
@@ -202,7 +200,14 @@ class RemoveModelBatchItem extends ModelBatchItem {
 	}
 }
 
-module.exports = {
+export {
+	ModelBatchItem,
+	InsertModelBatchItem,
+	UpdateModelBatchItem,
+	RemoveModelBatchItem,
+}
+
+export default {
 	ModelBatchItem,
 	InsertModelBatchItem,
 	UpdateModelBatchItem,

@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
 
-const utils = require("../utils")
-const VersionNumber = require("./version-number")
+import utils from "../utils"
+import VersionNumber from "./version-number"
+
 const v200 = VersionNumber.parse("2.0.0")
 const v210 = VersionNumber.parse("2.1.0")
 const v220 = VersionNumber.parse("2.2.0")
@@ -388,4 +388,4 @@ const protocolVersion = {
 	},
 }
 
-module.exports = protocolVersion
+export default protocolVersion

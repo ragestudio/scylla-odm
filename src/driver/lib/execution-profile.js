@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const utils = require("./utils")
-const types = require("./types")
-const promiseUtils = require("./promise-utils")
+import utils from "./utils"
+import types from "./types"
+import promiseUtils from "./promise-utils"
 
 /**
  * Creates a new instance of {@link ExecutionProfile}.
@@ -271,7 +269,6 @@ class ProfileManager {
 	}
 }
 
-module.exports = {
-	ProfileManager,
-	ExecutionProfile,
-}
+export { ProfileManager, ExecutionProfile }
+
+export default { ProfileManager, ExecutionProfile }

@@ -15,27 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
+import events from "events"
+import util from "util"
 
-const events = require("events")
-const util = require("util")
-
-const utils = require("./utils.js")
-const errors = require("./errors.js")
-const types = require("./types")
-const { ProfileManager } = require("./execution-profile")
-const requests = require("./requests")
-const clientOptions = require("./client-options")
-const ClientState = require("./metadata/client-state")
-const description = require("../../../package.json").description
-const { version } = require("../../../package.json")
-const { DefaultExecutionOptions } = require("./execution-options")
-const ControlConnection = require("./control-connection")
-const RequestHandler = require("./request-handler")
-const PrepareHandler = require("./prepare-handler")
-const InsightsClient = require("./insights-client")
-const GraphExecutor = require("./datastax/graph/graph-executor")
-const promiseUtils = require("./promise-utils")
+import utils from "./utils"
+import errors from "./errors"
+import types from "./types"
+import { ProfileManager } from "./execution-profile"
+import requests from "./requests"
+import clientOptions from "./client-options"
+import ClientState from "./metadata/client-state"
+import { DefaultExecutionOptions } from "./execution-options"
+import ControlConnection from "./control-connection"
+import RequestHandler from "./request-handler"
+import PrepareHandler from "./prepare-handler"
+import InsightsClient from "./insights-client"
+import GraphExecutor from "./datastax/graph/graph-executor"
+import promiseUtils from "./promise-utils"
+import {
+	description,
+	version,
+} from "../../../package.json" with { type: "json" }
 
 /**
  * Max amount of pools being warmup in parallel, when warmup is enabled
@@ -189,9 +189,9 @@ const warmupLimit = 32
  * @property {RequestTracker} [requestTracker] The instance of RequestTracker used to monitor or log requests executed
  * with this instance.
  * @property {Object} [sslOptions] Client-to-node ssl options. When set the driver will use the secure layer.
- * You can specify cert, ca, ... options named after the Node.js <code>tls.connect()</code> options.
+ * You can specify cert, ca, ... options named after the Node <code>tls.connect()</code> options.
  * <p>
- *   It uses the same default values as Node.js <code>tls.connect()</code> except for <code>rejectUnauthorized</code>
+ *   It uses the same default values as Node <code>tls.connect()</code> except for <code>rejectUnauthorized</code>
  *   which is set to <code>false</code> by default (for historical reasons). This setting is likely to change
  *   in upcoming versions to enable validation by default.
  * </p>
@@ -1298,4 +1298,4 @@ Client.prototype._setRoutingInfo = async function (execOptions, params, meta) {
  * @param {ResultSet} [result] Result of the execution of the query.
  */
 
-module.exports = Client
+export default Client

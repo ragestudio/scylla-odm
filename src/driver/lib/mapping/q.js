@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const errors = require("../errors")
+import errors from "../errors"
 
 /**
  * Represents a CQL query operator, like >=, IN, <, ...
@@ -153,6 +151,6 @@ const q = {
 	},
 }
 
-exports.q = q
-exports.QueryAssignment = QueryAssignment
-exports.QueryOperator = QueryOperator
+export { q, QueryAssignment, QueryOperator }
+
+export default { q, QueryAssignment, QueryOperator }

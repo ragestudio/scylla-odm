@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /** @module types */
 
 /**
@@ -102,4 +100,4 @@ Tuple.prototype.values = function () {
 	return this.elements.slice(0)
 }
 
-module.exports = Tuple
+export default Tuple

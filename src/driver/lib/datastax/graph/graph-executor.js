@@ -16,19 +16,17 @@
  * limitations under the License.
  */
 
-"use strict"
-
-const utils = require("../../utils")
-const policies = require("../../policies")
-const GraphResultSet = require("./result-set")
-const {
+import * as utils from "../../utils"
+import * as policies from "../../policies/index"
+import GraphResultSet from "./result-set"
+import {
 	GraphSON2Reader,
 	GraphSON2Writer,
 	GraphSON3Reader,
 	GraphSON3Writer,
-} = require("./graph-serializer")
-const getCustomTypeSerializers = require("./custom-type-serializers")
-const { GraphExecutionOptions, graphProtocol } = require("./options")
+} from "./graph-serializer"
+import getCustomTypeSerializers from "./custom-type-serializers"
+import { GraphExecutionOptions, graphProtocol } from "./options"
 
 const graphLanguageGroovyString = "gremlin-groovy"
 const graphEngineCore = "Core"
@@ -341,4 +339,4 @@ function getDefaultWriter(writer) {
 	return (value) => writer.write(value)
 }
 
-module.exports = GraphExecutor
+export default GraphExecutor

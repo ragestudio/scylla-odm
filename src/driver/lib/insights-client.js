@@ -16,25 +16,24 @@
  * limitations under the License.
  */
 
-"use strict"
+import os from "os"
+import path from "path"
+import fs from "fs"
+import utils from "./utils"
+import promiseUtils from "./promise-utils"
+import types from "./types"
+import requests from "./requests"
+import { ExecutionOptions } from "./execution-options"
+import pkg from "../../../package.json" with { type: "json" }
+import VersionNumber from "./types/version-number"
+import { NoAuthProvider } from "./auth"
+import { createRequire } from "module"
 
-const os = require("os")
-const path = require("path")
-const fs = require("fs")
-const utils = require("./utils")
-const promiseUtils = require("./promise-utils")
-const types = require("./types")
-const requests = require("./requests")
-const { ExecutionOptions } = require("./execution-options")
-const packageInfo = require("../../../package.json")
-const VersionNumber = require("./types/version-number")
-const { NoAuthProvider } = require("./auth")
-
+const _require = createRequire(import.meta.url)
 let kerberosModule
 
 try {
-	// eslint-disable-next-line
-	kerberosModule = require("kerberos")
+	kerberosModule = _require("kerberos")
 } catch (err) {
 	// Kerberos is an optional dependency
 }
@@ -223,8 +222,8 @@ class InsightsClient {
 				tags: { language: "nodejs" },
 			},
 			data: {
-				driverName: packageInfo.description,
-				driverVersion: packageInfo.version,
+				driverName: pkg.description,
+				driverVersion: pkg.version,
 				clientId: options.id,
 				sessionId: this._sessionId,
 				applicationName: appInfo.applicationName,
@@ -353,21 +352,21 @@ class InsightsClient {
 
 		let readPromise = Promise.resolve()
 
-		if (require.main && require.main.filename) {
-			const packageInfoPath = path.dirname(require.main.filename)
+		if (process.argv[1]) {
+			const packageInfoPath = path.dirname(process.argv[1])
 			readPromise = this._readPackageInfoFile(packageInfoPath)
 		}
 
 		const text = await readPromise
-		let applicationName = "Default Node.js Application"
+		let applicationName = "Default Node Application"
 		let applicationVersion
 
 		if (text) {
 			try {
-				const packageInfo = JSON.parse(text)
-				if (packageInfo.name) {
-					applicationName = packageInfo.name
-					applicationVersion = packageInfo.version
+				const parsedPkg = JSON.parse(text)
+				if (parsedPkg.name) {
+					applicationName = parsedPkg.name
+					applicationVersion = parsedPkg.version
 				}
 			} catch (err) {
 				// The package.json file could not be parsed
@@ -455,7 +454,7 @@ class InsightsClient {
 	}
 }
 
-module.exports = InsightsClient
+export default InsightsClient
 
 function mapToObject(map) {
 	const result = {}

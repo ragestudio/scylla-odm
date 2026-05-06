@@ -15,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-
-const util = require("util")
-const types = require("../types")
-const utils = require("../utils.js")
-const errors = require("../errors.js")
+import util from "util"
+import types from "../types"
+import utils from "../utils"
+import errors from "../errors"
 
 const doneIteratorObject = Object.freeze({ done: true })
 const newlyUpInterval = 60000
@@ -949,7 +947,18 @@ function getDataCenters(hosts) {
 	return new Set(hosts.values().map((h) => h.datacenter))
 }
 
-module.exports = {
+export {
+	AllowListPolicy,
+	DCAwareRoundRobinPolicy,
+	DefaultLoadBalancingPolicy,
+	LoadBalancingPolicy,
+	RoundRobinPolicy,
+	TokenAwarePolicy,
+	// Deprecated: for backward compatibility only.
+	WhiteListPolicy,
+}
+
+export default {
 	AllowListPolicy,
 	DCAwareRoundRobinPolicy,
 	DefaultLoadBalancingPolicy,

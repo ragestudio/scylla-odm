@@ -15,13 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const crypto = require("crypto")
-const Long = require("long")
+import util from "util"
+import crypto from "crypto"
+import Long from "long"
 
-const Uuid = require("./uuid")
-const utils = require("../utils")
+import Uuid from "./uuid"
+import utils from "../utils"
 
 /** @module types */
 /**
@@ -412,4 +411,4 @@ function generateBuffer(date, ticks, nodeId, clockId) {
 	return buffer
 }
 
-module.exports = TimeUuid
+export default TimeUuid

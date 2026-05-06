@@ -16,21 +16,42 @@
  * limitations under the License.
  */
 
-"use strict"
-
 /**
  * Module containing classes and fields related to the Mapper.
  * @module mapping
  */
 
-exports.Mapper = require("./mapper")
-exports.ModelMapper = require("./model-mapper")
-exports.ModelBatchMapper = require("./model-batch-mapper")
-exports.ModelBatchItem = require("./model-batch-item").ModelBatchItem
-exports.Result = require("./result")
-const tableMappingsModule = require("./table-mappings")
-exports.TableMappings = tableMappingsModule.TableMappings
-exports.DefaultTableMappings = tableMappingsModule.DefaultTableMappings
-exports.UnderscoreCqlToCamelCaseMappings =
-	tableMappingsModule.UnderscoreCqlToCamelCaseMappings
-exports.q = require("./q").q
+import Mapper from "./mapper"
+import ModelMapper from "./model-mapper"
+import ModelBatchMapper from "./model-batch-mapper"
+import { ModelBatchItem } from "./model-batch-item"
+import Result from "./result"
+import {
+	TableMappings,
+	DefaultTableMappings,
+	UnderscoreCqlToCamelCaseMappings,
+} from "./table-mappings"
+import { q } from "./q"
+
+export {
+	Mapper,
+	ModelMapper,
+	ModelBatchMapper,
+	ModelBatchItem,
+	Result,
+	TableMappings,
+	DefaultTableMappings,
+	UnderscoreCqlToCamelCaseMappings,
+	q,
+}
+export default {
+	Mapper,
+	ModelMapper,
+	ModelBatchMapper,
+	ModelBatchItem,
+	Result,
+	TableMappings,
+	DefaultTableMappings,
+	UnderscoreCqlToCamelCaseMappings,
+	q,
+}

@@ -15,10 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict"
-const util = require("util")
-const utils = require("../utils")
-const Geometry = require("./geometry")
+import util from "util"
+import utils from "../utils"
+import Geometry from "./geometry"
 
 /**
  * Creates a new {@link Point} instance.
@@ -136,4 +135,4 @@ Point.prototype.toJSON = function () {
 	return { type: "Point", coordinates: [this.x, this.y] }
 }
 
-module.exports = Point
+export default Point
