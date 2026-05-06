@@ -22,7 +22,7 @@ const { FrameWriter } = require("./writers")
 const types = require("./types")
 const utils = require("./utils")
 const { ExecutionOptions } = require("./execution-options")
-const packageInfo = require("../../package.json")
+const packageInfo = require("../../../package.json")
 
 /**
  * Options for the execution of the query / prepared statement

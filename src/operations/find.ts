@@ -1,5 +1,5 @@
 import type Model from "../model"
-import type { mapping } from "../../driver/lib/mapping"
+import type { mapping } from "../driver/lib/mapping"
 import type { Query, QueryOptions } from "../types"
 import queryParser from "../utils/queryParser"
 

@@ -1,4 +1,4 @@
-import { ClientOptions } from "../driver"
+import { ClientOptions } from "./driver"
 import Document from "./document"
 import { Schema } from "./schema"
 

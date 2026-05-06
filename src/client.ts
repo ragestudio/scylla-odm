@@ -2,13 +2,13 @@ import type {
 	Client as T_CassandraClient,
 	ClientOptions as T_CassandraClientOptions,
 	mapping as T_CassandraMapping,
-} from "../driver"
+} from "./driver"
 import type { ClientConfig } from "./types"
 
 //@ts-ignore
 import path from "node:path"
 //@ts-ignore
-import Cassandra from "../driver"
+import Cassandra from "./driver"
 import Model from "./model"
 import Logger from "./logger"
 

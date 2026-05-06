@@ -26,7 +26,7 @@ const promiseUtils = require("./promise-utils")
 const types = require("./types")
 const requests = require("./requests")
 const { ExecutionOptions } = require("./execution-options")
-const packageInfo = require("../../package.json")
+const packageInfo = require("../../../package.json")
 const VersionNumber = require("./types/version-number")
 const { NoAuthProvider } = require("./auth")
 

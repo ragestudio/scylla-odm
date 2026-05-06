@@ -18,7 +18,7 @@
 
 import _Long = require("long")
 import * as stream from "stream"
-import { ValueCallback } from "../../"
+import { ValueCallback } from "../.."
 
 export namespace types {
 	class Long extends _Long {}

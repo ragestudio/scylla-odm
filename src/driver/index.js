@@ -46,4 +46,4 @@ exports.geometry = require("./lib/geometry")
 exports.defaultOptions = function () {
 	return clientOptions.defaultOptions()
 }
-exports.version = require("../package.json").version
+exports.version = require("../../package.json").version

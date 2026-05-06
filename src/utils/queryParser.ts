@@ -1,7 +1,7 @@
 import type { Model } from "../model"
 
 // @ts-ignore
-import cassandra from "../../driver"
+import cassandra from "../driver"
 const { q } = cassandra.mapping
 
 const MAX_QUERY_DEPTH = 3

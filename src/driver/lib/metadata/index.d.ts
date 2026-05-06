@@ -17,7 +17,7 @@
  */
 
 import { types } from "../types"
-import { EmptyCallback, Host, token, ValueCallback } from "../../"
+import { EmptyCallback, Host, token, ValueCallback } from "../.."
 import dataTypes = types.dataTypes
 import Uuid = types.Uuid
 import InetAddress = types.InetAddress
