@@ -1,10 +1,13 @@
 {
   "name": "@ragestudio/scylla-odm",
   "version": "0.14.0",
-  "description": "An ODM for ScyllaDB",
+  "description": "An ODM for ScyllaDB/Cassandra",
+  "repository": {
+    "url": "https://github.com/ragestudio/scylla-odm"
+  },
   "license": "MIT",
   "author": "RageStudio",
-  "type": "module",
+  "type": "commonjs",
   "types": "./index.d.ts",
   "main": "./index.js",
   "module": "./index.js",
@@ -12,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "cassandra-driver": "^4.8.0"
+    "long": "^5.3.2"
   },
   "scripts": {
     "build": "tsdown && cp package.json dist/package.json"
