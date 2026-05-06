@@ -2,17 +2,18 @@ import type {
 	Client as T_CassandraClient,
 	ClientOptions as T_CassandraClientOptions,
 	mapping as T_CassandraMapping,
-} from "cassandra-driver"
+} from "../driver"
 import type { ClientConfig } from "./types"
 
 //@ts-ignore
 import path from "node:path"
 //@ts-ignore
-import Cassandra from "cassandra-driver"
+import Cassandra from "../driver"
+import { Model } from "./model"
+
 import loadModels from "./utils/loadModels"
 import buildMapper from "./utils/buildMapper"
-
-import { Model } from "./model"
+import delay from "./utils/delay"
 
 const DEFAULT_MAX_RETRIES = 3
 const DEFAULT_RETRY_DELAY = 1000
@@ -35,7 +36,7 @@ export class Client {
 				config.localDataCenter ??
 				SCYLLA_LOCAL_DATA_CENTER ??
 				"datacenter1",
-			keyspace: config.keyspace ?? SCYLLA_KEYSPACE ?? "default",
+			keyspace: config.keyspace ?? SCYLLA_KEYSPACE ?? "default_keyspace",
 			port: 9042,
 			maxRetries: DEFAULT_MAX_RETRIES,
 			retryDelay: DEFAULT_RETRY_DELAY,
@@ -86,6 +87,10 @@ export class Client {
 
 		globalThis.__scylla_client = this
 
+		console.log("Connecting to ScyllaDB")
+		await this.connectWithRetry()
+		console.log("ScyllaDB Connected")
+
 		for (let model of models) {
 			this.models.set(model.name, model as Model<typeof model.schema>)
 
@@ -93,10 +98,18 @@ export class Client {
 				await model._sync()
 			}
 		}
+	}
 
-		console.log("Connecting to ScyllaDB")
-		await this.connectWithRetry()
-		console.log("ScyllaDB Connected")
+	async shutdown(): Promise<void> {
+		try {
+			await this.driver.shutdown()
+			console.log("ScyllaDB connection closed")
+
+			delete globalThis.__scylla_client
+		} catch (error) {
+			console.error("Error shutting down ScyllaDB connection:", error)
+			throw error
+		}
 	}
 
 	private async connectWithRetry(): Promise<void> {
@@ -114,7 +127,7 @@ export class Client {
 
 				if (attempt < this.config.maxRetries!) {
 					console.log(`Retrying in ${this.config.retryDelay}ms...`)
-					await this.delay(this.config.retryDelay!)
+					await delay(this.config.retryDelay!)
 				}
 			}
 		}
@@ -122,22 +135,6 @@ export class Client {
 		throw new Error(
 			`Failed to connect to ScyllaDB after ${this.config.maxRetries} attempts: ${lastError?.message}`,
 		)
-	}
-
-	private delay(ms: number): Promise<void> {
-		return new Promise((resolve) => setTimeout(resolve, ms))
-	}
-
-	async shutdown(): Promise<void> {
-		try {
-			await this.driver.shutdown()
-			console.log("ScyllaDB connection closed")
-
-			delete globalThis.__scylla_client
-		} catch (error) {
-			console.error("Error shutting down ScyllaDB connection:", error)
-			throw error
-		}
 	}
 
 	async executeWithRetry<T>(
@@ -162,7 +159,7 @@ export class Client {
 					)
 					console.log(`Retrying in ${this.config.retryDelay}ms...`)
 
-					await this.delay(this.config.retryDelay!)
+					await delay(this.config.retryDelay!)
 					continue
 				}
 

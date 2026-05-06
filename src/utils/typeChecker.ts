@@ -1,5 +1,5 @@
 // @ts-ignore
-import cassandra from "cassandra-driver"
+import cassandra from "../../driver"
 const { types } = cassandra
 import type { Model } from "../model"
 import { isValidFieldName } from "./queryParser"

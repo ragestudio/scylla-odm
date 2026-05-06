@@ -1,3 +1,4 @@
+import { ClientOptions } from "../driver"
 import Document from "./document"
 import { Schema } from "./schema"
 
@@ -13,7 +14,7 @@ export type ClientConfig = {
 		coreConnectionsPerHost?: Record<string, number>
 		maxRequestsPerConnection?: number
 	}
-}
+} & ClientOptions
 
 export enum ColumnTypes {
 	Ascii = "ascii",
