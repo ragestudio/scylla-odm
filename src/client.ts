@@ -9,7 +9,8 @@ import type { ClientConfig } from "./types"
 import path from "node:path"
 //@ts-ignore
 import Cassandra from "../driver"
-import { Model } from "./model"
+import Model from "./model"
+import Logger from "./logger"
 
 import loadModels from "./utils/loadModels"
 import buildMapper from "./utils/buildMapper"
@@ -68,6 +69,8 @@ export class Client {
 		return this.models.get(name)
 	}
 
+	logger: Logger = new Logger()
+
 	async initialize(options: { sync?: boolean } = {}) {
 		let models: Model<any>[]
 
@@ -87,9 +90,9 @@ export class Client {
 
 		globalThis.__scylla_client = this
 
-		console.log("Connecting to ScyllaDB")
+		this.logger.log("Connecting...")
 		await this.connectWithRetry()
-		console.log("ScyllaDB Connected")
+		this.logger.log("Connected")
 
 		for (let model of models) {
 			this.models.set(model.name, model as Model<typeof model.schema>)
@@ -103,11 +106,11 @@ export class Client {
 	async shutdown(): Promise<void> {
 		try {
 			await this.driver.shutdown()
-			console.log("ScyllaDB connection closed")
+			this.logger.log("connection closed")
 
 			delete globalThis.__scylla_client
 		} catch (error) {
-			console.error("Error shutting down ScyllaDB connection:", error)
+			this.logger.error("error shutting down connection:", error)
 			throw error
 		}
 	}
@@ -121,12 +124,14 @@ export class Client {
 				return
 			} catch (error) {
 				lastError = error as Error
-				console.warn(
+				this.logger.warn(
 					`Connection attempt ${attempt} failed: ${(error as Error).message}`,
 				)
 
 				if (attempt < this.config.maxRetries!) {
-					console.log(`Retrying in ${this.config.retryDelay}ms...`)
+					this.logger.log(
+						`Retrying in ${this.config.retryDelay}ms...`,
+					)
 					await delay(this.config.retryDelay!)
 				}
 			}
@@ -154,10 +159,12 @@ export class Client {
 					this.isRetryableError(error) &&
 					attempt < this.config.maxRetries!
 				) {
-					console.warn(
+					this.logger.warn(
 						`Operation ${operationName} attempt ${attempt} failed: ${(error as Error).message}`,
 					)
-					console.log(`Retrying in ${this.config.retryDelay}ms...`)
+					this.logger.log(
+						`Retrying in ${this.config.retryDelay}ms...`,
+					)
 
 					await delay(this.config.retryDelay!)
 					continue
