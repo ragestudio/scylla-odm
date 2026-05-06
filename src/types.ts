@@ -1,4 +1,4 @@
-import Result from "./result"
+import Document from "./document"
 import { Schema } from "./schema"
 
 export type ClientConfig = {
@@ -61,32 +61,25 @@ export interface Column<T> {
 	required?: boolean
 }
 
-export type InferRawData<T> = {
-	[K in keyof T as K extends `$${string}` ? never : K]: T[K] extends Column<
-		infer U
-	>
-		? U
-		: T[K]
-}
-
-export type InferDocument<S> =
-	S extends Schema<infer T> ? InferRawData<T> : never
-
-// export type DocOf<M extends Model<any>> =
-// 	M extends Model<infer S> ? InferDocument<S> : never
-
-export type DocumentResult<TDoc> = Result<TDoc> & TDoc
-
-export type QueryOptions = {
-	raw?: boolean
-}
-
-export type OrderBy<TDoc> = { [K in keyof TDoc]?: "asc" | "desc" }
-
 export type Query<TDoc> = {
 	[K in keyof TDoc]?: TDoc[K] | QueryOperators<TDoc[K]>
 } & {
 	$and?: Query<TDoc>[]
 	$limit?: number
-	$orderby?: OrderBy<TDoc>
+	$orderby?: { [K in keyof TDoc]?: "asc" | "desc" }
 }
+
+export type QueryOptions = {
+	raw?: boolean
+}
+
+export type Doc<TDoc = any> = Document<TDoc> & TDoc
+
+export type InferDoc<S> =
+	S extends Schema<infer T>
+		? {
+				[K in keyof T as K extends `$${string}`
+					? never
+					: K]: T[K] extends Column<infer U> ? U : T[K]
+			}
+		: any

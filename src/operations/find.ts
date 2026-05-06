@@ -4,7 +4,7 @@ import type { Query, QueryOptions } from "../types"
 import queryParser from "../utils/queryParser"
 
 export default async function findOP<TDoc>(
-	this: Model<TDoc>,
+	this: Model<any, TDoc>,
 	query: Query<TDoc> = {},
 	options?: QueryOptions,
 ) {

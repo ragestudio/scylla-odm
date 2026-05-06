@@ -2,7 +2,10 @@ import type Model from "../model"
 import fillDefaults from "../utils/fillDefaults"
 //import typeChecker from "../utils/typeChecker"
 
-export default async function (this: Model, query: any) {
+export default async function updateOP<TDoc>(
+	this: Model<any, TDoc>,
+	query: any,
+) {
 	query = fillDefaults(this.schema, query)
 
 	//typeChecker(this, query)

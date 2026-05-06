@@ -1,10 +1,10 @@
 import Client from ".."
-import { Result } from "../result"
+import { Document } from "../document"
 
 import fillDefaults from "../utils/fillDefaults"
 
 import { mapping } from "cassandra-driver/lib/mapping"
-import type { DocumentResult, Query, QueryOptions } from "../types"
+import type { Query, QueryOptions, InferDoc, Doc } from "../types"
 import type { Schema } from "../schema"
 
 import findOneOP from "../operations/findOne"
@@ -16,9 +16,12 @@ import countAllOP from "../operations/countAll"
 import tableExistsOP from "../operations/tableExists"
 import syncOP from "../operations/sync"
 
-export class Model<TDoc = any> {
+export class Model<
+	TSchema extends Schema<any> = Schema<any>,
+	TDoc = InferDoc<TSchema>,
+> {
 	name: string
-	schema: Schema<any>
+	schema: TSchema
 
 	get client(): Client {
 		return globalThis.__scylla_client
@@ -32,7 +35,7 @@ export class Model<TDoc = any> {
 		return globalThis.__scylla_client.mapper.forModel(this.name)
 	}
 
-	constructor(name: string, schema: Schema<any>) {
+	constructor(name: string, schema: TSchema) {
 		this.name = name
 		this.schema = schema
 
@@ -57,42 +60,37 @@ export class Model<TDoc = any> {
 			query: Query<TDoc>,
 			options: QueryOptions & { raw: true },
 		): Promise<TDoc[]>
-		(
-			query?: Query<TDoc>,
-			options?: QueryOptions,
-		): Promise<DocumentResult<TDoc>[]>
-	} = findOP.bind(this)
+		(query?: Query<TDoc>, options?: QueryOptions): Promise<Doc<TDoc>[]>
+	} = (findOP as Function).bind(this) as any
 
 	findOne: {
 		(
 			query: Query<TDoc>,
 			options: QueryOptions & { raw: true },
-		): Promise<TDoc>
-		(
-			query?: Query<TDoc>,
-			options?: QueryOptions,
-		): Promise<DocumentResult<TDoc>>
-	} = findOneOP.bind(this)
+		): Promise<TDoc | null>
+		(query?: Query<TDoc>, options?: QueryOptions): Promise<Doc<TDoc> | null>
+	} = (findOneOP as Function).bind(this) as any
 
-	update: (query: Query<TDoc>) => Promise<DocumentResult<TDoc>> =
-		updateOP.bind(this)
+	update: (query: Query<TDoc>) => Promise<Doc<TDoc>> = (
+		updateOP as Function
+	).bind(this) as any
 
-	delete: (query: Query<TDoc>) => Promise<mapping.Result> =
-		deleteOP.bind(this)
+	delete: (query: Query<TDoc>) => Promise<mapping.Result> = (
+		deleteOP as Function
+	).bind(this) as any
 
-	countAll: () => Promise<number> = countAllOP.bind(this)
+	countAll: () => Promise<number> = (countAllOP as Function).bind(this) as any
 
-	_sync: typeof syncOP = syncOP.bind(this)
-	_tableExists: typeof tableExistsOP = tableExistsOP.bind(this)
+	_sync: typeof syncOP = (syncOP as Function).bind(this) as any
+	_tableExists: typeof tableExistsOP = (tableExistsOP as Function).bind(
+		this,
+	) as any
 
-	_wrap(row: any): DocumentResult<TDoc> | null {
-		if (!row) {
-			return null
-		}
-
-		row = fillDefaults(this.schema, row)
-
-		return new Result<TDoc>(row, this) as DocumentResult<TDoc>
+	_wrap(row: any): Doc<TDoc> {
+		return new Document<TDoc>(
+			fillDefaults(this.schema, row),
+			this,
+		) as Doc<TDoc>
 	}
 }
 

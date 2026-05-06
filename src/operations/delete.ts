@@ -1,6 +1,6 @@
 import type Model from "../model"
 
-export default async function (this: Model, query: any) {
+export default async function (this: Model<any, any>, query: any) {
 	const operation = async () => {
 		return await this.mapper.remove(query)
 	}

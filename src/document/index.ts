@@ -1,14 +1,16 @@
 import type { Model } from "../model"
 //import typeChecker from "../utils/typeChecker"
 
-export class Result<TDoc = any> {
-	constructor(data: TDoc, model: Model<TDoc>) {
+export class Document<TDoc = any> {
+	constructor(data: TDoc, model: Model<any, TDoc>) {
 		if (data == null) {
-			throw new Error("Cannot create Result with null or undefined data")
+			throw new Error(
+				"Cannot create Document with null or undefined data",
+			)
 		}
 
 		if (typeof data !== "object" || Array.isArray(data)) {
-			throw new Error("Result data must be an object")
+			throw new Error("Document data must be an object")
 		}
 
 		Object.assign(this, data)
@@ -21,7 +23,7 @@ export class Result<TDoc = any> {
 		})
 	}
 
-	_model: Model<TDoc>
+	_model!: Model<any, TDoc>
 
 	async save() {
 		try {
@@ -31,7 +33,7 @@ export class Result<TDoc = any> {
 
 			return await this._model.update(data as any)
 		} catch (error: any) {
-			throw new Error(`Failed to save result: ${error.message}`)
+			throw new Error(`Failed to save document: ${error.message}`)
 		}
 	}
 
@@ -39,7 +41,7 @@ export class Result<TDoc = any> {
 		try {
 			return await this._model.delete(this.toRaw() as any)
 		} catch (error: any) {
-			throw new Error(`Failed to delete result: ${error.message}`)
+			throw new Error(`Failed to delete document: ${error.message}`)
 		}
 	}
 
@@ -87,4 +89,4 @@ export class Result<TDoc = any> {
 	}
 }
 
-export default Result
+export default Document

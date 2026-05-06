@@ -1,6 +1,6 @@
 import type Model from "../model"
 
-export default async function (this: Model) {
+export default async function (this: Model<any, any>) {
 	const cql = `
 			SELECT table_name
 			FROM system_schema.tables

@@ -13,7 +13,6 @@ import loadModels from "./utils/loadModels"
 import buildMapper from "./utils/buildMapper"
 
 import { Model } from "./model"
-import { InferDocument } from "./types"
 
 const DEFAULT_MAX_RETRIES = 3
 const DEFAULT_RETRY_DELAY = 1000
@@ -30,10 +29,8 @@ export class Client {
 
 		this.config = {
 			modelsPath: path.resolve(process.cwd(), "db"),
-			contactPoints:
-				(config.contactPoints ?? SCYLLA_CONTACT_POINTS)
-					? SCYLLA_CONTACT_POINTS.split(",")
-					: ["127.0.0.1"],
+			contactPoints: config.contactPoints ??
+				SCYLLA_CONTACT_POINTS?.split(",") ?? ["127.0.0.1"],
 			localDataCenter:
 				config.localDataCenter ??
 				SCYLLA_LOCAL_DATA_CENTER ??
@@ -63,7 +60,7 @@ export class Client {
 
 	config: ClientConfig
 	driver: T_CassandraClient
-	mapper: T_CassandraMapping.Mapper
+	mapper!: T_CassandraMapping.Mapper
 	models: Map<string, Model<any>> = new Map()
 
 	model(name: string): Model<any> | undefined {
@@ -74,9 +71,11 @@ export class Client {
 		let models: Model<any>[]
 
 		try {
-			models = await loadModels(this.config.modelsPath)
+			models = await loadModels(this.config.modelsPath!)
 		} catch (error) {
-			throw new Error(`Failed to load models: ${error.message}`)
+			throw new Error(
+				`Failed to load models: ${(error as Error).message}`,
+			)
 		}
 
 		models = models.filter((schema) => schema instanceof Model)
@@ -88,10 +87,7 @@ export class Client {
 		globalThis.__scylla_client = this
 
 		for (let model of models) {
-			this.models.set(
-				model.name,
-				model as Model<InferDocument<typeof model.schema>>,
-			)
+			this.models.set(model.name, model as Model<typeof model.schema>)
 
 			if (options?.sync === true) {
 				await model._sync()
@@ -111,9 +107,9 @@ export class Client {
 				await this.driver.connect()
 				return
 			} catch (error) {
-				lastError = error
+				lastError = error as Error
 				console.warn(
-					`Connection attempt ${attempt} failed: ${error.message}`,
+					`Connection attempt ${attempt} failed: ${(error as Error).message}`,
 				)
 
 				if (attempt < this.config.maxRetries!) {
@@ -154,7 +150,7 @@ export class Client {
 			try {
 				return await operation()
 			} catch (error) {
-				lastError = error
+				lastError = error as Error
 
 				// check if error is retryable
 				if (
@@ -162,7 +158,7 @@ export class Client {
 					attempt < this.config.maxRetries!
 				) {
 					console.warn(
-						`Operation ${operationName} attempt ${attempt} failed: ${error.message}`,
+						`Operation ${operationName} attempt ${attempt} failed: ${(error as Error).message}`,
 					)
 					console.log(`Retrying in ${this.config.retryDelay}ms...`)
 

@@ -1,6 +1,9 @@
 import type Model from "../model"
 
-export default async function (this: Model, timeoutMs: number = 60000) {
+export default async function (
+	this: Model<any, any>,
+	timeoutMs: number = 60000,
+) {
 	const cql = `SELECT COUNT(1) FROM ${this.client.config.keyspace}.${this.schema.table_name}`
 
 	const queryOptions = {

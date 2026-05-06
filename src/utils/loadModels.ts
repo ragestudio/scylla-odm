@@ -13,7 +13,7 @@ export default async (fromPath: string): Promise<any[]> => {
 		return []
 	}
 
-	let mods = []
+	let mods: any[] = []
 
 	let files = await fs.promises.readdir(fromPath)
 

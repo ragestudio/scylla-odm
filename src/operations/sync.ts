@@ -1,7 +1,7 @@
 import type Model from "../model"
 import generateCreateTableCQL from "../cql_gen/create_table"
 
-export default async function syncOP(this: Model) {
+export default async function syncOP(this: Model<any, any>) {
 	const tableExists = await this._tableExists()
 
 	if (tableExists) {

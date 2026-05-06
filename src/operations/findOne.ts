@@ -2,7 +2,11 @@ import type { QueryOptions } from "../types"
 import type Model from "../model"
 import queryParser from "../utils/queryParser"
 
-export default function (this: Model, query: any, options?: QueryOptions) {
+export default async function findOneOP<TDoc>(
+	this: Model<any, TDoc>,
+	query: any,
+	options?: QueryOptions,
+) {
 	query = queryParser(this, query)
 
 	const operation = async () => {
