@@ -1,13 +1,13 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "An ODM for ScyllaDB/Cassandra",
   "repository": {
     "url": "https://git.ragestudio.net/ragestudio/scylla-odm"
   },
   "license": "MIT",
   "author": "RageStudio",
-  "type": "commonjs",
+  "type": "module",
   "types": "./index.d.ts",
   "main": "./index.js",
   "module": "./index.js",
