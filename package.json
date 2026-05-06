@@ -3,7 +3,7 @@
   "version": "0.14.0",
   "description": "An ODM for ScyllaDB/Cassandra",
   "repository": {
-    "url": "https://github.com/ragestudio/scylla-odm"
+    "url": "https://git.ragestudio.net/ragestudio/scylla-odm"
   },
   "license": "MIT",
   "author": "RageStudio",
