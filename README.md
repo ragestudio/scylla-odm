@@ -223,7 +223,7 @@ This package ships a modified version of the `cassandra-driver`
 This project is licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 The bundled `cassandra-driver` is licensed under the
-[Apache License, Version 2.0](driver/LICENSE.txt).
+[Apache License, Version 2.0](src/driver/LICENSE.txt).
 
 ```
 Apache Cassandra NodeJS Driver
@@ -242,5 +242,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-See [`driver/LICENSE.txt`](driver/LICENSE.txt) and
-[`driver/NOTICE.txt`](driver/NOTICE.txt) for the full legal text.
+See [`src/driver/LICENSE.txt`](src/driver/LICENSE.txt) and
+[`src/driver/NOTICE.txt`](src/driver/NOTICE.txt) for the full legal text.
