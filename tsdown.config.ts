@@ -5,10 +5,11 @@ export default defineConfig({
 	format: "esm",
 	dts: true,
 	clean: true,
-	sourcemap: true,
+	sourcemap: false,
 	platform: "node",
 	unbundle: true,
-	minify: false,
+	minify: true,
+	treeshake: true,
 	outExtensions({ format, pkgType }) {
 		return {
 			js: ".js",
