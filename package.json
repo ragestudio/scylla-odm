@@ -1,6 +1,6 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "An ODM for ScyllaDB/Cassandra",
   "repository": {
     "url": "https://git.ragestudio.net/ragestudio/scylla-odm"
@@ -18,7 +18,7 @@
     "long": "^5.3.2"
   },
   "scripts": {
-    "build": "tsdown && cp package.json dist/package.json"
+    "build": "tsdown && cp package.json dist/package.json && cp README.md dist/README.md"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
