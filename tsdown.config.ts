@@ -20,9 +20,6 @@ export default defineConfig([
 			mangle: {
 				keepNames: true,
 			},
-			codegen: {
-				removeWhitespace: false,
-			},
 		},
 	},
 ])
