@@ -32,10 +32,7 @@ import PrepareHandler from "./prepare-handler"
 import InsightsClient from "./insights-client"
 import GraphExecutor from "./datastax/graph/graph-executor"
 import promiseUtils from "./promise-utils"
-import {
-	description,
-	version,
-} from "../../../package.json" with { type: "json" }
+import { description, version } from "../../package.json" with { type: "json" }
 
 /**
  * Max amount of pools being warmup in parallel, when warmup is enabled

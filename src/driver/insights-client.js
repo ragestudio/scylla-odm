@@ -24,7 +24,7 @@ import promiseUtils from "./promise-utils"
 import types from "./types"
 import requests from "./requests"
 import { ExecutionOptions } from "./execution-options"
-import pkg from "../../../package.json" with { type: "json" }
+import pkg from "../../package.json" with { type: "json" }
 import VersionNumber from "./types/version-number"
 import { NoAuthProvider } from "./auth"
 import { createRequire } from "module"

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { ExecutionOptions, Host } from "../.."
+import { ExecutionOptions, Host } from ".."
 
 export namespace tracker {
 	interface RequestTracker {

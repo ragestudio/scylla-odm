@@ -17,7 +17,7 @@
  */
 
 import { types } from "../types"
-import { Client } from "../.."
+import { Client } from ".."
 import Long = types.Long
 
 export namespace mapping {

@@ -3,7 +3,7 @@ import { Document } from "../document"
 
 import fillDefaults from "../utils/fillDefaults"
 
-import { mapping } from "../driver/lib/mapping"
+import { mapping } from "../driver/mapping"
 import type { Query, FindQueryOptions, InferDoc, Doc } from "../types"
 import type { Schema } from "../schema"
 

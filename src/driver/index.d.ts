@@ -19,19 +19,19 @@
 import * as events from "events"
 import * as tls from "tls"
 import { URL } from "url"
-import { auth } from "./lib/auth"
-import { policies } from "./lib/policies"
-import { types } from "./lib/types"
-import { metrics } from "./lib/metrics"
-import { tracker } from "./lib/tracker"
-import { metadata } from "./lib/metadata"
+import { auth } from "./auth"
+import { policies } from "./policies"
+import { types } from "./types"
+import { metrics } from "./metrics"
+import { tracker } from "./tracker"
+import { metadata } from "./metadata"
 import Long = types.Long
 import Uuid = types.Uuid
 
 // Export imported submodules
-export { concurrent } from "./lib/concurrent"
-export { mapping } from "./lib/mapping"
-export { geometry } from "./lib/geometry"
+export { concurrent } from "./concurrent"
+export { mapping } from "./mapping"
+export { geometry } from "./geometry"
 export { auth, metadata, metrics, policies, tracker, types }
 
 export const version: number

@@ -1,7 +1,7 @@
 import { ClientOptions } from "./driver"
 import Document from "./document"
 import { Schema } from "./schema"
-import type { mapping } from "./driver/lib/mapping"
+import type { mapping } from "./driver/mapping"
 
 export type ClientConfig = {
 	modelsPath?: string

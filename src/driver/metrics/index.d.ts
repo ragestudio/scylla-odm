@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { errors } from "../.."
+import { errors } from ".."
 
 export namespace metrics {
 	interface ClientMetrics {

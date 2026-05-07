@@ -15,22 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import clientOptions from "./lib/client-options"
-import Client from "./lib/client"
-import { ExecutionProfile } from "./lib/execution-profile"
-import { ExecutionOptions } from "./lib/execution-options"
-import types from "./lib/types"
-import errors from "./lib/errors"
-import policies from "./lib/policies"
-import auth from "./lib/auth"
-import mapping from "./lib/mapping"
-import tracker from "./lib/tracker"
-import metrics from "./lib/metrics"
-import concurrent from "./lib/concurrent"
-import { Token, TokenRange } from "./lib/token"
-import Metadata from "./lib/metadata"
-import Encoder from "./lib/encoder"
-import geometry from "./lib/geometry"
+import clientOptions from "./client-options"
+import Client from "./client"
+import { ExecutionProfile } from "./execution-profile"
+import { ExecutionOptions } from "./execution-options"
+import types from "./types"
+import errors from "./errors"
+import policies from "./policies"
+import auth from "./auth"
+import mapping from "./mapping"
+import tracker from "./tracker"
+import metrics from "./metrics"
+import concurrent from "./concurrent"
+import { Token, TokenRange } from "./token"
+import Metadata from "./metadata"
+import Encoder from "./encoder"
+import geometry from "./geometry"
 import { version as pkgVersion } from "../../package.json" with { type: "json" }
 
 export {

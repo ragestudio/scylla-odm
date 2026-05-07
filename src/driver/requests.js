@@ -22,7 +22,7 @@ import { FrameWriter } from "./writers"
 import types from "./types"
 import utils from "./utils"
 import { ExecutionOptions } from "./execution-options"
-import pkg from "../../../package.json" with { type: "json" }
+import pkg from "../../package.json" with { type: "json" }
 
 /**
  * Options for the execution of the query / prepared statement

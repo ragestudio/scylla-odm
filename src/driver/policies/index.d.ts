@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Client, EmptyCallback, ExecutionOptions, Host, HostMap } from "../.."
+import { Client, EmptyCallback, ExecutionOptions, Host, HostMap } from ".."
 import { types } from "../types"
 
 export namespace policies {
