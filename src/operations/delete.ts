@@ -3,7 +3,7 @@ import type Model from "../model"
 import { DeleteQueryOptions, Query } from "../types"
 import queryParser from "../utils/queryParser"
 
-export default async function deleteOP<T>(
+export default function deleteOP<T>(
 	this: Model<any, T>,
 	query: Query<T>,
 	options?: DeleteQueryOptions<T>,
