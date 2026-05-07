@@ -1,12 +1,24 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "An ODM for ScyllaDB/Cassandra",
+  "license": "MIT",
+  "author": "RageStudio",
   "repository": {
     "url": "https://git.ragestudio.net/ragestudio/scylla-odm"
   },
-  "license": "MIT",
-  "author": "RageStudio",
+  "bugs": {
+    "url": "https://git.ragestudio.net/ragestudio/scylla-odm/issues"
+  },
+  "keywords": [
+    "scylladb",
+    "cassandra",
+    "odm",
+    "database",
+    "driver",
+    "mapper",
+    "typescript"
+  ],
   "type": "module",
   "types": "./index.d.ts",
   "main": "./index.js",
