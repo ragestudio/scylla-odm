@@ -1,6 +1,6 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "An ODM for ScyllaDB/Cassandra",
   "repository": {
     "url": "https://git.ragestudio.net/ragestudio/scylla-odm"
