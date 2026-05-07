@@ -1,28 +1,26 @@
-import type { QueryOptions } from "../types"
+import type { Query, FindQueryOptions } from "../types"
 import type Model from "../model"
 import queryParser from "../utils/queryParser"
 
 export default async function findOneOP<TDoc>(
 	this: Model<any, TDoc>,
-	query: any,
-	options?: QueryOptions,
+	query: Query<TDoc> = {},
+	options?: FindQueryOptions<TDoc>,
 ) {
 	query = queryParser(this, query)
 
 	const operation = async () => {
-		let result = await this.mapper.get(query)
+		const result = await this.mapper.get(query, options)
 
 		if (!result) {
 			return null
 		}
 
-		result = this._wrap(result)
-
 		if (options?.raw === true) {
 			return result.toRaw()
 		}
 
-		return result
+		return this._wrap(result)
 	}
 
 	return this.client.executeWithRetry(operation, `findOne on ${this.name}`)

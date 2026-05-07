@@ -4,7 +4,7 @@ import { Document } from "../document"
 import fillDefaults from "../utils/fillDefaults"
 
 import { mapping } from "../driver/lib/mapping"
-import type { Query, QueryOptions, InferDoc, Doc } from "../types"
+import type { Query, FindQueryOptions, InferDoc, Doc } from "../types"
 import type { Schema } from "../schema"
 
 import findOneOP from "../operations/findOne"
@@ -58,17 +58,23 @@ export class Model<
 	find: {
 		(
 			query: Query<TDoc>,
-			options: QueryOptions & { raw: true },
+			options: FindQueryOptions<TDoc> & { raw: true },
 		): Promise<TDoc[]>
-		(query?: Query<TDoc>, options?: QueryOptions): Promise<Doc<TDoc>[]>
+		(
+			query?: Query<TDoc>,
+			options?: FindQueryOptions<TDoc>,
+		): Promise<Doc<TDoc>[]>
 	} = (findOP as Function).bind(this) as any
 
 	findOne: {
 		(
 			query: Query<TDoc>,
-			options: QueryOptions & { raw: true },
+			options: FindQueryOptions<TDoc> & { raw: true },
 		): Promise<TDoc | null>
-		(query?: Query<TDoc>, options?: QueryOptions): Promise<Doc<TDoc> | null>
+		(
+			query?: Query<TDoc>,
+			options?: FindQueryOptions<TDoc>,
+		): Promise<Doc<TDoc> | null>
 	} = (findOneOP as Function).bind(this) as any
 
 	update: (query: Query<TDoc>) => Promise<Doc<TDoc>> = (

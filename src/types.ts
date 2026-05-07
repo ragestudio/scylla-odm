@@ -1,6 +1,7 @@
 import { ClientOptions } from "./driver"
 import Document from "./document"
 import { Schema } from "./schema"
+import type { mapping } from "./driver/lib/mapping"
 
 export type ClientConfig = {
 	modelsPath?: string
@@ -45,16 +46,6 @@ export enum ColumnTypes {
 	Varint = "varint",
 }
 
-export type QueryOperators<TValue> = {
-	$eq?: TValue
-	$ne?: TValue
-	$in?: TValue[]
-	$gt?: TValue
-	$gte?: TValue
-	$lt?: TValue
-	$lte?: TValue
-}
-
 export type TableKeys = (string | TableKeys)[]
 
 export interface Column<T> {
@@ -62,18 +53,32 @@ export interface Column<T> {
 	required?: boolean
 }
 
-export type Query<TDoc> = {
-	[K in keyof TDoc]?: TDoc[K] | QueryOperators<TDoc[K]>
-} & {
-	$and?: Query<TDoc>[]
-	$limit?: number
-	$orderby?: { [K in keyof TDoc]?: "asc" | "desc" }
+//
+// QUERY
+//
+export type QueryOperators<T> = {
+	$eq?: T
+	$ne?: T
+	$in?: T[]
+	$gt?: T
+	$gte?: T
+	$lt?: T
+	$lte?: T
+	$and?: Query<T>[]
 }
 
-export type QueryOptions = {
+export type Query<T> = {
+	[K in keyof T]?: T[K] | QueryOperators<T[K]>
+}
+
+export type FindQueryOptions<T> = {
 	raw?: boolean
-}
+	orderBy?: { [K in keyof T]?: "asc" | "desc" }
+} & mapping.FindDocInfo
 
+//
+// DOCUMENT
+//
 export type Doc<TDoc = any> = Document<TDoc> & TDoc
 
 export type InferDoc<S> =
