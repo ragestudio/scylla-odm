@@ -2,6 +2,7 @@ import type { Model } from "../model"
 
 // @ts-ignore
 import cassandra from "../driver"
+import isPlainObject from "./isPlainObject"
 const { q } = cassandra.mapping
 
 const MAX_QUERY_DEPTH = 3
@@ -88,80 +89,27 @@ export default function queryParser(
 	}
 
 	const parsedQuery: Record<string, any> = {}
-	const fields = model.schema.fields
 
-	for (const field of Object.keys(query)) {
-		const value = query[field]
+	for (const fieldKey of Object.keys(query)) {
+		const value = query[fieldKey]
 
-		if (field === "$and") {
-			handleAnd(model, value, parsedQuery, depth)
-			continue
-		}
-
-		if (field === "$or") {
+		if (!isValidFieldName(model.schema.fields, fieldKey)) {
 			throw new Error(
-				"ScyllaDB does not support OR queries across different columns. Use $in for a single column.",
+				`Invalid field name: [${fieldKey}] or it does not exist in schema`,
 			)
 		}
 
-		if (!isValidFieldName(fields, field)) {
-			throw new Error(
-				`Invalid field name: [${field}] or it does not exist in schema`,
-			)
+		if (isPlainObject(value)) {
+			parsedQuery[fieldKey] = parseField(value)
+		} else {
+			parsedQuery[fieldKey] = value
 		}
-
-		parsedQuery[field] = parseField(value)
 	}
 
 	return parsedQuery
 }
 
-function handleAnd(
-	model: Model<any>,
-	conditions: any,
-	parsedQuery: Record<string, any>,
-	depth: number,
-) {
-	if (!Array.isArray(conditions)) {
-		throw new Error("$and operator requires an array")
-	}
-	if (conditions.length > 10) {
-		throw new Error("$and operator exceeds maximum of 10 conditions")
-	}
-
-	for (let i = 0; i < conditions.length; i++) {
-		const condition = conditions[i]
-		if (!condition || typeof condition !== "object") {
-			throw new Error(`$and condition at index ${i} must be an object`)
-		}
-
-		const parsed = queryParser(model, condition, depth + 1)
-		for (const key of Object.keys(parsed)) {
-			if (key in parsedQuery) {
-				throw new Error(
-					`$and conflict: field "${key}" appears in multiple conditions`,
-				)
-			}
-		}
-		Object.assign(parsedQuery, parsed)
-	}
-}
-
 function parseField(value: any): any {
-	if (
-		value === null ||
-		typeof value !== "object" ||
-		Array.isArray(value) ||
-		value instanceof Date
-	) {
-		if (Array.isArray(value)) {
-			throw new Error(
-				"Array values require explicit operator (e.g., $in)",
-			)
-		}
-		return value
-	}
-
 	const operators = Object.keys(value)
 	const compiledOps = operators.map((op) => buildOperator(op, value[op]))
 
