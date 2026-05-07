@@ -17,7 +17,7 @@ export default async function findOneOP<TDoc>(
 		}
 
 		if (options?.raw === true) {
-			return result.toRaw()
+			return result
 		}
 
 		return this._wrap(result)
