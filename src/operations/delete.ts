@@ -16,7 +16,7 @@ export default async function deleteOP<T>(
 	}
 
 	if (options?.batch) {
-		return this.mapper.remove(query, mapperOptions)
+		return this.mapper.batching.remove(query, mapperOptions)
 	}
 
 	const operation = async () => {
