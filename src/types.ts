@@ -65,6 +65,7 @@ export type QueryOperators<T> = {
 	$lt?: T
 	$lte?: T
 	$and?: Query<T>[]
+	__v?: number
 }
 
 export type Query<T> = {
@@ -75,6 +76,24 @@ export type FindQueryOptions<T> = {
 	raw?: boolean
 	orderBy?: { [K in keyof T]?: "asc" | "desc" }
 } & mapping.FindDocInfo
+
+export type UpdateQueryOptions<T> = {
+	batch?: boolean
+	raw?: boolean
+	orderBy?: { [K in keyof T]?: "asc" | "desc" }
+	when?: { [K in keyof T]?: any }
+} & mapping.UpdateDocInfo
+
+export type InsertQueryOptions<T> = {
+	batch?: boolean
+	raw?: boolean
+} & mapping.InsertDocInfo
+
+export type DeleteQueryOptions<T> = {
+	batch?: boolean
+	raw?: boolean
+	when?: { [K in keyof T]?: any }
+} & mapping.RemoveDocInfo
 
 //
 // DOCUMENT

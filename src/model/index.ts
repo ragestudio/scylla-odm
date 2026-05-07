@@ -1,10 +1,18 @@
-import Client from ".."
+import Client, { Batch } from ".."
 import { Document } from "../document"
 
 import fillDefaults from "../utils/fillDefaults"
 
 import { mapping } from "../driver/mapping"
-import type { Query, FindQueryOptions, InferDoc, Doc } from "../types"
+import type {
+	Query,
+	FindQueryOptions,
+	InferDoc,
+	Doc,
+	UpdateQueryOptions,
+	InsertQueryOptions,
+	DeleteQueryOptions,
+} from "../types"
 import type { Schema } from "../schema"
 
 import findOneOP from "../operations/findOne"
@@ -15,6 +23,7 @@ import countAllOP from "../operations/countAll"
 
 import tableExistsOP from "../operations/tableExists"
 import syncOP from "../operations/sync"
+import insertOP from "../operations/insert"
 
 export class Model<
 	TSchema extends Schema<any> = Schema<any>,
@@ -55,13 +64,52 @@ export class Model<
 	create = (data: Partial<TDoc>) => this._wrap(data)
 	obj = (data: Partial<TDoc>) => this._wrap(data)
 
+	batch = {
+		update: (
+			batch: Batch,
+			query: Query<TDoc>,
+			options: UpdateQueryOptions<TDoc> = {},
+		) => {
+			batch.add(
+				this.update(query, {
+					...options,
+					batch: true,
+				}),
+			)
+		},
+		insert: (
+			batch: Batch,
+			query: Query<TDoc>,
+			options: InsertQueryOptions<TDoc> = {},
+		) => {
+			batch.add(
+				this.insert(query, {
+					...options,
+					batch: true,
+				}),
+			)
+		},
+		delete: (
+			batch: Batch,
+			query: Query<TDoc>,
+			options: DeleteQueryOptions<TDoc> = {},
+		) => {
+			batch.add(
+				this.delete(query, {
+					...options,
+					batch: true,
+				}),
+			)
+		},
+	}
+
 	find: {
 		(
 			query: Query<TDoc>,
 			options: FindQueryOptions<TDoc> & { raw: true },
 		): Promise<TDoc[]>
 		(
-			query?: Query<TDoc>,
+			query: Query<TDoc>,
 			options?: FindQueryOptions<TDoc>,
 		): Promise<Doc<TDoc>[]>
 	} = (findOP as Function).bind(this) as any
@@ -72,18 +120,55 @@ export class Model<
 			options: FindQueryOptions<TDoc> & { raw: true },
 		): Promise<TDoc | null>
 		(
-			query?: Query<TDoc>,
+			query: Query<TDoc>,
 			options?: FindQueryOptions<TDoc>,
 		): Promise<Doc<TDoc> | null>
 	} = (findOneOP as Function).bind(this) as any
 
-	update: (query: Query<TDoc>) => Promise<Doc<TDoc>> = (
-		updateOP as Function
-	).bind(this) as any
+	update: {
+		(
+			query: Query<TDoc>,
+			options: UpdateQueryOptions<TDoc> & { batch: true },
+		): mapping.ModelBatchItem
+		(
+			query: Query<TDoc>,
+			options: UpdateQueryOptions<TDoc> & { raw: true },
+		): Promise<TDoc[]>
+		(
+			query: Query<TDoc>,
+			options?: UpdateQueryOptions<TDoc>,
+		): Promise<Doc<TDoc>[]>
+	} = (updateOP as Function).bind(this) as any
 
-	delete: (query: Query<TDoc>) => Promise<mapping.Result> = (
-		deleteOP as Function
-	).bind(this) as any
+	insert: {
+		(
+			query: Query<TDoc>,
+			options: InsertQueryOptions<TDoc> & { batch: true },
+		): mapping.ModelBatchItem
+		(
+			query: Query<TDoc>,
+			options: InsertQueryOptions<TDoc> & { raw: true },
+		): Promise<TDoc[]>
+		(
+			query: Query<TDoc>,
+			options?: InsertQueryOptions<TDoc>,
+		): Promise<Doc<TDoc>[]>
+	} = (insertOP as Function).bind(this) as any
+
+	delete: {
+		(
+			query: Query<TDoc>,
+			options: DeleteQueryOptions<TDoc> & { batch: true },
+		): mapping.ModelBatchItem
+		(
+			query: Query<TDoc>,
+			options: DeleteQueryOptions<TDoc> & { raw: true },
+		): Promise<TDoc[]>
+		(
+			query: Query<TDoc>,
+			options?: DeleteQueryOptions<TDoc>,
+		): Promise<Doc<TDoc>[]>
+	} = (deleteOP as Function).bind(this) as any
 
 	countAll: () => Promise<number> = (countAllOP as Function).bind(this) as any
 

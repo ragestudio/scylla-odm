@@ -1,8 +1,32 @@
+import { mapping } from "../driver"
 import type Model from "../model"
+import { DeleteQueryOptions, Query } from "../types"
 
-export default async function (this: Model<any, any>, query: any) {
+export default async function deleteOP<T>(
+	this: Model<any, T>,
+	query: Query<T>,
+	options?: DeleteQueryOptions<T>,
+) {
+	const mapperOptions: mapping.RemoveDocInfo = {
+		fields: options?.fields,
+		ttl: options?.ttl,
+		ifExists: options?.ifExists,
+		when: options?.when,
+		deleteOnlyColumns: options?.deleteOnlyColumns,
+	}
+
+	if (options?.batch) {
+		return this.mapper.remove(query, mapperOptions)
+	}
+
 	const operation = async () => {
-		return await this.mapper.remove(query)
+		const result = await this.mapper.remove(query, mapperOptions)
+
+		if (options?.raw === true) {
+			return result
+		}
+
+		return this._wrap(result)
 	}
 
 	return this.client.executeWithRetry(operation, `delete on ${this.name}`)

@@ -15,6 +15,7 @@ import Logger from "./logger"
 import loadModels from "./utils/loadModels"
 import buildMapper from "./utils/buildMapper"
 import delay from "./utils/delay"
+import { Batch } from "./batch"
 
 const DEFAULT_MAX_RETRIES = 3
 const DEFAULT_RETRY_DELAY = 1000
@@ -101,6 +102,10 @@ export class Client {
 				await model._sync()
 			}
 		}
+	}
+
+	batch(logged: boolean = true): Batch {
+		return new Batch(this, logged)
 	}
 
 	async shutdown(): Promise<void> {

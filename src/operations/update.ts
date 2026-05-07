@@ -1,25 +1,48 @@
+import { mapping } from "../driver/mapping"
 import type Model from "../model"
+import { Query, UpdateQueryOptions } from "../types"
 import fillDefaults from "../utils/fillDefaults"
 import queryParser from "../utils/queryParser"
 
-export default async function updateOP<TDoc>(
+export default function updateOP<TDoc>(
 	this: Model<any, TDoc>,
-	query: any,
+	query: Query<TDoc>,
+	options?: UpdateQueryOptions<TDoc>,
 ) {
 	query = fillDefaults(this.schema, query)
 	query = queryParser(this, query)
 
-	if (typeof query.__v !== "undefined") {
-		if (Number.isNaN(query.__v)) {
-			query.__v = 0
-		} else {
-			query.__v = query.__v + 1
-		}
+	const mapperOptions: mapping.UpdateDocInfo = {
+		fields: options?.fields,
+		orderBy: options?.orderBy,
+		limit: options?.limit,
+		ttl: options?.ttl,
+		ifExists: options?.ifExists,
+		when: options?.when,
+		deleteOnlyColumns: options?.deleteOnlyColumns,
+	}
+
+	// if (typeof query.__v !== "undefined") {
+	// 	if (Number.isNaN(query.__v)) {
+	// 		query.__v = 0
+	// 	} else {
+	// 		query.__v = query.__v + 1
+	// 	}
+	// }
+
+	if (options?.batch) {
+		return this.mapper.batching.update(query, mapperOptions)
 	}
 
 	const operation = async () => {
-		await this.mapper.update(query)
-		return this._wrap(query)
+		const result = await this.mapper.update(query, mapperOptions)
+		const rows = result.toArray()
+
+		if (options?.raw === true) {
+			return rows
+		}
+
+		return rows.map((row) => this._wrap(row))
 	}
 
 	return this.client.executeWithRetry(operation, `update on ${this.name}`)
