@@ -24,13 +24,10 @@ import errors from "./errors"
 import policies from "./policies"
 import auth from "./auth"
 import mapping from "./mapping"
-import tracker from "./tracker"
-import metrics from "./metrics"
 import concurrent from "./concurrent"
 import { Token, TokenRange } from "./token"
 import Metadata from "./metadata"
 import Encoder from "./encoder"
-import geometry from "./geometry"
 import { version as pkgVersion } from "../../package.json" with { type: "json" }
 
 export {
@@ -42,11 +39,8 @@ export {
 	policies,
 	auth,
 	mapping,
-	tracker,
-	metrics,
 	concurrent,
 	Encoder,
-	geometry,
 }
 
 export const token = {
@@ -76,13 +70,10 @@ const _default = {
 	policies,
 	auth,
 	mapping,
-	tracker,
-	metrics,
 	concurrent,
 	token,
 	metadata,
 	Encoder,
-	geometry,
 	defaultOptions,
 	version,
 }

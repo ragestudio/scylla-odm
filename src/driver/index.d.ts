@@ -22,8 +22,6 @@ import { URL } from "url"
 import { auth } from "./auth"
 import { policies } from "./policies"
 import { types } from "./types"
-import { metrics } from "./metrics"
-import { tracker } from "./tracker"
 import { metadata } from "./metadata"
 import Long = types.Long
 import Uuid = types.Uuid
@@ -31,8 +29,7 @@ import Uuid = types.Uuid
 // Export imported submodules
 export { concurrent } from "./concurrent"
 export { mapping } from "./mapping"
-export { geometry } from "./geometry"
-export { auth, metadata, metrics, policies, tracker, types }
+export { auth, metadata, policies, types }
 
 export const version: number
 
@@ -46,9 +43,9 @@ export class Client extends events.EventEmitter {
 	hosts: HostMap
 	keyspace: string
 	metadata: metadata.Metadata
-	metrics: metrics.ClientMetrics
+	metrics: null
 
-	constructor(options: DseClientOptions)
+	constructor(options: ClientOptions)
 
 	connect(): Promise<void>
 
@@ -74,30 +71,6 @@ export class Client extends events.EventEmitter {
 	): void
 
 	execute(query: string, callback: ValueCallback<types.ResultSet>): void
-
-	executeGraph(
-		traversal: string,
-		parameters: { [name: string]: any } | undefined,
-		options: GraphQueryOptions,
-		callback: ValueCallback<graph.GraphResultSet>,
-	): void
-
-	executeGraph(
-		traversal: string,
-		parameters: { [name: string]: any } | undefined,
-		callback: ValueCallback<graph.GraphResultSet>,
-	): void
-
-	executeGraph(
-		traversal: string,
-		callback: ValueCallback<graph.GraphResultSet>,
-	): void
-
-	executeGraph(
-		traversal: string,
-		parameters?: { [name: string]: any },
-		options?: GraphQueryOptions,
-	): Promise<graph.GraphResultSet>
 
 	eachRow(
 		query: string,
@@ -243,7 +216,6 @@ export interface ClientOptions {
 	}
 	isMetadataSyncEnabled?: boolean
 	maxPrepared?: number
-	metrics?: metrics.ClientMetrics
 	policies?: {
 		addressResolution?: policies.addressResolution.AddressTranslator
 		loadBalancing?: policies.loadBalancing.LoadBalancingPolicy
@@ -272,7 +244,6 @@ export interface ClientOptions {
 	queryOptions?: QueryOptions
 	refreshSchemaDelay?: number
 	rePrepareOnUp?: boolean
-	requestTracker?: tracker.RequestTracker
 	socketOptions?: {
 		coalescingThreshold?: number
 		connectTimeout?: number
@@ -310,31 +281,6 @@ export interface QueryOptions {
 	traceQuery?: boolean
 }
 
-export interface DseClientOptions extends ClientOptions {
-	id?: Uuid
-	applicationName?: string
-	applicationVersion?: string
-	monitorReporting?: { enabled?: boolean }
-	graphOptions?: GraphOptions
-}
-
-export interface GraphQueryOptions extends QueryOptions {
-	graphLanguage?: string
-	graphName?: string
-	graphReadConsistency?: types.consistencies
-	graphSource?: string
-	graphWriteConsistency?: types.consistencies
-}
-
-export type GraphOptions = {
-	language?: string
-	name?: string
-	readConsistency?: types.consistencies
-	readTimeout?: number
-	source?: string
-	writeConsistency?: types.consistencies
-}
-
 export class ExecutionProfile {
 	consistency?: types.consistencies
 	loadBalancing?: policies.loadBalancing.LoadBalancingPolicy
@@ -342,13 +288,6 @@ export class ExecutionProfile {
 	readTimeout?: number
 	retry?: policies.retry.RetryPolicy
 	serialConsistency?: types.consistencies
-	graphOptions?: {
-		name?: string
-		language?: string
-		source?: string
-		readConsistency?: types.consistencies
-		writeConsistency?: types.consistencies
-	}
 
 	constructor(
 		name: string,
@@ -358,13 +297,6 @@ export class ExecutionProfile {
 			readTimeout?: number
 			retry?: policies.retry.RetryPolicy
 			serialConsistency?: types.consistencies
-			graphOptions?: {
-				name?: string
-				language?: string
-				source?: string
-				readConsistency?: types.consistencies
-				writeConsistency?: types.consistencies
-			}
 		},
 	)
 }

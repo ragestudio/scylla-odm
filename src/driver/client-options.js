@@ -19,9 +19,27 @@ import util from "util"
 import policies from "./policies"
 import types from "./types"
 import utils from "./utils"
-import tracker from "./tracker"
-import metrics from "./metrics"
 import auth from "./auth"
+
+// no-op metrics stub (metrics module removed from this build)
+const noopMetrics = {
+	onSuccessfulResponse() {},
+	onConnectionError() {},
+	onClientTimeoutError() {},
+	onOtherError() {},
+	onReadTimeoutError() {},
+	onUnavailableError() {},
+	onWriteTimeoutError() {},
+	onOtherErrorRetry() {},
+	onClientTimeoutRetry() {},
+	onReadTimeoutRetry() {},
+	onUnavailableRetry() {},
+	onWriteTimeoutRetry() {},
+	onResponse() {},
+	onIgnoreError() {},
+	onSpeculativeExecution() {},
+	onAuthenticationError() {},
+}
 
 /** Core connections per host for protocol versions 1 and 2 */
 const coreConnectionsPerHostV2 = {
@@ -86,7 +104,7 @@ function defaultOptions() {
 		},
 		authProvider: null,
 		requestTracker: null,
-		metrics: new metrics.DefaultMetrics(),
+		metrics: noopMetrics,
 		maxPrepared: 500,
 		refreshSchemaDelay: 1000,
 		isMetadataSyncEnabled: true,
@@ -143,19 +161,6 @@ function extend(baseOptions, userOptions) {
 	}
 	if (!options.queryOptions) {
 		throw new TypeError("queryOptions not defined in options")
-	}
-
-	if (
-		options.requestTracker !== null &&
-		!(options.requestTracker instanceof tracker.RequestTracker)
-	) {
-		throw new TypeError(
-			"requestTracker must be an instance of RequestTracker",
-		)
-	}
-
-	if (!(options.metrics instanceof metrics.ClientMetrics)) {
-		throw new TypeError("metrics must be an instance of ClientMetrics")
 	}
 
 	validatePoliciesOptions(options.policies)

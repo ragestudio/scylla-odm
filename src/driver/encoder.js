@@ -25,13 +25,7 @@ const BigDecimal = types.BigDecimal
 import MutableLong from "./types/mutable-long"
 import utils from "./utils"
 import token from "./token"
-import { DateRange } from "./datastax/search"
-import geo from "./geometry"
 import Vector from "./types/vector"
-const Geometry = geo.Geometry
-const LineString = geo.LineString
-const Point = geo.Point
-const Polygon = geo.Polygon
 
 const uuidRegex =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -109,10 +103,6 @@ const singleFqTypeNamesLength = Object.keys(singleTypeNames).reduce(function (
 
 const customTypeNames = Object.freeze({
 	duration: "org.apache.cassandra.db.marshal.DurationType",
-	lineString: "org.apache.cassandra.db.marshal.LineStringType",
-	point: "org.apache.cassandra.db.marshal.PointType",
-	polygon: "org.apache.cassandra.db.marshal.PolygonType",
-	dateRange: "org.apache.cassandra.db.marshal.DateRangeType",
 	vector: "org.apache.cassandra.db.marshal.VectorType",
 })
 
@@ -180,18 +170,10 @@ function defineInstanceMembers() {
 
 	const customDecoders = {
 		[customTypeNames.duration]: decodeDuration,
-		[customTypeNames.lineString]: decodeLineString,
-		[customTypeNames.point]: decodePoint,
-		[customTypeNames.polygon]: decodePolygon,
-		[customTypeNames.dateRange]: decodeDateRange,
 	}
 
 	const customEncoders = {
 		[customTypeNames.duration]: encodeDuration,
-		[customTypeNames.lineString]: encodeLineString,
-		[customTypeNames.point]: encodePoint,
-		[customTypeNames.polygon]: encodePolygon,
-		[customTypeNames.dateRange]: encodeDateRange,
 	}
 
 	// Decoding methods
@@ -2129,16 +2111,6 @@ Encoder.guessDataType = function (value) {
 		}
 	} else if (Array.isArray(value)) {
 		return { code: dataTypes.list }
-	} else if (value instanceof Geometry) {
-		if (value instanceof LineString) {
-			return { code: dataTypes.custom, info: customTypeNames.lineString }
-		} else if (value instanceof Point) {
-			return { code: dataTypes.custom, info: customTypeNames.point }
-		} else if (value instanceof Polygon) {
-			return { code: dataTypes.custom, info: customTypeNames.polygon }
-		}
-	} else if (value instanceof DateRange) {
-		return { code: dataTypes.custom, info: customTypeNames.dateRange }
 	}
 
 	return null
@@ -2239,60 +2211,30 @@ function encodeDuration(value) {
  * @private
  * @param {Buffer} buffer
  */
-function decodeLineString(buffer) {
-	return LineString.fromBuffer(buffer)
+// geometry and daterange types not supported in this build
+function decodeLineString() {
+	throw new Error("LineString type not supported")
 }
-
-/**
- * @private
- * @param {LineString} value
- */
-function encodeLineString(value) {
-	return value.toBuffer()
+function encodeLineString() {
+	throw new Error("LineString type not supported")
 }
-
-/**
- * @private
- * @param {Buffer} buffer
- */
-function decodePoint(buffer) {
-	return Point.fromBuffer(buffer)
+function decodePoint() {
+	throw new Error("Point type not supported")
 }
-
-/**
- * @private
- * @param {LineString} value
- */
-function encodePoint(value) {
-	return value.toBuffer()
+function encodePoint() {
+	throw new Error("Point type not supported")
 }
-
-/**
- * @private
- * @param {Buffer} buffer
- */
-function decodePolygon(buffer) {
-	return Polygon.fromBuffer(buffer)
+function decodePolygon() {
+	throw new Error("Polygon type not supported")
 }
-
-/**
- * @private
- * @param {Polygon} value
- */
-function encodePolygon(value) {
-	return value.toBuffer()
+function encodePolygon() {
+	throw new Error("Polygon type not supported")
 }
-
-function decodeDateRange(buffer) {
-	return DateRange.fromBuffer(buffer)
+function decodeDateRange() {
+	throw new Error("DateRange type not supported")
 }
-
-/**
- * @private
- * @param {DateRange} value
- */
-function encodeDateRange(value) {
-	return value.toBuffer()
+function encodeDateRange() {
+	throw new Error("DateRange type not supported")
 }
 
 /**

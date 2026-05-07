@@ -29,8 +29,6 @@ import { DefaultExecutionOptions } from "./execution-options"
 import ControlConnection from "./control-connection"
 import RequestHandler from "./request-handler"
 import PrepareHandler from "./prepare-handler"
-import InsightsClient from "./insights-client"
-import GraphExecutor from "./datastax/graph/graph-executor"
 import promiseUtils from "./promise-utils"
 import { description, version } from "../../package.json" with { type: "json" }
 
@@ -406,10 +404,6 @@ function Client(options) {
 		value: new ControlConnection(this.options, this.profileManager),
 		writable: true,
 	})
-	Object.defineProperty(this, "insightsClient", {
-		value: new InsightsClient(this),
-	})
-
 	//Unlimited amount of listeners for internal event queues by default
 	this.setMaxListeners(0)
 	this.connected = false
@@ -430,15 +424,8 @@ function Client(options) {
 	 */
 	this.hosts = this.controlConnection.hosts
 
-	/**
-	 * The [ClientMetrics]{@link module:metrics~ClientMetrics} instance used to expose measurements of its internal
-	 * behavior and of the server as seen from the driver side.
-	 * <p>By default, a [DefaultMetrics]{@link module:metrics~DefaultMetrics} instance is used.</p>
-	 * @type {ClientMetrics}
-	 */
+	// metrics are not available in this build (noop stub from client-options)
 	this.metrics = this.options.metrics
-
-	this._graphExecutor = new GraphExecutor(this, options, this._execute)
 }
 
 util.inherits(Client, events.EventEmitter)
@@ -547,7 +534,6 @@ Client.prototype._connect = async function () {
 
 	// Set the distance of the control connection host relatively to this instance
 	this.profileManager.getDistance(this.controlConnection.host)
-	this.insightsClient.init()
 	this.connected = true
 	this.connecting = false
 	this.emit("connected")
@@ -643,23 +629,8 @@ Client.prototype.execute = function (query, params, options, callback) {
  * });
  * @see {@link ExecutionProfile} to reuse a set of options across different query executions.
  */
-Client.prototype.executeGraph = function (
-	query,
-	parameters,
-	options,
-	callback,
-) {
-	callback = callback || (options ? options : parameters)
-
-	if (typeof callback === "function") {
-		parameters = typeof parameters !== "function" ? parameters : null
-		return promiseUtils.toCallback(
-			this._graphExecutor.send(query, parameters, options),
-			callback,
-		)
-	}
-
-	return this._graphExecutor.send(query, parameters, options)
+Client.prototype.executeGraph = function () {
+	throw new Error("Graph queries are not supported in this build")
 }
 
 /**
@@ -948,8 +919,6 @@ Client.prototype._shutdown = async function () {
 	this.connected = false
 	this.isShuttingDown = true
 	const hosts = this.hosts.values()
-
-	this.insightsClient.shutdown()
 
 	// Shutdown the ControlConnection before shutting down the pools
 	this.controlConnection.shutdown()
