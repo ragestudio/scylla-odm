@@ -1,12 +1,15 @@
 import { mapping } from "../driver"
 import type Model from "../model"
 import { DeleteQueryOptions, Query } from "../types"
+import queryParser from "../utils/queryParser"
 
 export default async function deleteOP<T>(
 	this: Model<any, T>,
 	query: Query<T>,
 	options?: DeleteQueryOptions<T>,
 ) {
+	query = queryParser(this, query)
+
 	const mapperOptions: mapping.RemoveDocInfo = {
 		fields: options?.fields,
 		ttl: options?.ttl,
