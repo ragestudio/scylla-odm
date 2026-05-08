@@ -46,7 +46,8 @@ export enum ColumnTypes {
 	Varint = "varint",
 }
 
-export type TableKeys = (string | TableKeys)[]
+export type TableKeys<T> = (keyof T | TableKeys<T>)[]
+export type TableClusteringOrder<T> = Partial<Record<keyof T, "asc" | "desc">>
 
 export interface Column<T> {
 	type?: ColumnTypes | string

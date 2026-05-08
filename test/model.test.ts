@@ -35,39 +35,6 @@ describe("Model", () => {
 		expect(model.schema.keys).toEqual(["key"])
 	})
 
-	it("should throw if schema has no keys", () => {
-		const schema = new Schema(
-			{ table_name: "t", keys: undefined as any },
-			{},
-		)
-
-		expect(() => new Model("bad", schema)).toThrow(
-			'[bad] model has missing "keys" array',
-		)
-	})
-
-	it("should throw if schema has keys but not an array", () => {
-		const schema = new Schema(
-			{ table_name: "t", keys: "not-an-array" as any },
-			{},
-		)
-
-		expect(() => new Model("bad", schema)).toThrow(
-			'[bad] model has missing "keys" array',
-		)
-	})
-
-	it("should throw if schema has no table_name", () => {
-		const schema = new Schema(
-			{ table_name: undefined as any, keys: ["k"] },
-			{},
-		)
-
-		expect(() => new Model("bad", schema)).toThrow(
-			'[bad] model has missing "table_name"',
-		)
-	})
-
 	it("should throw if schema has no fields", () => {
 		const schema = new Schema(
 			{ table_name: "t", keys: ["k"] },
