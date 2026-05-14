@@ -16,6 +16,13 @@ import loadModels from "./utils/loadModels"
 import buildMapper from "./utils/buildMapper"
 import delay from "./utils/delay"
 import { Batch } from "./batch"
+import {
+	migrateModel,
+	promptMigration,
+	executeMigration,
+	promptResetMigration,
+	executeResetMigration,
+} from "./migrate"
 
 const DEFAULT_MAX_RETRIES = 3
 const DEFAULT_RETRY_DELAY = 1000
@@ -106,6 +113,64 @@ export class Client {
 
 	batch(logged: boolean = true): Batch {
 		return new Batch(this, logged)
+	}
+
+	async migrate(modelName?: string): Promise<void> {
+		if (!this.models.size) {
+			throw new Error("no models loaded, call initialize() first")
+		}
+
+		let models: Model<any>[]
+
+		if (modelName) {
+			const model = this.models.get(modelName)
+			if (!model) {
+				throw new Error(
+					`model "${modelName}" not found, ` +
+						`available: [${[...this.models.keys()].join(", ")}]`,
+				)
+			}
+			models = [model]
+		} else {
+			models = [...this.models.values()]
+		}
+
+		for (const model of models) {
+			const result = await migrateModel(model)
+
+			if (result.type === "none") {
+				this.logger.log(
+					`[${model.name}] schema is up to date, nothing to migrate`,
+				)
+				continue
+			}
+
+			if (result.errors.length) {
+				const shouldReset = await promptResetMigration(
+					model.name,
+					result,
+				)
+
+				if (shouldReset) {
+					await executeResetMigration(model, result)
+					this.logger.log(`[${model.name}] table reset successfully`)
+				} else {
+					this.logger.log(`[${model.name}] migration skipped`)
+				}
+				continue
+			}
+
+			const shouldApply = await promptMigration(model.name, result)
+
+			if (shouldApply) {
+				await executeMigration(model, result)
+				this.logger.log(
+					`[${model.name}] migration applied successfully`,
+				)
+			} else {
+				this.logger.log(`[${model.name}] migration skipped`)
+			}
+		}
 	}
 
 	async shutdown(): Promise<void> {

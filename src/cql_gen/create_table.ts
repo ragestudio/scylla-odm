@@ -31,13 +31,13 @@ export default function (model: Model): string {
 		const first = key[0]
 
 		if (Array.isArray(first)) {
-			pkDef = `(${first.map((k) => `"${k}"`).join(", ")})`
+			pkDef = `(${first.map((k) => `"${String(k)}"`).join(", ")})`
 		} else {
-			pkDef = `"${first}"`
+			pkDef = `"${String(first)}"`
 		}
 
 		for (let i = 1; i < key.length; i++) {
-			pkDef += `, "${key[i]}"`
+			pkDef += `, "${String(key[i])}"`
 		}
 	} else {
 		throw new Error(
