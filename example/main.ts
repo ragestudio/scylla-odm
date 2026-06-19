@@ -1,6 +1,6 @@
 import Client from "../dist/client.js"
 import { Model, Schema, ColumnTypes } from "../dist/index.js"
-import type { Column } from "../dist/types"
+import { defineColumn, InferDoc, type Column } from "../dist/types"
 
 const schema = new Schema(
 	{
@@ -8,14 +8,17 @@ const schema = new Schema(
 		keys: ["key"],
 	},
 	{
-		key: {
+		key: defineColumn<string>()({
 			type: ColumnTypes.Text,
-		} as Column<string>,
-		value: {
+			required: true,
+		}),
+		value: defineColumn<string>()({
 			type: ColumnTypes.Text,
-		} as Column<string>,
+		}),
 	},
 )
+
+type t = InferDoc<typeof schema>
 
 const model = new Model("test", schema)
 
