@@ -1,9 +1,7 @@
 import type { Model } from "../model"
+import type { QueryOperators } from "../adapter/types"
 
-// @ts-ignore
-import cassandra from "../driver"
 import isPlainObject from "./isPlainObject"
-const { q } = cassandra.mapping
 
 const MAX_QUERY_DEPTH = 3
 const MAX_IN_ELEMENTS = 1000
@@ -26,7 +24,15 @@ function requireNotNull(value: any, operator: string): void {
 	}
 }
 
-function buildOperator(operator: string, opValue: any): any {
+function getOperators(model: Model<any>): QueryOperators {
+	return model.client.adapter.operators
+}
+
+function buildOperator(
+	operators: QueryOperators,
+	operator: string,
+	opValue: any,
+): any {
 	if (!VALID_OPERATORS.has(operator)) {
 		throw new Error(`Invalid operator: ${operator}`)
 	}
@@ -37,7 +43,7 @@ function buildOperator(operator: string, opValue: any): any {
 
 		case "$ne":
 			requireNotNull(opValue, "$ne")
-			return q.notEq(opValue)
+			return operators.notEq(opValue)
 
 		case "$in":
 			if (!Array.isArray(opValue)) {
@@ -55,23 +61,23 @@ function buildOperator(operator: string, opValue: any): any {
 					)
 				}
 			}
-			return q.in_(opValue)
+			return operators.in_(opValue)
 
 		case "$gt":
 			requireNotNull(opValue, "$gt")
-			return q.gt(opValue)
+			return operators.gt(opValue)
 
 		case "$gte":
 			requireNotNull(opValue, "$gte")
-			return q.gte(opValue)
+			return operators.gte(opValue)
 
 		case "$lt":
 			requireNotNull(opValue, "$lt")
-			return q.lt(opValue)
+			return operators.lt(opValue)
 
 		case "$lte":
 			requireNotNull(opValue, "$lte")
-			return q.lte(opValue)
+			return operators.lte(opValue)
 	}
 }
 
@@ -88,6 +94,7 @@ export default function queryParser(
 		return query
 	}
 
+	const operators = getOperators(model)
 	const parsedQuery: Record<string, any> = {}
 
 	for (const fieldKey of Object.keys(query)) {
@@ -100,7 +107,7 @@ export default function queryParser(
 		}
 
 		if (isPlainObject(value)) {
-			parsedQuery[fieldKey] = parseField(value)
+			parsedQuery[fieldKey] = parseField(operators, value)
 		} else {
 			parsedQuery[fieldKey] = value
 		}
@@ -109,13 +116,15 @@ export default function queryParser(
 	return parsedQuery
 }
 
-function parseField(value: any): any {
-	const operators = Object.keys(value)
-	const compiledOps = operators.map((op) => buildOperator(op, value[op]))
+function parseField(operators: QueryOperators, value: any): any {
+	const operatorKeys = Object.keys(value)
+	const compiledOps = operatorKeys.map((op) =>
+		buildOperator(operators, op, value[op]),
+	)
 
 	return compiledOps.length === 1
 		? compiledOps[0]
-		: (q.and as any)(...compiledOps)
+		: operators.and(...compiledOps)
 }
 
 export function isValidFieldName(

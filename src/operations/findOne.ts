@@ -1,7 +1,6 @@
 import type { Query, FindQueryOptions } from "../types"
 import type Model from "../model"
 import queryParser from "../utils/queryParser"
-import { mapping } from "../driver/mapping"
 
 export default async function findOneOP<TDoc>(
 	this: Model<any, TDoc>,
@@ -10,14 +9,8 @@ export default async function findOneOP<TDoc>(
 ) {
 	query = queryParser(this, query)
 
-	const mapperOptions: mapping.FindDocInfo = {
-		fields: options?.fields,
-		orderBy: options?.orderBy,
-		limit: options?.limit,
-	}
-
 	const operation = async () => {
-		const result = await this.mapper.get(query, mapperOptions)
+		const result = await this.client.adapter.findOne(this, query, options)
 
 		if (!result) {
 			return null

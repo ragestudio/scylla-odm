@@ -27,6 +27,7 @@ export const mockDriverClient: Record<string, ReturnType<typeof vi.fn>> = m()
 export const mockMapper: Record<string, ReturnType<typeof vi.fn>> = m()
 	.mockMapper
 export const mockModelMapper: Record<string, any> = m().mockModelMapper
+export const mockAdapter: Record<string, any> = m().mockAdapter
 
 export interface TestDoc {
 	key: string
@@ -49,9 +50,10 @@ export function makeModel(name: string = "test") {
 
 export function setupFakeClient() {
 	const mm = m()
+	const adapter = mm.mockAdapter
 	// @ts-ignore
 	globalThis.__scylla_client = {
-		config: { keyspace: "test_ks" },
+		config: { keyspace: "test_ks", driver: "cassandra" },
 		mapper: mm.mockMapper,
 		driver: {
 			execute: vi.fn().mockResolvedValue({
@@ -59,6 +61,7 @@ export function setupFakeClient() {
 			}),
 		},
 		executeWithRetry: async (op: Function) => op(),
+		adapter,
 	}
 }
 

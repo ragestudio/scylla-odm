@@ -1,11 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import {
-	Result,
-	makeModel,
-	setupFakeClient,
-	mockResult,
-	mockModelMapper,
-} from "./helpers"
+import { Result, makeModel, setupFakeClient } from "./helpers"
 
 beforeEach(() => {
 	vi.clearAllMocks()
@@ -17,6 +11,10 @@ afterEach(() => {
 	// @ts-ignore
 	delete globalThis.__scylla_client
 })
+
+function getAdapter() {
+	return (globalThis.__scylla_client as any).adapter
+}
 
 // ---------------------------------------------------------------------------
 // Result
@@ -121,16 +119,15 @@ describe("Result.save", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.update.mockResolvedValue(
-			mockResult([{ key: "k", value: "saved" }]),
-		)
+		getAdapter().update.mockResolvedValue([{ key: "k", value: "saved" }])
 
 		const doc = model.obj({ key: "k", value: "saved" })
 		const result = await doc.save()
 
-		expect(mockModelMapper.update).toHaveBeenCalledWith(
+		expect(getAdapter().update).toHaveBeenCalledWith(
+			model,
 			expect.objectContaining({ key: "k", value: "saved" }),
-			expect.anything(),
+			undefined,
 		)
 		expect(result).toHaveLength(1)
 		expect(result[0]).toBeInstanceOf(Result)
@@ -160,16 +157,15 @@ describe("Result.delete", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.remove.mockResolvedValue(
-			mockResult([{ key: "k", value: "v" }]),
-		)
+		getAdapter().remove.mockResolvedValue({ key: "k", value: "v" })
 
 		const doc = model.obj({ key: "k", value: "v" })
 		const result = await doc.delete()
 
-		expect(mockModelMapper.remove).toHaveBeenCalledWith(
+		expect(getAdapter().remove).toHaveBeenCalledWith(
+			model,
 			expect.objectContaining({ key: "k", value: "v" }),
-			expect.anything(),
+			undefined,
 		)
 		expect(result).toBeInstanceOf(Result)
 	})

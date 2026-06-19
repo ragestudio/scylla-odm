@@ -1,6 +1,3 @@
-// @ts-ignore
-import cassandra from "../driver"
-const { types } = cassandra
 import type { Model } from "../model"
 import { isValidFieldName } from "./queryParser"
 
@@ -28,28 +25,16 @@ function isValidValue(value: any, expectedType: string): boolean {
 	if (intTypes.has(typeName)) return Number.isInteger(value)
 	if (floatTypes.has(typeName)) return typeof value === "number"
 	if (longTypes.has(typeName)) {
-		return (
-			typeof value === "bigint" ||
-			typeof value === "number" ||
-			value instanceof types.Long
-		)
+		return typeof value === "bigint" || typeof value === "number"
 	}
 
 	switch (typeName) {
 		case "boolean":
 			return typeof value === "boolean"
 		case "decimal":
-			return (
-				typeof value === "number" ||
-				typeof value === "string" ||
-				value instanceof types.BigDecimal
-			)
+			return typeof value === "number" || typeof value === "string"
 		case "varint":
-			return (
-				typeof value === "bigint" ||
-				typeof value === "number" ||
-				value instanceof types.Integer
-			)
+			return typeof value === "bigint" || typeof value === "number"
 		case "timestamp":
 			return (
 				value instanceof Date ||
@@ -57,13 +42,13 @@ function isValidValue(value: any, expectedType: string): boolean {
 				typeof value === "string"
 			)
 		case "date":
-			return typeof value === "string" || value instanceof types.LocalDate
+			return typeof value === "string"
 		case "time":
-			return typeof value === "string" || value instanceof types.LocalTime
+			return typeof value === "string"
 		case "uuid":
-			return typeof value === "string" || value instanceof types.Uuid
+			return typeof value === "string"
 		case "timeuuid":
-			return typeof value === "string" || value instanceof types.TimeUuid
+			return typeof value === "string"
 		case "blob":
 			return Buffer.isBuffer(value) || value instanceof Uint8Array
 	}

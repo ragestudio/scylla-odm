@@ -1,4 +1,3 @@
-import { mapping } from "../driver/mapping"
 import type Model from "../model"
 import { Query, UpdateQueryOptions } from "../types"
 import fillDefaults from "../utils/fillDefaults"
@@ -12,31 +11,12 @@ export default function updateOP<TDoc>(
 	query = fillDefaults(this.schema, query)
 	query = queryParser(this, query)
 
-	const mapperOptions: mapping.UpdateDocInfo = {
-		fields: options?.fields,
-		orderBy: options?.orderBy,
-		limit: options?.limit,
-		ttl: options?.ttl,
-		ifExists: options?.ifExists,
-		when: options?.when,
-		deleteOnlyColumns: options?.deleteOnlyColumns,
-	}
-
-	// if (typeof query.__v !== "undefined") {
-	// 	if (Number.isNaN(query.__v)) {
-	// 		query.__v = 0
-	// 	} else {
-	// 		query.__v = query.__v + 1
-	// 	}
-	// }
-
 	if (options?.batch) {
-		return this.mapper.batching.update(query, mapperOptions)
+		return this.client.adapter.createBatchUpdate(this, query, options)
 	}
 
 	const operation = async () => {
-		const result = await this.mapper.update(query, mapperOptions)
-		const rows = result.toArray()
+		const rows = await this.client.adapter.update(this, query, options)
 
 		if (options?.raw === true) {
 			return rows

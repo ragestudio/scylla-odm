@@ -3,7 +3,6 @@ import { Document } from "../document"
 
 import fillDefaults from "../utils/fillDefaults"
 
-import { mapping } from "../driver/mapping"
 import type {
 	Query,
 	FindQueryOptions,
@@ -36,7 +35,7 @@ export class Model<
 		return globalThis.__scylla_client
 	}
 
-	get mapper(): mapping.ModelMapper {
+	get mapper(): any {
 		if (!globalThis.__scylla_client?.mapper) {
 			throw new Error("No mapper available")
 		}
@@ -129,7 +128,7 @@ export class Model<
 		(
 			query: Query<TDoc>,
 			options: UpdateQueryOptions<TDoc> & { batch: true },
-		): mapping.ModelBatchItem
+		): any
 		(
 			query: Query<TDoc>,
 			options: UpdateQueryOptions<TDoc> & { raw: true },
@@ -144,7 +143,7 @@ export class Model<
 		(
 			query: Query<TDoc>,
 			options: InsertQueryOptions<TDoc> & { batch: true },
-		): mapping.ModelBatchItem
+		): any
 		(
 			query: Query<TDoc>,
 			options: InsertQueryOptions<TDoc> & { raw: true },
@@ -159,7 +158,7 @@ export class Model<
 		(
 			query: Query<TDoc>,
 			options: DeleteQueryOptions<TDoc> & { batch: true },
-		): mapping.ModelBatchItem
+		): any
 		(
 			query: Query<TDoc>,
 			options: DeleteQueryOptions<TDoc> & { raw: true },

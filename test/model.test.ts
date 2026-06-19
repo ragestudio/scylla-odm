@@ -22,6 +22,10 @@ afterEach(() => {
 	delete globalThis.__scylla_client
 })
 
+function getAdapter() {
+	return (globalThis.__scylla_client as any).adapter
+}
+
 // ---------------------------------------------------------------------------
 // Model
 // ---------------------------------------------------------------------------
@@ -79,16 +83,11 @@ describe("Model", () => {
 		const model = makeModel()
 		setupFakeClient()
 
+		getAdapter().countAll.mockResolvedValue(3)
+
 		const count = await model.countAll()
 
-		// countAll runs CQL directly via client.driver.execute
-		// @ts-ignore
-		const fakeDriver = (globalThis.__scylla_client as any).driver
-		expect(fakeDriver.execute).toHaveBeenCalledWith(
-			"SELECT COUNT(1) FROM test_ks.test",
-			[],
-			expect.anything(),
-		)
+		expect(getAdapter().countAll).toHaveBeenCalled()
 		expect(count).toBe(3)
 	})
 })
@@ -129,20 +128,18 @@ describe("Model typing", () => {
 // ---------------------------------------------------------------------------
 
 describe("Model.find", () => {
-	it("should call mapper.find and return wrapped documents", async () => {
+	it("should call adapter.find and return wrapped documents", async () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.find.mockResolvedValue(
-			mockResult([
-				{ key: "k1", value: "v1" },
-				{ key: "k2", value: "v2" },
-			]),
-		)
+		getAdapter().find.mockResolvedValue([
+			{ key: "k1", value: "v1" },
+			{ key: "k2", value: "v2" },
+		])
 
 		const results = await model.find({ key: "k1" })
 
-		expect(mockModelMapper.find).toHaveBeenCalled()
+		expect(getAdapter().find).toHaveBeenCalled()
 		expect(results).toHaveLength(2)
 		expect(results[0]).toBeInstanceOf(Result)
 		expect(results[0].key).toBe("k1")
@@ -153,9 +150,7 @@ describe("Model.find", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.find.mockResolvedValue(
-			mockResult([{ key: "k1", value: "v1" }]),
-		)
+		getAdapter().find.mockResolvedValue([{ key: "k1", value: "v1" }])
 
 		const results = await model.find({ key: "k1" }, { raw: true })
 
@@ -167,26 +162,27 @@ describe("Model.find", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.find.mockResolvedValue(mockResult([]))
+		getAdapter().find.mockResolvedValue([])
 
 		const results = await model.find({ key: "nonexistent" })
 
 		expect(results).toEqual([])
 	})
 
-	it("should pass orderBy and limit options to mapper", async () => {
+	it("should pass orderBy and limit options to adapter", async () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.find.mockResolvedValue(mockResult([]))
+		getAdapter().find.mockResolvedValue([])
 
 		await model.find(
 			{ key: "k1" },
 			{ orderBy: { value: "desc" }, limit: 10 },
 		)
 
-		expect(mockModelMapper.find).toHaveBeenCalledWith(
-			expect.anything(),
+		expect(getAdapter().find).toHaveBeenCalledWith(
+			model,
+			expect.objectContaining({ key: "k1" }),
 			expect.objectContaining({ orderBy: { value: "desc" }, limit: 10 }),
 		)
 	})
@@ -197,15 +193,15 @@ describe("Model.find", () => {
 // ---------------------------------------------------------------------------
 
 describe("Model.findOne", () => {
-	it("should call mapper.get and return a wrapped document", async () => {
+	it("should call adapter.findOne and return a wrapped document", async () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.get.mockResolvedValue({ key: "k1", value: "v1" })
+		getAdapter().findOne.mockResolvedValue({ key: "k1", value: "v1" })
 
 		const doc = await model.findOne({ key: "k1" })
 
-		expect(mockModelMapper.get).toHaveBeenCalled()
+		expect(getAdapter().findOne).toHaveBeenCalled()
 		expect(doc).toBeInstanceOf(Result)
 		expect(doc!.key).toBe("k1")
 	})
@@ -214,7 +210,7 @@ describe("Model.findOne", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.get.mockResolvedValue(null)
+		getAdapter().findOne.mockResolvedValue(null)
 
 		const doc = await model.findOne({ key: "nonexistent" })
 
@@ -225,7 +221,7 @@ describe("Model.findOne", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.get.mockResolvedValue({ key: "k1", value: "v1" })
+		getAdapter().findOne.mockResolvedValue({ key: "k1", value: "v1" })
 
 		const doc = await model.findOne({ key: "k1" }, { raw: true })
 
@@ -239,17 +235,15 @@ describe("Model.findOne", () => {
 // ---------------------------------------------------------------------------
 
 describe("Model.update", () => {
-	it("should call mapper.update and return wrapped documents", async () => {
+	it("should call adapter.update and return wrapped documents", async () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.update.mockResolvedValue(
-			mockResult([{ key: "k1", value: "updated" }]),
-		)
+		getAdapter().update.mockResolvedValue([{ key: "k1", value: "updated" }])
 
 		const results = await model.update({ key: "k1", value: "updated" })
 
-		expect(mockModelMapper.update).toHaveBeenCalled()
+		expect(getAdapter().update).toHaveBeenCalled()
 		expect(results).toHaveLength(1)
 		expect(results[0]).toBeInstanceOf(Result)
 		expect(results[0].value).toBe("updated")
@@ -259,15 +253,19 @@ describe("Model.update", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		const batchItem = { __batch: true }
-		mockModelMapper.batching.update.mockReturnValue(batchItem)
+		const batchItem = {
+			model: "test",
+			operation: "update",
+			query: { key: "k1" },
+		}
+		getAdapter().createBatchUpdate.mockReturnValue(batchItem)
 
 		const result = model.update(
 			{ key: "k1", value: "updated" },
 			{ batch: true },
-		)
+		) as any
 
-		expect(mockModelMapper.batching.update).toHaveBeenCalled()
+		expect(getAdapter().createBatchUpdate).toHaveBeenCalled()
 		expect(result).toBe(batchItem)
 	})
 
@@ -275,9 +273,7 @@ describe("Model.update", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.update.mockResolvedValue(
-			mockResult([{ key: "k1", value: "rawval" }]),
-		)
+		getAdapter().update.mockResolvedValue([{ key: "k1", value: "rawval" }])
 
 		const results = await model.update(
 			{ key: "k1", value: "rawval" },
@@ -294,17 +290,17 @@ describe("Model.update", () => {
 // ---------------------------------------------------------------------------
 
 describe("Model.insert", () => {
-	it("should call mapper.insert and return wrapped documents", async () => {
+	it("should call adapter.insert and return wrapped documents", async () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.insert.mockResolvedValue(
-			mockResult([{ key: "newkey", value: "newval" }]),
-		)
+		getAdapter().insert.mockResolvedValue([
+			{ key: "newkey", value: "newval" },
+		])
 
 		const results = await model.insert({ key: "newkey", value: "newval" })
 
-		expect(mockModelMapper.insert).toHaveBeenCalled()
+		expect(getAdapter().insert).toHaveBeenCalled()
 		expect(results).toHaveLength(1)
 		expect(results[0]).toBeInstanceOf(Result)
 	})
@@ -313,12 +309,19 @@ describe("Model.insert", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		const batchItem = { __batch_insert: true }
-		mockModelMapper.batching.insert.mockReturnValue(batchItem)
+		const batchItem = {
+			model: "test",
+			operation: "insert",
+			data: { key: "k1" },
+		}
+		getAdapter().createBatchInsert.mockReturnValue(batchItem)
 
-		const result = model.insert({ key: "k1", value: "v1" }, { batch: true })
+		const result = model.insert(
+			{ key: "k1", value: "v1" },
+			{ batch: true },
+		) as any
 
-		expect(mockModelMapper.batching.insert).toHaveBeenCalled()
+		expect(getAdapter().createBatchInsert).toHaveBeenCalled()
 		expect(result).toBe(batchItem)
 	})
 })
@@ -328,17 +331,15 @@ describe("Model.insert", () => {
 // ---------------------------------------------------------------------------
 
 describe("Model.delete", () => {
-	it("should call mapper.remove and return result", async () => {
+	it("should call adapter.remove and return result", async () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		mockModelMapper.remove.mockResolvedValue(
-			mockResult([{ key: "k1", value: "v1" }]),
-		)
+		getAdapter().remove.mockResolvedValue({ key: "k1", value: "v1" })
 
 		const result = await model.delete({ key: "k1" })
 
-		expect(mockModelMapper.remove).toHaveBeenCalled()
+		expect(getAdapter().remove).toHaveBeenCalled()
 		expect(result).toBeInstanceOf(Result)
 	})
 
@@ -346,12 +347,16 @@ describe("Model.delete", () => {
 		const model = makeModel()
 		setupFakeClient()
 
-		const batchItem = { __batch_remove: true }
-		mockModelMapper.batching.remove.mockReturnValue(batchItem)
+		const batchItem = {
+			model: "test",
+			operation: "remove",
+			query: { key: "k1" },
+		}
+		getAdapter().createBatchRemove.mockReturnValue(batchItem)
 
-		const result = model.delete({ key: "k1" }, { batch: true })
+		const result = model.delete({ key: "k1" }, { batch: true }) as any
 
-		expect(mockModelMapper.batching.remove).toHaveBeenCalled()
+		expect(getAdapter().createBatchRemove).toHaveBeenCalled()
 		expect(result).toBe(batchItem)
 	})
 })
@@ -367,10 +372,14 @@ describe("Model.batch", () => {
 		const batch = client.batch()
 		setupFakeClient()
 
-		model.batch.update(batch, { key: "k", value: "v" })
+		const batchItem = { model: "test", operation: "update", query: {} }
+		getAdapter().createBatchUpdate.mockReturnValue(batchItem)
+
+		model.batch.update(batch, { key: "k", value: "v" } as any)
 
 		expect(batch.size).toBe(1)
-		expect(mockModelMapper.batching.update).toHaveBeenCalledWith(
+		expect(getAdapter().createBatchUpdate).toHaveBeenCalledWith(
+			model,
 			expect.objectContaining({ key: "k", value: "v" }),
 			expect.anything(),
 		)
@@ -382,10 +391,14 @@ describe("Model.batch", () => {
 		const batch = client.batch()
 		setupFakeClient()
 
-		model.batch.insert(batch, { key: "k", value: "v" })
+		const batchItem = { model: "test", operation: "insert", data: {} }
+		getAdapter().createBatchInsert.mockReturnValue(batchItem)
+
+		model.batch.insert(batch, { key: "k", value: "v" } as any)
 
 		expect(batch.size).toBe(1)
-		expect(mockModelMapper.batching.insert).toHaveBeenCalledWith(
+		expect(getAdapter().createBatchInsert).toHaveBeenCalledWith(
+			model,
 			expect.objectContaining({ key: "k", value: "v" }),
 			expect.anything(),
 		)
@@ -397,10 +410,14 @@ describe("Model.batch", () => {
 		const batch = client.batch()
 		setupFakeClient()
 
-		model.batch.delete(batch, { key: "k" })
+		const batchItem = { model: "test", operation: "remove", query: {} }
+		getAdapter().createBatchRemove.mockReturnValue(batchItem)
+
+		model.batch.delete(batch, { key: "k" } as any)
 
 		expect(batch.size).toBe(1)
-		expect(mockModelMapper.batching.remove).toHaveBeenCalledWith(
+		expect(getAdapter().createBatchRemove).toHaveBeenCalledWith(
+			model,
 			expect.objectContaining({ key: "k" }),
 			expect.anything(),
 		)

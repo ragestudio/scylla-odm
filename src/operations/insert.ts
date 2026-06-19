@@ -1,4 +1,3 @@
-import { mapping } from "../driver/mapping"
 import type Model from "../model"
 import { InsertQueryOptions, Query } from "../types"
 import fillDefaults from "../utils/fillDefaults"
@@ -12,19 +11,20 @@ export default function insertOP<TDoc>(
 	query = fillDefaults(this.schema, query)
 	query = queryParser(this, query)
 
-	const mapperOptions: mapping.InsertDocInfo = {
-		fields: options?.fields,
-		ttl: options?.ttl,
-		ifNotExists: options?.ifNotExists,
-	}
-
 	if (options?.batch) {
-		return this.mapper.batching.insert(query, mapperOptions)
+		return this.client.adapter.createBatchInsert(
+			this,
+			query as any,
+			options,
+		)
 	}
 
 	const operation = async () => {
-		const result = await this.mapper.insert(query, mapperOptions)
-		const rows = result.toArray()
+		const rows = await this.client.adapter.insert(
+			this,
+			query as any,
+			options,
+		)
 
 		if (options?.raw === true) {
 			return rows

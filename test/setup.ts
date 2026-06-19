@@ -69,6 +69,24 @@ const mocks = vi.hoisted(() => {
 		},
 	}
 
+	const mockAdapter = {
+		operators: mockQ,
+		find: vi.fn(),
+		findOne: vi.fn(),
+		insert: vi.fn(),
+		update: vi.fn(),
+		remove: vi.fn(),
+		countAll: vi.fn(),
+		tableExists: vi.fn(),
+		sync: vi.fn(),
+		batch: vi.fn(),
+		createBatchInsert: vi.fn(),
+		createBatchUpdate: vi.fn(),
+		createBatchRemove: vi.fn(),
+		connect: vi.fn().mockResolvedValue(undefined),
+		shutdown: vi.fn().mockResolvedValue(undefined),
+	}
+
 	return {
 		mockDriverClient,
 		mockMapper,
@@ -76,17 +94,9 @@ const mocks = vi.hoisted(() => {
 		mockQ,
 		mockLoadModels,
 		mockDriverModule,
+		mockAdapter,
 	}
 })
-
-vi.mock("../src/driver", () => ({
-	default: mocks.mockDriverModule,
-	mapping: mocks.mockDriverModule.mapping,
-}))
-
-vi.mock("../src/driver/mapping", () => ({
-	mapping: mocks.mockDriverModule.mapping,
-}))
 
 vi.mock("../src/utils/loadModels", () => ({
 	default: mocks.mockLoadModels,

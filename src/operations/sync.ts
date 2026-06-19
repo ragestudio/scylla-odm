@@ -1,15 +1,14 @@
 import type Model from "../model"
-import generateCreateTableCQL from "../cql_gen/create_table"
 
 export default async function syncOP(this: Model<any, any>) {
-	const tableExists = await this._tableExists()
+	const exists = await this.client.adapter.tableExists(this)
 
-	if (tableExists) {
+	if (exists) {
 		return
 	}
 
 	try {
-		await this.client.driver.execute(generateCreateTableCQL(this))
+		await this.client.adapter.sync(this)
 
 		console.log(`Table "${this.schema.table_name}" created successfully`)
 	} catch (error) {

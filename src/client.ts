@@ -1,19 +1,12 @@
-import type {
-	Client as T_CassandraClient,
-	ClientOptions as T_CassandraClientOptions,
-	mapping as T_CassandraMapping,
-} from "./driver"
 import type { ClientConfig } from "./types"
+import type { DriverAdapter } from "./adapter/types"
 
 //@ts-ignore
 import path from "node:path"
-//@ts-ignore
-import Cassandra from "./driver"
 import Model from "./model"
 import Logger from "./logger"
 
 import loadModels from "./utils/loadModels"
-import buildMapper from "./utils/buildMapper"
 import delay from "./utils/delay"
 import { Batch } from "./batch"
 import {
@@ -37,7 +30,10 @@ export class Client {
 			)
 		}
 
+		const driverType = config.driver ?? "cassandra"
+
 		this.config = {
+			driver: driverType,
 			modelsPath: path.resolve(process.cwd(), "db"),
 			contactPoints: config.contactPoints ??
 				SCYLLA_CONTACT_POINTS?.split(",") ?? ["127.0.0.1"],
@@ -47,31 +43,35 @@ export class Client {
 				"datacenter1",
 			keyspace: config.keyspace ?? SCYLLA_KEYSPACE ?? "default_keyspace",
 			port: 9042,
+			server: config.server ?? "localhost",
+			database: config.database ?? "default_db",
+			user: config.user ?? "sa",
+			password: config.password ?? "",
 			maxRetries: DEFAULT_MAX_RETRIES,
 			retryDelay: DEFAULT_RETRY_DELAY,
 			...config,
 		}
 
-		const clientOptions: T_CassandraClientOptions = {
-			contactPoints: this.config.contactPoints,
-			localDataCenter: this.config.localDataCenter,
-			keyspace: this.config.keyspace,
-			protocolOptions: {
-				port: this.config.port,
-			},
+		// use pre-built adapter if provided, otherwise load lazily
+		if (config.adapter) {
+			this._adapter = config.adapter
+		} else {
+			this._adapter = null!
 		}
-
-		if (this.config.pooling) {
-			clientOptions.pooling = this.config.pooling
-		}
-
-		this.driver = new Cassandra.Client(clientOptions)
 	}
 
 	config: ClientConfig
-	driver: T_CassandraClient
-	mapper!: T_CassandraMapping.Mapper
+	private _adapter: DriverAdapter
+	driver!: any
+	mapper!: any
 	models: Map<string, Model<any>> = new Map()
+
+	get adapter(): DriverAdapter {
+		if (!this._adapter) {
+			throw new Error("adapter not initialized, call initialize() first")
+		}
+		return this._adapter
+	}
 
 	model(name: string): Model<any> | undefined {
 		return this.models.get(name)
@@ -91,10 +91,6 @@ export class Client {
 		}
 
 		models = models.filter((schema) => schema instanceof Model)
-
-		this.mapper = new Cassandra.mapping.Mapper(this.driver, {
-			models: buildMapper(models),
-		})
 
 		globalThis.__scylla_client = this
 
@@ -118,6 +114,13 @@ export class Client {
 	async migrate(modelName?: string): Promise<void> {
 		if (!this.models.size) {
 			throw new Error("no models loaded, call initialize() first")
+		}
+
+		if (this.config.driver === "mssql") {
+			this.logger.log(
+				"migrate is not supported for mssql driver, use sync instead",
+			)
+			return
 		}
 
 		let models: Model<any>[]
@@ -175,7 +178,9 @@ export class Client {
 
 	async shutdown(): Promise<void> {
 		try {
-			await this.driver.shutdown()
+			if (this._adapter) {
+				await this._adapter.shutdown()
+			}
 			this.logger.log("connection closed")
 
 			delete globalThis.__scylla_client
@@ -190,7 +195,7 @@ export class Client {
 
 		for (let attempt = 1; attempt <= this.config.maxRetries!; attempt++) {
 			try {
-				await this.driver.connect()
+				await this._adapter.connect()
 				return
 			} catch (error) {
 				lastError = error as Error
@@ -208,7 +213,7 @@ export class Client {
 		}
 
 		throw new Error(
-			`Failed to connect to ScyllaDB after ${this.config.maxRetries} attempts: ${lastError?.message}`,
+			`Failed to connect to database after ${this.config.maxRetries} attempts: ${lastError?.message}`,
 		)
 	}
 
@@ -224,7 +229,6 @@ export class Client {
 			} catch (error) {
 				lastError = error as Error
 
-				// check if error is retryable
 				if (
 					this.isRetryableError(error) &&
 					attempt < this.config.maxRetries!
@@ -240,7 +244,6 @@ export class Client {
 					continue
 				}
 
-				// if not retryable or last attempt, throw
 				throw error
 			}
 		}
@@ -251,7 +254,6 @@ export class Client {
 	}
 
 	private isRetryableError(error: any): boolean {
-		// retry on network errors, timeouts, and certain ScyllaDB errors
 		const retryableMessages = [
 			"timeout",
 			"connection",

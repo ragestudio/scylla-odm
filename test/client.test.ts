@@ -3,7 +3,7 @@ import {
 	Client,
 	Batch,
 	mockLoadModels,
-	mockDriverClient,
+	mockAdapter,
 	makeModel,
 } from "./helpers"
 
@@ -24,7 +24,7 @@ afterEach(() => {
 
 describe("Client", () => {
 	it("should create a client with default config", () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 
 		expect(client.config.contactPoints).toEqual(["127.0.0.1"])
 		expect(client.config.localDataCenter).toBe("datacenter1")
@@ -36,6 +36,7 @@ describe("Client", () => {
 
 	it("should create a client with custom config", () => {
 		const client = new Client({
+			adapter: mockAdapter as any,
 			contactPoints: ["10.0.0.1", "10.0.0.2"],
 			localDataCenter: "dc2",
 			keyspace: "my_keyspace",
@@ -50,6 +51,7 @@ describe("Client", () => {
 
 	it("should create a client with pooling config", () => {
 		const client = new Client({
+			adapter: mockAdapter as any,
 			pooling: {
 				coreConnectionsPerHost: { "1": 2 },
 				maxRequestsPerConnection: 100,
@@ -73,46 +75,46 @@ describe("Client", () => {
 	})
 
 	it("should expose a models map", () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 
 		expect(client.models).toBeInstanceOf(Map)
 		expect(client.models.size).toBe(0)
 	})
 
 	it("should return undefined for unknown model", () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 
 		expect(client.model("nonexistent")).toBeUndefined()
 	})
 
 	it("should create a batch instance", () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		const batch = client.batch()
 
 		expect(batch).toBeInstanceOf(Batch)
 	})
 
 	it("should create a logged batch by default", () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		const batch = client.batch()
 
 		expect(batch.size).toBe(0)
 	})
 
 	it("should shutdown and clean up global client", async () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		// @ts-ignore
 		globalThis.__scylla_client = client
 
 		await client.shutdown()
 
-		expect(mockDriverClient.shutdown).toHaveBeenCalled()
+		expect(mockAdapter.shutdown).toHaveBeenCalled()
 		// @ts-ignore
 		expect(globalThis.__scylla_client).toBeUndefined()
 	})
 
 	it("should have a logger instance", () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		expect(client.logger).toBeDefined()
 		expect(typeof client.logger.log).toBe("function")
 		expect(typeof client.logger.warn).toBe("function")
@@ -129,11 +131,11 @@ describe("Client.initialize", () => {
 		const model = makeModel()
 		mockLoadModels.mockResolvedValue([model])
 
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		await client.initialize()
 
 		expect(mockLoadModels).toHaveBeenCalled()
-		expect(mockDriverClient.connect).toHaveBeenCalled()
+		expect(mockAdapter.connect).toHaveBeenCalled()
 		expect(client.models.has("test")).toBe(true)
 		expect(client.models.get("test")).toBe(model)
 		// @ts-ignore
@@ -145,7 +147,7 @@ describe("Client.initialize", () => {
 		const notAModel = { name: "not-a-model" }
 		mockLoadModels.mockResolvedValue([model, notAModel])
 
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		await client.initialize()
 
 		expect(client.models.has("test")).toBe(true)
@@ -155,7 +157,7 @@ describe("Client.initialize", () => {
 	it("should throw if loadModels fails", async () => {
 		mockLoadModels.mockRejectedValue(new Error("load error"))
 
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 
 		await expect(client.initialize()).rejects.toThrow(
 			"Failed to load models",
@@ -168,7 +170,7 @@ describe("Client.initialize", () => {
 
 		const syncSpy = vi.spyOn(model, "_sync").mockResolvedValue(undefined)
 
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		await client.initialize({ sync: true })
 
 		expect(syncSpy).toHaveBeenCalled()
@@ -181,7 +183,7 @@ describe("Client.initialize", () => {
 
 describe("Client.executeWithRetry", () => {
 	it("should execute operation successfully on first try", async () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		const operation = vi.fn().mockResolvedValue("success")
 
 		const result = await client.executeWithRetry(operation, "test-op")
@@ -191,7 +193,7 @@ describe("Client.executeWithRetry", () => {
 	})
 
 	it("should retry on retryable error", async () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		const operation = vi
 			.fn()
 			.mockRejectedValueOnce(new Error("connection timeout"))
@@ -204,7 +206,7 @@ describe("Client.executeWithRetry", () => {
 	})
 
 	it("should not retry on non-retryable error", async () => {
-		const client = new Client()
+		const client = new Client({ adapter: mockAdapter as any })
 		const operation = vi
 			.fn()
 			.mockRejectedValue(new Error("validation error"))

@@ -1,17 +1,12 @@
 import type Client from "../client"
-import type { mapping } from "../driver/mapping"
-import type { types } from "../driver/types"
+import type { BatchItem, BatchOptions } from "../adapter/types"
 
-type Long = types.Long
-
-export type BatchExecutionOptions = {
-	logged?: boolean
-	timestamp?: number | Long
+export type BatchExecutionOptions = BatchOptions & {
 	executionProfile?: string
 }
 
 export class Batch {
-	private _items: mapping.ModelBatchItem[] = []
+	private _items: BatchItem[] = []
 	private _client: Client
 	private _logged: boolean
 
@@ -20,12 +15,12 @@ export class Batch {
 		this._logged = logged
 	}
 
-	add(item: mapping.ModelBatchItem): this {
+	add(item: BatchItem): this {
 		this._items.push(item)
 		return this
 	}
 
-	async execute(options?: BatchExecutionOptions): Promise<mapping.Result> {
+	async execute(options?: BatchExecutionOptions): Promise<any[]> {
 		if (this._items.length === 0) {
 			throw new Error("Cannot execute an empty batch")
 		}
@@ -33,14 +28,12 @@ export class Batch {
 		const items = this._items
 		this._items = []
 
-		const executionOptions = {
-			logged: this._logged,
-			...options,
-		}
-
 		return this._client.executeWithRetry(
 			async () =>
-				await this._client.mapper.batch(items, executionOptions),
+				await this._client.adapter.batch(items, {
+					logged: options?.logged ?? this._logged,
+					timestamp: options?.timestamp,
+				}),
 			"batch",
 		)
 	}

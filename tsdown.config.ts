@@ -2,7 +2,7 @@ import { defineConfig } from "tsdown"
 
 export default defineConfig([
 	{
-		entry: ["src/**/*.ts", "!src/driver"],
+		entry: ["src/**/*.ts"],
 		format: "esm",
 		platform: "node",
 		dts: true,

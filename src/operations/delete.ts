@@ -1,4 +1,3 @@
-import { mapping } from "../driver"
 import type Model from "../model"
 import { DeleteQueryOptions, Query } from "../types"
 import queryParser from "../utils/queryParser"
@@ -10,20 +9,12 @@ export default function deleteOP<T>(
 ) {
 	query = queryParser(this, query)
 
-	const mapperOptions: mapping.RemoveDocInfo = {
-		fields: options?.fields,
-		ttl: options?.ttl,
-		ifExists: options?.ifExists,
-		when: options?.when,
-		deleteOnlyColumns: options?.deleteOnlyColumns,
-	}
-
 	if (options?.batch) {
-		return this.mapper.batching.remove(query, mapperOptions)
+		return this.client.adapter.createBatchRemove(this, query, options)
 	}
 
 	const operation = async () => {
-		const result = await this.mapper.remove(query, mapperOptions)
+		const result = await this.client.adapter.remove(this, query, options)
 
 		if (options?.raw === true) {
 			return result
