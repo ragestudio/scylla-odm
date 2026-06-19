@@ -1,0 +1,9 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "long": "^5.3.2",
+    "mssql": "^12.5.3"
+  }
+}
