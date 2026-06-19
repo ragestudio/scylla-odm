@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 
-import utils from "../utils"
-import QueryGenerator from "./query-generator"
-import ResultMapper from "./result-mapper"
-import Result from "./result"
-import Cache from "./cache"
-import Tree from "./tree"
-import ObjectSelector from "./object-selector"
-import DocInfoAdapter from "./doc-info-adapter"
+import utils from "../utils.js"
+import QueryGenerator from "./query-generator.js"
+import ResultMapper from "./result-mapper.js"
+import Result from "./result.js"
+import Cache from "./cache.js"
+import Tree from "./tree.js"
+import ObjectSelector from "./object-selector.js"
+import DocInfoAdapter from "./doc-info-adapter.js"
 
 const cacheHighWaterMark = 100
 

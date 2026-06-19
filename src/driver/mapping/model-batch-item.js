@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import Cache from "./cache"
+import Cache from "./cache.js"
 
 /**
  * Represents a query or a set of queries used to perform a mutation in a batch.

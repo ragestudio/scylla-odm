@@ -18,19 +18,18 @@
 import events from "events"
 import util from "util"
 
-import utils from "./utils"
-import errors from "./errors"
-import types from "./types"
-import { ProfileManager } from "./execution-profile"
-import requests from "./requests"
-import clientOptions from "./client-options"
-import ClientState from "./metadata/client-state"
-import { DefaultExecutionOptions } from "./execution-options"
-import ControlConnection from "./control-connection"
-import RequestHandler from "./request-handler"
-import PrepareHandler from "./prepare-handler"
-import promiseUtils from "./promise-utils"
-import { description, version } from "../../package.json" with { type: "json" }
+import utils from "./utils.js"
+import errors from "./errors.js"
+import types from "./types/index.js"
+import { ProfileManager } from "./execution-profile.js"
+import requests from "./requests.js"
+import clientOptions from "./client-options.js"
+import ClientState from "./metadata/client-state.js"
+import { DefaultExecutionOptions } from "./execution-options.js"
+import ControlConnection from "./control-connection.js"
+import RequestHandler from "./request-handler.js"
+import PrepareHandler from "./prepare-handler.js"
+import promiseUtils from "./promise-utils.js"
 
 /**
  * Max amount of pools being warmup in parallel, when warmup is enabled
@@ -500,14 +499,7 @@ Client.prototype._connect = async function () {
 	}
 
 	this.connecting = true
-	this.log(
-		"info",
-		util.format(
-			"Connecting to cluster using '%s' version %s",
-			description,
-			version,
-		),
-	)
+	this.log("info", util.format("Connecting to cluster"))
 
 	try {
 		await this.controlConnection.init()

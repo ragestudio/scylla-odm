@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { types } from "../types"
-import { Client } from ".."
+import { types } from "../types/index.js"
+import { Client } from "../index.js"
 import Long = types.Long
 
 export namespace mapping {

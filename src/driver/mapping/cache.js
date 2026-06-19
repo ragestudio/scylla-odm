@@ -16,7 +16,27 @@
  * limitations under the License.
  */
 
-import { QueryOperator, QueryAssignment } from "./q"
+import { QueryOperator, QueryAssignment } from "./q.js"
+
+// duck-type checks to avoid instanceof failures
+// caused by duplicate class references in bundled ESM/CJS output
+function isQueryOperator(v) {
+	return (
+		v != null &&
+		typeof v === "object" &&
+		typeof v.key === "string" &&
+		"value" in v
+	)
+}
+
+function isQueryAssignment(v) {
+	return (
+		v != null &&
+		typeof v === "object" &&
+		typeof v.sign === "string" &&
+		"value" in v
+	)
+}
 
 /**
  * Provides utility methods for obtaining a caching keys based on the specifics of the Mapper methods.
@@ -180,11 +200,7 @@ class Cache {
 	}
 
 	static *_yieldOperators(value) {
-		if (
-			value !== null &&
-			value !== undefined &&
-			value instanceof QueryOperator
-		) {
+		if (value !== null && value !== undefined && isQueryOperator(value)) {
 			yield value.key
 			if (value.hasChildValues) {
 				yield* Cache._yieldOperators(value.value[0])
@@ -200,9 +216,9 @@ class Cache {
 			yield key
 			const value = obj[key]
 			if (value !== null && value !== undefined) {
-				if (value instanceof QueryOperator) {
+				if (isQueryOperator(value)) {
 					yield* Cache._yieldOperators(value)
-				} else if (value instanceof QueryAssignment) {
+				} else if (isQueryAssignment(value)) {
 					yield value.sign
 					yield value.inverted
 				}

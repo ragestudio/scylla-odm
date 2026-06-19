@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 import util from "util"
-import policies from "./policies"
-import types from "./types"
-import utils from "./utils"
-import auth from "./auth"
+import policies from "./policies/index.js"
+import types from "./types/index.js"
+import utils from "./utils.js"
+import auth from "./auth/index.js"
 
 // no-op metrics stub (metrics module removed from this build)
 const noopMetrics = {

@@ -15,20 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import clientOptions from "./client-options"
-import Client from "./client"
-import { ExecutionProfile } from "./execution-profile"
-import { ExecutionOptions } from "./execution-options"
-import types from "./types"
-import errors from "./errors"
-import policies from "./policies"
-import auth from "./auth"
-import mapping from "./mapping"
-import concurrent from "./concurrent"
-import { Token, TokenRange } from "./token"
-import Metadata from "./metadata"
-import Encoder from "./encoder"
-import { version as pkgVersion } from "../../package.json" with { type: "json" }
+import clientOptions from "./client-options.js"
+import Client from "./client.js"
+import { ExecutionProfile } from "./execution-profile.js"
+import { ExecutionOptions } from "./execution-options.js"
+import types from "./types/index.js"
+import errors from "./errors.js"
+import policies from "./policies/index.js"
+import auth from "./auth/index.js"
+import mapping from "./mapping/index.js"
+import concurrent from "./concurrent/index.js"
+import { Token, TokenRange } from "./token.js"
+import Metadata from "./metadata/index.js"
+import Encoder from "./encoder.js"
 
 export {
 	Client,
@@ -59,8 +58,6 @@ export function defaultOptions() {
 	return clientOptions.defaultOptions()
 }
 
-export const version = pkgVersion
-
 const _default = {
 	Client,
 	ExecutionProfile,
@@ -75,7 +72,6 @@ const _default = {
 	metadata,
 	Encoder,
 	defaultOptions,
-	version,
 }
 
 export default _default

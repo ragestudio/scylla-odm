@@ -17,9 +17,9 @@
  */
 
 import util from "util"
-import utils from "./utils"
-import types from "./types"
-import errors from "./errors"
+import utils from "./utils.js"
+import types from "./types/index.js"
+import errors from "./errors.js"
 
 /**
  * Information on the formatting of the returned rows

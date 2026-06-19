@@ -1,28 +1,26 @@
-import type {
-	Client as T_CassandraClient,
-	ClientOptions as T_CassandraClientOptions,
-	mapping as T_CassandraMapping,
-} from "./driver"
-import type { ClientConfig } from "./types"
+import type { ClientOptions as T_CassandraClientOptions } from "./driver/index.js"
+import type { Client as T_CassandraClient } from "./driver/index.js"
+import type { mapping as T_CassandraMapping } from "./driver/mapping/index.js"
 
-//@ts-ignore
+import type { ClientConfig } from "./types.js"
+
 import path from "node:path"
-//@ts-ignore
-import Cassandra from "./driver"
-import Model from "./model"
-import Logger from "./logger"
+import { Client as CassandraClient, mapping } from "./driver/index.js"
 
-import loadModels from "./utils/loadModels"
-import buildMapper from "./utils/buildMapper"
-import delay from "./utils/delay"
-import { Batch } from "./batch"
+import Model from "./model/index.js"
+import Logger from "./logger/index.js"
+
+import loadModels from "./utils/loadModels.js"
+import buildMapper from "./utils/buildMapper.js"
+import delay from "./utils/delay.js"
+import { Batch } from "./batch/index.js"
 import {
 	migrateModel,
 	promptMigration,
 	executeMigration,
 	promptResetMigration,
 	executeResetMigration,
-} from "./migrate"
+} from "./migrate/index.js"
 
 const DEFAULT_MAX_RETRIES = 3
 const DEFAULT_RETRY_DELAY = 1000
@@ -65,7 +63,7 @@ export class Client {
 			clientOptions.pooling = this.config.pooling
 		}
 
-		this.driver = new Cassandra.Client(clientOptions)
+		this.driver = new CassandraClient(clientOptions)
 	}
 
 	config: ClientConfig
@@ -92,7 +90,7 @@ export class Client {
 
 		models = models.filter((schema) => schema instanceof Model)
 
-		this.mapper = new Cassandra.mapping.Mapper(this.driver, {
+		this.mapper = new mapping.Mapper(this.driver, {
 			models: buildMapper(models),
 		})
 

@@ -1,7 +1,7 @@
-import { mapping } from "../driver"
-import type Model from "../model"
-import { DeleteQueryOptions, Query } from "../types"
-import queryParser from "../utils/queryParser"
+import type { mapping } from "../driver/index.js"
+import type Model from "../model/index.js"
+import { DeleteQueryOptions, Query } from "../types.js"
+import queryParser from "../utils/queryParser.js"
 
 export default function deleteOP<T>(
 	this: Model<any, T>,

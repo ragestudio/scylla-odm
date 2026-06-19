@@ -15,8 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Integer from "./integer"
-import utils from "../utils"
+import Integer from "./integer.js"
+import utils from "../utils.js"
 
 /** @module types */
 /**

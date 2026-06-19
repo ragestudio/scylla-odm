@@ -18,11 +18,11 @@
 
 import events from "events"
 
-import utils from "./utils"
-import types from "./types"
-import HostConnectionPool from "./host-connection-pool"
-import PrepareHandler from "./prepare-handler"
-import promiseUtils from "./promise-utils"
+import utils from "./utils.js"
+import types from "./types/index.js"
+import HostConnectionPool from "./host-connection-pool.js"
+import PrepareHandler from "./prepare-handler.js"
+import promiseUtils from "./promise-utils.js"
 
 const healthResponseCountInterval = 200
 

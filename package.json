@@ -1,6 +1,6 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.22.1",
+  "version": "0.22.9",
   "description": "An ODM for ScyllaDB/Cassandra",
   "license": "MIT",
   "author": "RageStudio",
@@ -21,8 +21,6 @@
   ],
   "type": "module",
   "types": "./index.d.ts",
-  "main": "./index.js",
-  "module": "./index.js",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -31,6 +29,10 @@
     "./types": {
       "types": "./types.d.ts",
       "default": "./types.js"
+    },
+    "./*": {
+      "types": "./*.d.ts",
+      "default": "./*.js"
     }
   },
   "publishConfig": {
@@ -40,7 +42,7 @@
     "long": "^5.3.2"
   },
   "scripts": {
-    "build": "tsgo && cp package.json dist && cp README.md dist",
+    "build": "tsgo && cp package.json dist && cp README.md dist && cp -r src/driver dist/",
     "test": "vitest run"
   },
   "devDependencies": {

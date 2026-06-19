@@ -21,8 +21,8 @@ import util from "util"
 import net from "net"
 import { EventEmitter } from "events"
 
-import errors from "./errors"
-import promiseUtils from "./promise-utils"
+import errors from "./errors.js"
+import promiseUtils from "./promise-utils.js"
 
 /**
  * Max int that can be accurately represented with 64-bit Number (2^53)

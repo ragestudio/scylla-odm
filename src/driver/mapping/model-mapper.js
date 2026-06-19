@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import ModelBatchMapper from "./model-batch-mapper"
+import ModelBatchMapper from "./model-batch-mapper.js"
 
 /**
  * Represents an object mapper for a specific model.

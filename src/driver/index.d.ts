@@ -19,16 +19,16 @@
 import * as events from "events"
 import * as tls from "tls"
 import { URL } from "url"
-import { auth } from "./auth"
-import { policies } from "./policies"
-import { types } from "./types"
-import { metadata } from "./metadata"
+import { auth } from "./auth/index.js"
+import { policies } from "./policies/index.js"
+import { types } from "./types/index.js"
+import { metadata } from "./metadata/index.js"
 import Long = types.Long
 import Uuid = types.Uuid
 
 // Export imported submodules
-export { concurrent } from "./concurrent"
-export { mapping } from "./mapping"
+export { concurrent } from "./concurrent/index.js"
+export { mapping } from "./mapping/index.js"
 export { auth, metadata, policies, types }
 
 export const version: number

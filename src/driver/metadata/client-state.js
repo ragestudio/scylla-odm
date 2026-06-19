@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 import util from "util"
-import errors from "../errors"
+import errors from "../errors.js"
 
 /**
  * Represents the state of a {@link Client}.

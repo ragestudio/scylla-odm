@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { Client, EmptyCallback, ExecutionOptions, Host, HostMap } from ".."
-import { types } from "../types"
+import { Client, EmptyCallback, ExecutionOptions, Host, HostMap } from "../index.js"
+import { types } from "../types/index.js"
 
 export namespace policies {
 	function defaultAddressTranslator(): addressResolution.AddressTranslator

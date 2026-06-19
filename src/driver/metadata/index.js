@@ -24,15 +24,15 @@ import util from "util"
  * @module metadata
  */
 
-import t from "../tokenizer"
-import utils from "../utils"
-import errors from "../errors"
-import types from "../types"
-import requests from "../requests"
-import schemaParserFactory from "./schema-parser"
-import promiseUtils from "../promise-utils"
-import { TokenRange } from "../token"
-import { ExecutionOptions } from "../execution-options"
+import t from "../tokenizer.js"
+import utils from "../utils.js"
+import errors from "../errors.js"
+import types from "../types/index.js"
+import requests from "../requests.js"
+import schemaParserFactory from "./schema-parser.js"
+import promiseUtils from "../promise-utils.js"
+import { TokenRange } from "../token.js"
+import { ExecutionOptions } from "../execution-options.js"
 
 /**
  * @const

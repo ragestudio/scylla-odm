@@ -1,6 +1,6 @@
-import type Model from "../model"
-import type { Column } from "../types"
-import generateCreateTableCQL from "../cql_gen/create_table"
+import type Model from "../model/index.js"
+import type { Column } from "../types.js"
+import generateCreateTableCQL from "../cql_gen/create_table.js"
 import * as readline from "node:readline"
 
 interface ExistingColumn {

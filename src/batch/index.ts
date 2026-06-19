@@ -1,6 +1,6 @@
-import type Client from "../client"
-import type { mapping } from "../driver/mapping"
-import type { types } from "../driver/types"
+import type Client from "../client.js"
+import type { mapping } from "../driver/mapping/index.js"
+import type { types } from "../driver/types/index.js"
 
 type Long = types.Long
 

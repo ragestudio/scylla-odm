@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import errors from "../errors"
+import errors from "../errors.js"
 
 /**
  * Represents a CQL query operator, like >=, IN, <, ...

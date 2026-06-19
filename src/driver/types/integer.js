@@ -14,7 +14,7 @@
 
 /** @module types */
 
-import utils from "../utils"
+import utils from "../utils.js"
 
 /**
  * Constructs a two's-complement integer an array containing bits of the

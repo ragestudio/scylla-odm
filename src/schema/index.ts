@@ -1,4 +1,4 @@
-import { TableClusteringOrder, TableKeys } from "../types"
+import { TableClusteringOrder, TableKeys } from "../types.js"
 
 export interface SchemaParams<T> {
 	table_name: string

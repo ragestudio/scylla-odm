@@ -17,15 +17,15 @@
  */
 import util from "util"
 
-import types from "./types"
+import types from "./types/index.js"
 const dataTypes = types.dataTypes
 const Long = types.Long
 const Integer = types.Integer
 const BigDecimal = types.BigDecimal
-import MutableLong from "./types/mutable-long"
-import utils from "./utils"
-import token from "./token"
-import Vector from "./types/vector"
+import MutableLong from "./types/mutable-long.js"
+import utils from "./utils.js"
+import token from "./token.js"
+import Vector from "./types/vector.js"
 
 const uuidRegex =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i

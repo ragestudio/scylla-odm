@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 import util from "util"
-import DataCollection from "./data-collection"
+import DataCollection from "./data-collection.js"
 /**
  * Creates a new instance of TableMetadata
  * @classdesc Describes a table

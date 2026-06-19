@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 import util from "util"
-import utils from "../utils"
-import types from "../types"
+import utils from "../utils.js"
+import types from "../types/index.js"
 
 /** @private */
 const kind = {

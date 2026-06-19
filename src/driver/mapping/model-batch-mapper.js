@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 
-import Tree from "./tree"
+import Tree from "./tree.js"
 import {
 	InsertModelBatchItem,
 	UpdateModelBatchItem,
 	RemoveModelBatchItem,
-} from "./model-batch-item"
+} from "./model-batch-item.js"
 
 /**
  * Provides utility methods to group multiple mutations on a single batch.

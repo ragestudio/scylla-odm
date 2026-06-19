@@ -23,9 +23,9 @@
  * @module auth
  */
 
-import { Authenticator, AuthProvider } from "./provider"
-import { PlainTextAuthProvider } from "./plain-text-auth-provider"
-import NoAuthProvider from "./no-auth-provider"
+import { Authenticator, AuthProvider } from "./provider.js"
+import { PlainTextAuthProvider } from "./plain-text-auth-provider.js"
+import NoAuthProvider from "./no-auth-provider.js"
 
 export { Authenticator, AuthProvider, NoAuthProvider, PlainTextAuthProvider }
 

@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import utils from "./utils"
-import types from "./types"
-import errors from "./errors"
+import utils from "./utils.js"
+import types from "./types/index.js"
+import errors from "./errors.js"
 
 const proxyExecuteKey = "ProxyExecute"
 
@@ -201,7 +201,7 @@ class ExecutionOptions {
 	/**
 	 * Internal method to get or generate a timestamp for the request execution.
 	 * @ignore
-	 * @returns {Long|null}
+	 * @returns {object|null}
 	 */
 	getOrGenerateTimestamp() {}
 
@@ -239,7 +239,7 @@ class ExecutionOptions {
 	 * Gets the provided timestamp for the execution in microseconds from the unix epoch (00:00:00, January 1st, 1970).
 	 * <p>When a timestamp generator is used, this method returns <code>undefined</code>.</p>
 	 * @abstract
-	 * @returns {Number|Long|undefined|null}
+	 * @returns {number|object|undefined|null}
 	 */
 	getTimestamp() {}
 

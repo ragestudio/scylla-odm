@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 import util from "util"
-import types from "../types"
-import utils from "../utils"
-import errors from "../errors"
+import types from "../types/index.js"
+import utils from "../utils.js"
+import errors from "../errors.js"
 
 const doneIteratorObject = Object.freeze({ done: true })
 const newlyUpInterval = 60000

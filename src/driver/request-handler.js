@@ -17,11 +17,11 @@
  */
 import util from "util"
 
-import errors from "./errors"
-import types from "./types"
-import utils from "./utils"
-import RequestExecution from "./request-execution"
-import promiseUtils from "./promise-utils"
+import errors from "./errors.js"
+import types from "./types/index.js"
+import utils from "./utils.js"
+import RequestExecution from "./request-execution.js"
+import promiseUtils from "./promise-utils.js"
 
 /**
  * Handles a BATCH, QUERY and EXECUTE request to the server, dealing with host fail-over and retries on error

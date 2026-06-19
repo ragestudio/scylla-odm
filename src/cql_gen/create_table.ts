@@ -1,4 +1,4 @@
-import type Model from "../model"
+import type Model from "../model/index.js"
 
 export default function (model: Model): string {
 	const desc = model.schema

@@ -21,17 +21,17 @@
  * @module mapping
  */
 
-import Mapper from "./mapper"
-import ModelMapper from "./model-mapper"
-import ModelBatchMapper from "./model-batch-mapper"
-import { ModelBatchItem } from "./model-batch-item"
-import Result from "./result"
+import Mapper from "./mapper.js"
+import ModelMapper from "./model-mapper.js"
+import ModelBatchMapper from "./model-batch-mapper.js"
+import { ModelBatchItem } from "./model-batch-item.js"
+import Result from "./result.js"
 import {
 	TableMappings,
 	DefaultTableMappings,
 	UnderscoreCqlToCamelCaseMappings,
-} from "./table-mappings"
-import { q } from "./q"
+} from "./table-mappings.js"
+import { q } from "./q.js"
 
 export {
 	Mapper,

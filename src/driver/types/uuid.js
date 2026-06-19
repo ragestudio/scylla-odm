@@ -17,7 +17,7 @@
  */
 
 import crypto from "crypto"
-import utils from "../utils"
+import utils from "../utils.js"
 
 /** @module types */
 

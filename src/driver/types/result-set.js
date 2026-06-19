@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import utils from "../utils"
-import errors from "../errors"
+import utils from "../utils.js"
+import errors from "../errors.js"
 
 const asyncIteratorSymbol = Symbol.asyncIterator || "@@asyncIterator"
 

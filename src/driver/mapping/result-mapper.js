@@ -17,8 +17,8 @@
  */
 
 import vm from "vm"
-import utils from "../utils"
-import types from "../types"
+import utils from "../utils.js"
+import types from "../types/index.js"
 
 /**
  * @ignore

@@ -1,7 +1,7 @@
-import type { Query, FindQueryOptions } from "../types"
-import type Model from "../model"
-import queryParser from "../utils/queryParser"
-import { mapping } from "../driver/mapping"
+import type { Query, FindQueryOptions } from "../types.js"
+import type Model from "../model/index.js"
+import queryParser from "../utils/queryParser.js"
+import type { mapping } from "../driver/mapping/index.js"
 
 export default async function findOneOP<TDoc>(
 	this: Model<any, TDoc>,

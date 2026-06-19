@@ -17,9 +17,9 @@
  */
 
 import { Readable } from "stream"
-import utils from "../utils"
-import errors from "../errors"
-import clientOptions from "../client-options"
+import utils from "../utils.js"
+import errors from "../errors.js"
+import clientOptions from "../client-options.js"
 
 /** @module types */
 /**

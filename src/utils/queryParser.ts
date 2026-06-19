@@ -1,9 +1,7 @@
-import type { Model } from "../model"
+import type { Model } from "../model/index.js"
 
-// @ts-ignore
-import cassandra from "../driver"
-import isPlainObject from "./isPlainObject"
-const { q } = cassandra.mapping
+import { mapping } from "../driver/index.js"
+import isPlainObject from "./isPlainObject.js"
 
 const MAX_QUERY_DEPTH = 3
 const MAX_IN_ELEMENTS = 1000
@@ -37,7 +35,7 @@ function buildOperator(operator: string, opValue: any): any {
 
 		case "$ne":
 			requireNotNull(opValue, "$ne")
-			return q.notEq(opValue)
+			return mapping.q.notEq(opValue)
 
 		case "$in":
 			if (!Array.isArray(opValue)) {
@@ -55,23 +53,23 @@ function buildOperator(operator: string, opValue: any): any {
 					)
 				}
 			}
-			return q.in_(opValue)
+			return mapping.q.in_(opValue)
 
 		case "$gt":
 			requireNotNull(opValue, "$gt")
-			return q.gt(opValue)
+			return mapping.q.gt(opValue)
 
 		case "$gte":
 			requireNotNull(opValue, "$gte")
-			return q.gte(opValue)
+			return mapping.q.gte(opValue)
 
 		case "$lt":
 			requireNotNull(opValue, "$lt")
-			return q.lt(opValue)
+			return mapping.q.lt(opValue)
 
 		case "$lte":
 			requireNotNull(opValue, "$lte")
-			return q.lte(opValue)
+			return mapping.q.lte(opValue)
 	}
 }
 
@@ -115,7 +113,7 @@ function parseField(value: any): any {
 
 	return compiledOps.length === 1
 		? compiledOps[0]
-		: (q.and as any)(...compiledOps)
+		: (mapping.q.and as any)(...compiledOps)
 }
 
 export function isValidFieldName(

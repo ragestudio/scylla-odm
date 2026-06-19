@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Client } from ".."
+import { Client } from "../index.js"
 import { Readable } from "stream"
 
 export namespace concurrent {

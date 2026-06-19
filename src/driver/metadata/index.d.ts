@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { types } from "../types"
-import { EmptyCallback, Host, token, ValueCallback } from ".."
+import { types } from "../types/index.js"
+import { EmptyCallback, Host, token, ValueCallback } from "../index.js"
 import dataTypes = types.dataTypes
 import Uuid = types.Uuid
 import InetAddress = types.InetAddress

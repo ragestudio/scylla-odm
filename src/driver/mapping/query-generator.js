@@ -17,9 +17,29 @@
  */
 
 import vm from "vm"
-import { QueryOperator, QueryAssignment } from "./q"
-import types from "../types"
+import { QueryOperator, QueryAssignment } from "./q.js"
+import types from "../types/index.js"
 const dataTypes = types.dataTypes
+
+// duck-type checks to avoid instanceof failures
+// caused by duplicate class references in bundled ESM/CJS output
+function isQueryOperator(v) {
+	return (
+		v != null &&
+		typeof v === "object" &&
+		typeof v.key === "string" &&
+		"value" in v
+	)
+}
+
+function isQueryAssignment(v) {
+	return (
+		v != null &&
+		typeof v === "object" &&
+		typeof v.sign === "string" &&
+		"value" in v
+	)
+}
 
 const vmFileName = "gen-param-getter"
 
@@ -205,7 +225,7 @@ class QueryGenerator {
 
 			if (
 				column.type.code === dataTypes.list &&
-				pInfo.value instanceof QueryAssignment
+				isQueryAssignment(pInfo.value)
 			) {
 				// Its not idempotent when list append/prepend
 				isIdempotent = false
@@ -269,7 +289,7 @@ class QueryGenerator {
 		query += propertiesInfo
 			.filter((p) => !primaryKeys.has(p.columnName))
 			.map((p) => {
-				if (p.value instanceof QueryAssignment) {
+				if (isQueryAssignment(p.value)) {
 					if (p.value.inverted) {
 						// e.g: prepend "col1 = ? + col1"
 						return `"${p.columnName}" = ? ${p.value.sign} "${p.columnName}"`
@@ -482,7 +502,7 @@ class QueryGenerator {
 	static _valueGetterSingle(prefix, propName, value, fromModelFn) {
 		let valueGetter = prefix
 
-		if (value instanceof QueryOperator) {
+		if (isQueryOperator(value)) {
 			if (value.hasChildValues) {
 				return (
 					`${QueryGenerator._valueGetterSingle(`${prefix}.value[0]`, propName, value.value[0], fromModelFn)}` +
@@ -515,7 +535,7 @@ class QueryGenerator {
 
 		return propertiesInfo
 			.map((p) => {
-				const valueGetter = `${prefix}['${p.propertyName}']${p.value instanceof QueryAssignment ? ".value" : ""}`
+				const valueGetter = `${prefix}['${p.propertyName}']${isQueryAssignment(p.value) ? ".value" : ""}`
 				if (p.fromModel) {
 					return QueryGenerator._getMappingFunctionCall(
 						p.propertyName,
@@ -540,7 +560,7 @@ class QueryGenerator {
 	}
 
 	static _getSingleCondition(columnName, value) {
-		if (value instanceof QueryOperator) {
+		if (isQueryOperator(value)) {
 			if (value.hasChildValues) {
 				return (
 					`${QueryGenerator._getSingleCondition(columnName, value.value[0])}` +

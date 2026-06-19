@@ -1,4 +1,4 @@
-import type { Model } from "../model"
+import type { Model } from "../model/index.js"
 //import typeChecker from "../utils/typeChecker"
 
 export class Document<TDoc = any> {

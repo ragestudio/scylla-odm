@@ -18,15 +18,15 @@
 
 import util from "util"
 import events from "events"
-import types from "../types"
-import utils from "../utils"
-import errors from "../errors"
-import promiseUtils from "../promise-utils"
-import TableMetadata from "./table-metadata"
-import Aggregate from "./aggregate"
-import SchemaFunction from "./schema-function"
-import Index from "./schema-index"
-import MaterializedView from "./materialized-view"
+import types from "../types/index.js"
+import utils from "../utils.js"
+import errors from "../errors.js"
+import promiseUtils from "../promise-utils.js"
+import TableMetadata from "./table-metadata.js"
+import Aggregate from "./aggregate.js"
+import SchemaFunction from "./schema-function.js"
+import Index from "./schema-index.js"
+import MaterializedView from "./materialized-view.js"
 const { format } = util
 
 /**
@@ -101,7 +101,6 @@ class SchemaParser {
 	 * @param strategyOptions
 	 * @param virtual
 	 * @returns {{name, durableWrites, strategy, strategyOptions, tokenToReplica, udts, tables, functions, aggregates}}
-	 * @protected
 	 */
 	_createKeyspace(name, durableWrites, strategy, strategyOptions, virtual) {
 		return {

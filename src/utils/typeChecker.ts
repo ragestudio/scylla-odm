@@ -1,8 +1,6 @@
-// @ts-ignore
-import cassandra from "../driver"
-const { types } = cassandra
-import type { Model } from "../model"
-import { isValidFieldName } from "./queryParser"
+import type { Model } from "../model/index.js"
+import { types } from "../driver/types/index.js"
+import { isValidFieldName } from "./queryParser.js"
 
 const stringTypes = new Set(["ascii", "text", "varchar", "inet"])
 const intTypes = new Set(["int", "smallint", "tinyint"])

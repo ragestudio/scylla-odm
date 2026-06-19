@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import utils from "../utils"
+import utils from "../utils.js"
 
 /** @module types */
 /**

@@ -79,12 +79,13 @@ const mocks = vi.hoisted(() => {
 	}
 })
 
-vi.mock("../src/driver", () => ({
+vi.mock("../src/driver/index.js", () => ({
 	default: mocks.mockDriverModule,
+	Client: mocks.mockDriverModule.Client,
 	mapping: mocks.mockDriverModule.mapping,
 }))
 
-vi.mock("../src/driver/mapping", () => ({
+vi.mock("../src/driver/mapping/index.js", () => ({
 	mapping: mocks.mockDriverModule.mapping,
 }))
 

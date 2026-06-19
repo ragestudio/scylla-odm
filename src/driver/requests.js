@@ -18,11 +18,10 @@
 
 import util from "util"
 
-import { FrameWriter } from "./writers"
-import types from "./types"
-import utils from "./utils"
-import { ExecutionOptions } from "./execution-options"
-import pkg from "../../package.json" with { type: "json" }
+import { FrameWriter } from "./writers.js"
+import types from "./types/index.js"
+import utils from "./utils.js"
+import { ExecutionOptions } from "./execution-options.js"
 
 /**
  * Options for the execution of the query / prepared statement
@@ -361,8 +360,8 @@ class StartupRequest extends Request {
 
 		const startupOptions = {
 			CQL_VERSION: this.options.cqlVersion || "3.0.0",
-			DRIVER_NAME: pkg.description,
-			DRIVER_VERSION: pkg.version,
+			DRIVER_NAME: "scylla-odm",
+			DRIVER_VERSION: "0.1.0",
 		}
 
 		if (this.options.noCompact) {

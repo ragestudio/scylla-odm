@@ -24,12 +24,12 @@
  *  [speculative execution]{@link module:policies/speculativeExecution}.
  * @module policies
  */
-import addressResolution from "./address-resolution"
-import loadBalancing from "./load-balancing"
-import reconnection from "./reconnection"
-import retry from "./retry"
-import speculativeExecution from "./speculative-execution"
-import timestampGeneration from "./timestamp-generation"
+import addressResolution from "./address-resolution.js"
+import loadBalancing from "./load-balancing.js"
+import reconnection from "./reconnection.js"
+import retry from "./retry.js"
+import speculativeExecution from "./speculative-execution.js"
+import timestampGeneration from "./timestamp-generation.js"
 
 export { addressResolution }
 export { loadBalancing }

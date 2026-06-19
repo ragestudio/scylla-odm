@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import { AuthProvider, Authenticator } from "./provider"
-import { PlainTextAuthenticator } from "./plain-text-auth-provider"
-import errors from "../errors"
+import { AuthProvider, Authenticator } from "./provider.js"
+import { PlainTextAuthenticator } from "./plain-text-auth-provider.js"
+import errors from "../errors.js"
 
 const dseAuthenticator = "com.datastax.bdp.cassandra.auth.DseAuthenticator"
 

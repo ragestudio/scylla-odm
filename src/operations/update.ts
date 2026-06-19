@@ -1,8 +1,8 @@
-import { mapping } from "../driver/mapping"
-import type Model from "../model"
-import { Query, UpdateQueryOptions } from "../types"
-import fillDefaults from "../utils/fillDefaults"
-import queryParser from "../utils/queryParser"
+import type { mapping } from "../driver/mapping/index.js"
+import type Model from "../model/index.js"
+import { Query, UpdateQueryOptions } from "../types.js"
+import fillDefaults from "../utils/fillDefaults.js"
+import queryParser from "../utils/queryParser.js"
 
 export default function updateOP<TDoc>(
 	this: Model<any, TDoc>,

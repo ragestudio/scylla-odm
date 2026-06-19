@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import types from "./types"
-import token from "./token"
-import utils from "./utils"
-import MutableLong from "./types/mutable-long"
+import types from "./types/index.js"
+import token from "./token.js"
+import utils from "./utils.js"
+import MutableLong from "./types/mutable-long.js"
 import crypto from "crypto"
 const { Integer } = types
 

@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import errors from "./errors"
-import utils from "./utils"
-import types from "./types"
-import promiseUtils from "./promise-utils"
+import errors from "./errors.js"
+import utils from "./utils.js"
+import types from "./types/index.js"
+import promiseUtils from "./promise-utils.js"
 
 /**
  * Encapsulates the logic for dealing with the different prepare request and response flows, including failover when

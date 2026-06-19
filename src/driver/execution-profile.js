@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import utils from "./utils"
-import types from "./types"
-import promiseUtils from "./promise-utils"
+import utils from "./utils.js"
+import types from "./types/index.js"
+import promiseUtils from "./promise-utils.js"
 
 /**
  * Creates a new instance of {@link ExecutionProfile}.

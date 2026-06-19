@@ -1,9 +1,9 @@
-import Client, { Batch } from ".."
-import { Document } from "../document"
+import Client, { Batch } from "../index.js"
+import { Document } from "../document/index.js"
 
-import fillDefaults from "../utils/fillDefaults"
+import fillDefaults from "../utils/fillDefaults.js"
 
-import { mapping } from "../driver/mapping"
+import type { mapping } from "../driver/mapping/index.js"
 import type {
 	Query,
 	FindQueryOptions,
@@ -12,18 +12,18 @@ import type {
 	UpdateQueryOptions,
 	InsertQueryOptions,
 	DeleteQueryOptions,
-} from "../types"
-import type { Schema } from "../schema"
+} from "../types.js"
+import type { Schema } from "../schema/index.js"
 
-import findOneOP from "../operations/findOne"
-import findOP from "../operations/find"
-import updateOP from "../operations/update"
-import deleteOP from "../operations/delete"
-import countAllOP from "../operations/countAll"
+import findOneOP from "../operations/findOne.js"
+import findOP from "../operations/find.js"
+import updateOP from "../operations/update.js"
+import deleteOP from "../operations/delete.js"
+import countAllOP from "../operations/countAll.js"
 
-import tableExistsOP from "../operations/tableExists"
-import syncOP from "../operations/sync"
-import insertOP from "../operations/insert"
+import tableExistsOP from "../operations/tableExists.js"
+import syncOP from "../operations/sync.js"
+import insertOP from "../operations/insert.js"
 
 export class Model<
 	TSchema extends Schema<any> = Schema<any>,

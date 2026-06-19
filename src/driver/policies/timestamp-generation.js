@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 import util from "util"
-import { Long } from "../types"
-import errors from "../errors"
+import { Long } from "../types/index.js"
+import errors from "../errors.js"
 
 /** @module policies/timestampGeneration */
 

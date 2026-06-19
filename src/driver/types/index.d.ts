@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import _Long = require("long")
+import _Long from "long"
 import * as stream from "stream"
-import { ValueCallback } from ".."
+import { ValueCallback } from "../index.js"
 
 export namespace types {
 	class Long extends _Long {}

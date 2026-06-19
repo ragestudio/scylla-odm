@@ -19,10 +19,10 @@
 import util from "util"
 import { Transform, Writable } from "stream"
 
-import types from "./types"
-import utils from "./utils"
-import errors from "./errors"
-import { FrameReader } from "./readers"
+import types from "./types/index.js"
+import utils from "./utils.js"
+import errors from "./errors.js"
+import { FrameReader } from "./readers.js"
 
 const { FrameHeader } = types
 

@@ -18,11 +18,11 @@
 import util from "util"
 import events from "events"
 
-import Connection from "./connection"
-import utils from "./utils"
-import promiseUtils from "./promise-utils"
-import errors from "./errors"
-import clientOptions from "./client-options"
+import Connection from "./connection.js"
+import utils from "./utils.js"
+import promiseUtils from "./promise-utils.js"
+import errors from "./errors.js"
+import clientOptions from "./client-options.js"
 
 // Used to get the index of the connection with less in-flight requests
 let connectionIndex = 0

@@ -18,8 +18,8 @@
 
 import events from "events"
 
-import types from "./types"
-import utils from "./utils"
+import types from "./types/index.js"
+import utils from "./utils.js"
 
 const { FrameHeader } = types
 
@@ -57,7 +57,7 @@ class FrameWriter {
 		this.add(buf)
 	}
 
-	/** @param {Long} num */
+	/** @param {object} num */
 	writeLong(num) {
 		this.add(types.Long.toBuffer(num))
 	}

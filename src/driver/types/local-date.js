@@ -17,7 +17,7 @@
  */
 import util from "util"
 
-import utils from "../utils"
+import utils from "../utils.js"
 /** @module types */
 
 /**

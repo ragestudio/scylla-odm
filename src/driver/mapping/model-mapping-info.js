@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { TableMappings, DefaultTableMappings } from "./table-mappings"
+import { TableMappings, DefaultTableMappings } from "./table-mappings.js"
 
 /**
  * Represents the parsed user information of the table mappings of a model.

@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 import util from "util"
-import { AuthProvider, Authenticator } from "./provider"
-import utils from "../utils"
+import { AuthProvider, Authenticator } from "./provider.js"
+import utils from "../utils.js"
 /**
  * Creates a new instance of the Authenticator provider
  * @classdesc Provides plain text [Authenticator]{@link module:auth~Authenticator} instances to be used when

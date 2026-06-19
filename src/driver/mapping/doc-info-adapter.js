@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import errors from "../errors"
-import utils from "../utils"
+import errors from "../errors.js"
+import utils from "../utils.js"
 
 /**
  * Provides utility methods to adapt and map user provided docInfo and executionOptions to a predictable object format.

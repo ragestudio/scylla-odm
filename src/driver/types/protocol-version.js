@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import utils from "../utils"
-import VersionNumber from "./version-number"
+import utils from "../utils.js"
+import VersionNumber from "./version-number.js"
 
 const v200 = VersionNumber.parse("2.0.0")
 const v210 = VersionNumber.parse("2.1.0")

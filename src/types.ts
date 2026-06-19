@@ -1,7 +1,7 @@
-import { ClientOptions } from "./driver"
-import Document from "./document"
-import { Schema } from "./schema"
-import type { mapping } from "./driver/mapping"
+import { ClientOptions } from "./driver/index.js"
+import Document from "./document/index.js"
+import { Schema } from "./schema/index.js"
+import type { mapping } from "./driver/mapping/index.js"
 
 export type ClientConfig = {
 	modelsPath?: string
