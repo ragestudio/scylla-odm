@@ -61,8 +61,8 @@ export class Model<
 		}
 	}
 
-	create = (data: Partial<TDoc>) => this._wrap(data)
-	obj = (data: Partial<TDoc>) => this._wrap(data)
+	create = (data: TDoc) => this._wrap(data)
+	obj = (data: TDoc) => this._wrap(data)
 
 	batch = {
 		update: (

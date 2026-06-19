@@ -49,10 +49,19 @@ export enum ColumnTypes {
 export type TableKeys<T> = (keyof T | TableKeys<T>)[]
 export type TableClusteringOrder<T> = Partial<Record<keyof T, "asc" | "desc">>
 
-export interface Column<T> {
-	type?: ColumnTypes | string
-	required?: boolean
+export interface Column<T, Required extends boolean = false> {
+	type?: ColumnTypes[] | string
+	required?: Required
 }
+
+export const defineColumn =
+	<T>() =>
+	<R extends boolean = false>(config: {
+		type: any
+		required?: R
+	}): Column<T, R> => {
+		return config as any
+	}
 
 //
 // QUERY
@@ -99,13 +108,30 @@ export type DeleteQueryOptions<T> = {
 //
 // DOCUMENT
 //
+
+type Prettify<T> = {
+	[K in keyof T]: T[K]
+} & {}
+
 export type Doc<TDoc = any> = Document<TDoc> & TDoc
 
 export type InferDoc<S> =
 	S extends Schema<infer T>
-		? {
-				[K in keyof T as K extends `$${string}`
-					? never
-					: K]: T[K] extends Column<infer U> ? U : T[K]
-			}
+		? Prettify<
+				{
+					[K in keyof T as K extends `$${string}`
+						? never
+						: T[K] extends Column<any, true>
+							? K
+							: never]: T[K] extends Column<infer U, any>
+						? U
+						: T[K]
+				} & {
+					[K in keyof T as K extends `$${string}`
+						? never
+						: T[K] extends Column<any, true>
+							? never
+							: K]?: T[K] extends Column<infer U, any> ? U : T[K]
+				}
+			>
 		: any
