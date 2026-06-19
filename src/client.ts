@@ -178,6 +178,7 @@ export class Client {
 			await this.driver.shutdown()
 			this.logger.log("connection closed")
 
+			// @ts-ignore
 			delete globalThis.__scylla_client
 		} catch (error) {
 			this.logger.error("error shutting down connection:", error)

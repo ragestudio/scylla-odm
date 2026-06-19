@@ -113,10 +113,13 @@ function getModelSchema(model: Model): ModelSchema {
 
 	for (const fieldName in fields) {
 		const field = fields[fieldName]
-		const originalType =
+		const rawType =
 			typeof field === "string"
 				? field
 				: (field as Column<any>)?.type || "text"
+		const originalType = Array.isArray(rawType)
+			? rawType.join(", ")
+			: rawType
 
 		columns.set(fieldName, {
 			type: normalizeType(originalType),
