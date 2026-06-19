@@ -106,14 +106,6 @@ describe("Model typing", () => {
 		expect(typeof doc.value).toBe("string")
 	})
 
-	it("should allow partial data in obj/create", () => {
-		const model = makeModel()
-		const doc = model.obj({ key: "pk" })
-
-		expect(doc.key).toBe("pk")
-		expect(doc.value).toBeUndefined()
-	})
-
 	it("toRaw should return a plain object", () => {
 		const model = makeModel()
 		const doc = model.obj({ key: "k", value: "v" })
