@@ -11,7 +11,7 @@ export default (map: MapSchema[]) => {
 	return map.reduce((obj, { name, schema }) => {
 		return {
 			...obj,
-			[name]: {
+			[schema.table_name]: {
 				tables: [schema.table_name],
 			},
 		}
