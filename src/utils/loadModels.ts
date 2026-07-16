@@ -20,14 +20,13 @@ export default async (fromPath: string): Promise<any[]> => {
 	files = files.filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
 
 	for await (const file of files) {
-		const name = file.replace(".js", "")
+		const name = file.replace(".js", "").replace(".ts", "")
+
 		const file_path = path.join(fromPath, file)
 
 		try {
 			let mod = await import(file_path)
-
-			mod = mod.default
-
+			mod = mod.default ?? mod
 			mods.push(mod)
 		} catch (error) {
 			console.error(`Failed to load model [${name}]:`, error)
