@@ -109,13 +109,13 @@ export default function queryParser(
 
 function parseField(value: any): any {
 	const keys = Object.keys(value)
-	const operatorKeys = keys.filter((k) => VALID_OPERATORS.has(k))
+	const allAreOperators = keys.every((k) => VALID_OPERATORS.has(k))
 
-	if (operatorKeys.length === 0) {
+	if (!allAreOperators) {
 		return value
 	}
 
-	const compiledOps = operatorKeys.map((op) => buildOperator(op, value[op]))
+	const compiledOps = keys.map((op) => buildOperator(op, value[op]))
 
 	return compiledOps.length === 1
 		? compiledOps[0]
