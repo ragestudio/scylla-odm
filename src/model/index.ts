@@ -41,7 +41,9 @@ export class Model<
 			throw new Error("No mapper available")
 		}
 
-		return globalThis.__scylla_client.mapper.forModel(this.name)
+		return globalThis.__scylla_client.mapper.forModel(
+			this.schema.table_name,
+		)
 	}
 
 	constructor(name: string, schema: TSchema) {
