@@ -88,7 +88,17 @@ export class Client {
 			)
 		}
 
-		models = models.filter((schema) => schema instanceof Model)
+		models = models.filter(
+			(mod) =>
+				mod != null &&
+				typeof mod === "object" &&
+				typeof mod.name === "string" &&
+				mod.schema != null &&
+				typeof mod.schema.table_name === "string" &&
+				Array.isArray(mod.schema.keys) &&
+				typeof mod.schema.fields === "object" &&
+				typeof mod._sync === "function",
+		)
 
 		this.mapper = new mapping.Mapper(this.driver, {
 			models: buildMapper(models),
