@@ -1,6 +1,6 @@
 {
   "name": "@ragestudio/scylla-odm",
-  "version": "0.22.15",
+  "version": "0.22.17",
   "description": "An ODM for ScyllaDB/Cassandra",
   "license": "MIT",
   "author": "RageStudio",
