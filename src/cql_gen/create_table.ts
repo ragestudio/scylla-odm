@@ -12,12 +12,18 @@ export default function (model: Model): string {
 
 	for (const fieldName in fields) {
 		const field = fields[fieldName]
-		const typeStr = typeof field === "string" ? field : (field as any)?.type
+		let typeStr = typeof field === "string" ? field : (field as any)?.type
 
 		if (!typeStr) {
 			throw new Error(
 				`Invalid field type for "${fieldName}" in model "${tableName}"`,
 			)
+		}
+
+		typeStr = typeStr.trim()
+
+		if (typeStr.startsWith("<") && typeStr.endsWith(">")) {
+			typeStr = typeStr.slice(1, -1).trim()
 		}
 
 		columnsDef += `"${fieldName}" ${typeStr.toUpperCase()}, `
